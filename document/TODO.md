@@ -21,6 +21,25 @@ Buffer Manager:
 
 ### Map
 中间四周分布，上下通
+地图分布预选项
+所有的地图都可以用TRANSFORM FEEDBACK模拟其特定要素
+
+雨天（TRANSFORM FEEDBACK模拟雨点）
+草原（TS、GS的应用）
+雪地、沙地（displacement texture+TS）
+透明迷宫（OIT）
+海洋、池塘（SSR，FFT，OIT）
 
 ### Code
 统一shader参数传递标准
+
+### 具体的任务
+- [ ] 整体渲染管线与重构
+- [ ] 草场的精细化调试
+- [ ] 天空盒技术
+- [ ] 最后一个pass的颜色处理
+- [ ] 整体地图的搭建
+- [ ] 模型加载
+- [ ] 状态打印 
+- [ ] 物体运动
+- [ ] 云

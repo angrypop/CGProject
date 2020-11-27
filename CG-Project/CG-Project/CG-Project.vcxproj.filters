@@ -1,0 +1,201 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="ViewGroup.cpp">
+      <Filter>ViewGroup</Filter>
+    </ClCompile>
+    <ClCompile Include="ViewWorld.cpp">
+      <Filter>ViewWorld</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>Others</Filter>
+    </ClCompile>
+    <ClCompile Include="ViewObject.cpp">
+      <Filter>ViewObject</Filter>
+    </ClCompile>
+    <ClCompile Include="ViewModule.cpp">
+      <Filter>ViewModule</Filter>
+    </ClCompile>
+    <ClCompile Include="..\include\OpenGL\glad.c">
+      <Filter>Others</Filter>
+    </ClCompile>
+    <ClCompile Include="ShaderObject.cpp" />
+    <ClCompile Include="ViewData.cpp">
+      <Filter>ViewBase</Filter>
+    </ClCompile>
+    <ClCompile Include="ViewBase.cpp">
+      <Filter>ViewBase</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="ViewObject.h">
+      <Filter>ViewObject</Filter>
+    </ClInclude>
+    <ClInclude Include="ViewWorld.h">
+      <Filter>ViewWorld</Filter>
+    </ClInclude>
+    <ClInclude Include="ViewGroup.h">
+      <Filter>ViewGroup</Filter>
+    </ClInclude>
+    <ClInclude Include="ViewBase.h">
+      <Filter>ViewBase</Filter>
+    </ClInclude>
+    <ClInclude Include="ViewModule.h">
+      <Filter>ViewModule</Filter>
+    </ClInclude>
+    <ClInclude Include="ViewCppHeader.h">
+      <Filter>ViewBase</Filter>
+    </ClInclude>
+    <ClInclude Include="ShaderObject.h">
+      <Filter>ViewModule</Filter>
+    </ClInclude>
+    <ClInclude Include="ViewData.h">
+      <Filter>ViewBase</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="DisplayOITF.shader">
+      <Filter>Shader\OITF</Filter>
+    </None>
+    <None Include="DisplayOITV.shader">
+      <Filter>Shader\OITF</Filter>
+    </None>
+    <None Include="RankOITV.shader">
+      <Filter>Shader\OITF</Filter>
+    </None>
+    <None Include="RankOITF.shader">
+      <Filter>Shader\OITF</Filter>
+    </None>
+    <None Include="waterV.shader">
+      <Filter>Shader\Water</Filter>
+    </None>
+    <None Include="WaterOITV.shader">
+      <Filter>Shader\Water</Filter>
+    </None>
+    <None Include="WaterOITF.shader">
+      <Filter>Shader\Water</Filter>
+    </None>
+    <None Include="WaterMeshF.shader">
+      <Filter>Shader\Water</Filter>
+    </None>
+    <None Include="waterF.shader">
+      <Filter>Shader\Water</Filter>
+    </None>
+    <None Include="gBufferWaterF.shader">
+      <Filter>Shader\Water</Filter>
+    </None>
+    <None Include="gBufferWaterV.shader">
+      <Filter>Shader\Water</Filter>
+    </None>
+    <None Include="gBufferGrassF.shader">
+      <Filter>Shader\Grass</Filter>
+    </None>
+    <None Include="gBufferLightV.shader">
+      <Filter>Shader\Illuminate</Filter>
+    </None>
+    <None Include="gBufferLightF.shader">
+      <Filter>Shader\Illuminate</Filter>
+    </None>
+    <None Include="gBufferTexturePlaneV.shader">
+      <Filter>Shader\Texture</Filter>
+    </None>
+    <None Include="gBufferTexturePlaneF.shader">
+      <Filter>Shader\Texture</Filter>
+    </None>
+    <None Include="gBufferShowShadowV.shader">
+      <Filter>Shader\Shadow</Filter>
+    </None>
+    <None Include="gBufferShowShadowF.shader">
+      <Filter>Shader\Shadow</Filter>
+    </None>
+    <None Include="LightV.shader">
+      <Filter>Shader\Illuminate</Filter>
+    </None>
+    <None Include="LightF.shader">
+      <Filter>Shader\Illuminate</Filter>
+    </None>
+    <None Include="Triangle.frag">
+      <Filter>Shader\Test</Filter>
+    </None>
+    <None Include="Triangle.vert">
+      <Filter>Shader\Test</Filter>
+    </None>
+    <None Include="ControlT.shader">
+      <Filter>Shader\Others</Filter>
+    </None>
+    <None Include="EvaluationT.shader">
+      <Filter>Shader\Others</Filter>
+    </None>
+    <None Include="gBufferShowF.shader">
+      <Filter>Shader\Others</Filter>
+    </None>
+    <None Include="gBufferShowV.shader">
+      <Filter>Shader\Others</Filter>
+    </None>
+    <None Include="GroundF.shader">
+      <Filter>Shader\Others</Filter>
+    </None>
+    <None Include="GroundV.shader">
+      <Filter>Shader\Others</Filter>
+    </None>
+    <None Include="NormalG.shader">
+      <Filter>Shader\Others</Filter>
+    </None>
+    <None Include="shadowF.shader">
+      <Filter>Shader\Others</Filter>
+    </None>
+    <None Include="shadowGF.shader">
+      <Filter>Shader\Others</Filter>
+    </None>
+    <None Include="shadowV.shader">
+      <Filter>Shader\Others</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Shader">
+      <UniqueIdentifier>{3fd24d2c-adf5-402e-a9a0-e60c4d39cc3c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shader\OITF">
+      <UniqueIdentifier>{f7fc037c-d5c0-4403-a9aa-010fc8c9ab7b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ViewObject">
+      <UniqueIdentifier>{2f047c90-323c-4a82-adff-89045f59cbe1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ViewGroup">
+      <UniqueIdentifier>{34798f66-6377-469b-bdd7-1c11469dda40}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ViewWorld">
+      <UniqueIdentifier>{90af54db-0d9e-4522-91a5-2b9ea0794eac}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shader\Water">
+      <UniqueIdentifier>{9a409cb8-eb9b-4a70-9618-12738ecf5478}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shader\Grass">
+      <UniqueIdentifier>{cf4a0b2d-9377-4afe-8c02-4f2d7e4aec9a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shader\Illuminate">
+      <UniqueIdentifier>{eb8b08fd-d151-499d-b53f-b306b8961d94}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shader\Texture">
+      <UniqueIdentifier>{43c50a95-e43a-4a6c-89d4-4c3ba222d34c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shader\Shadow">
+      <UniqueIdentifier>{362d869f-751c-4907-b905-9901ed396460}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shader\Others">
+      <UniqueIdentifier>{241e85d7-10a1-4f68-8363-9eb4a1c13090}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Others">
+      <UniqueIdentifier>{f20a99b2-5a51-47a6-ab00-1d127a2b27e8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shader\Test">
+      <UniqueIdentifier>{8e53a825-377d-4a88-846f-33c1ba0b3fdf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ViewModule">
+      <UniqueIdentifier>{f87c447f-a0d9-41f7-817a-2b7db4c65a71}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ViewBase">
+      <UniqueIdentifier>{526fae83-1dec-4bfc-abad-9dc2f2d891b5}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

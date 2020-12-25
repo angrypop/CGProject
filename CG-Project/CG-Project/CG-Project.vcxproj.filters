@@ -26,6 +26,9 @@
     <ClCompile Include="ViewBase.cpp">
       <Filter>ViewBase</Filter>
     </ClCompile>
+    <ClCompile Include="GameObject.cpp">
+      <Filter>ViewObject</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ViewObject.h">
@@ -51,6 +54,9 @@
     </ClInclude>
     <ClInclude Include="ViewData.h">
       <Filter>ViewBase</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObject.h">
+      <Filter>ViewObject</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -1,10 +1,9 @@
-#include "GameObject.h"
 #include "ViewHeader.h"
 #include <fstream>
 
 std::vector<std::shared_ptr<ViewTriangle>> getAllRenderData() {
 	GameObject wolf;
-	wolf.loadFromObj("wolf.obj");
+	wolf.loadFromObj("resources/wolf.obj");
 	return wolf.getRenderData();
 }
 
@@ -16,12 +15,15 @@ void GameObject::loadFromObj(std::string filename) {
 	std::vector<vertex> vertices;
 	int cnt = 0;
 	while (fin >> op) {
+		cnt++;
+		// std::cout << " line: " << cnt << std::endl;
+		if (cnt == 16255) {
+			std::cout << "ÔÚÕâÍ£¶Ù£¡";
+		}
 		if (op == "v") {
-			std::cout << vertices.size();
 			vertex v = {0, 0, 0, 0, 0};
 			fin >> v[0] >> v[1] >> v[2];
 			vertices.push_back(v);
-			cnt++;
 		}
 		else if (op == "f") {
 			std::vector<std::string> vertex_info;
@@ -42,7 +44,7 @@ void GameObject::loadFromObj(std::string filename) {
 			}
 			vertex_info.push_back(tmp);
 			for (std::string s : vertex_info) {
-				int coord_index_this = std::stoi(s.substr(0, s.find('/')));
+				int coord_index_this = std::stoi(s.substr(0, s.find('/'))) - 1;
 				coord_index.push_back(coord_index_this);
 			}
 			for (int i = 2; i < coord_index.size(); i++) {
@@ -56,8 +58,6 @@ void GameObject::loadFromObj(std::string filename) {
 			fin.getline(line, 127);
 		}
 	}
-	glm::vec3 coord();
-	glm::vec4 color();
 }
 
 bool GameObject::intersect(GameObject& obj) {

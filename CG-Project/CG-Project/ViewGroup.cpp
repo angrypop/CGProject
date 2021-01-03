@@ -155,3 +155,17 @@ void TriangleGroup::AddTriangle(const GLsizei& num)
 		this->AddObject(std::shared_ptr<ViewTriangle>(new ViewTriangle(std::move(vertex))));
 	}
 }
+
+MyGroup::MyGroup()
+{
+	this->Init();
+}
+
+void MyGroup::Init()
+{
+	this->AddModule(std::shared_ptr<TestModule>(new TestModule()));
+	std::vector<std::shared_ptr<ViewTriangle>> renderData = getAllRenderData();
+	for (auto ptr : renderData) {
+		this->AddObject(ptr);
+	}
+}

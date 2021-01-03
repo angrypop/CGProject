@@ -4,6 +4,7 @@
 #include "ViewTexture.h"
 #include "ShaderObject.h"
 #include "ViewObject.h"
+#include "GameObject.h"
 #include "ViewGroup.h"
 #include "ViewWorld.h"
 #include "ViewModule.h"

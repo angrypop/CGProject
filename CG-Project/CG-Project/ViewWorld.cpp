@@ -43,8 +43,8 @@ void ViewWorld::Render()
 		cnt++;
 		if (cnt % 10 == 0)
 			group->PrintInfo();
-		if (cnt % 5 == 0 && PERFORMANCETEST)
-			dynamic_cast<TriangleGroup *>(group.get())->AddTriangle(30);
+		// if (cnt % 5 == 0 && PERFORMANCETEST)
+			// dynamic_cast<TriangleGroup *>(group.get())->AddTriangle(30);
 		group->Render();
 		if (!PERFORMANCETEST)
 		{
@@ -173,7 +173,8 @@ void GameWorld::InitModules()
 void GameWorld::InitGroups()
 {
 	// add groups
-	this->AddGroup(std::shared_ptr<TriangleGroup>(new TriangleGroup()));
+	// this->AddGroup(std::shared_ptr<TriangleGroup>(new TriangleGroup()));
+	this->AddGroup(std::shared_ptr<MyGroup>(new MyGroup()));
 }
 
 void GameWorld::InitCallback()
@@ -188,8 +189,9 @@ void GameWorld::InitCallback()
 void GameWorld::UpdateData()
 {
 	for (const auto& group : this->_groups)
-		for (const auto& obj : group->GetObjectList())
-			obj->Rotate(15.0f, glm::vec3(0.0f, 0.0f, 1.0f));
+		for (const auto& obj : group->GetObjectList()) {
+			obj->Rotate(15.0f, glm::vec3(0.1f, 0.3f, 0.7f));
+		}
 }
 
 void GameWorld::InitTexture()

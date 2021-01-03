@@ -48,7 +48,7 @@ public:
 		return this->_data;
 	}
 	// set data
-	void SetData(T&& data)
+	void SetData(const T& data)
 	{
 		this->_data = data;
 	}
@@ -116,12 +116,12 @@ public:
 		::glBindBuffer(GL_ARRAY_BUFFER, 0);
 	}
 	// set data[pos]
-	virtual void SetData(GLsizei&& pos, T&& data)
+	virtual void SetData(const GLsizei& pos, const T& data)
 	{
 		this->_data[pos] = data;
 	}
 	// set data[posX, posY]
-	virtual void SetData(GLsizei&& posX, GLsizei&& posY, T&& data)
+	virtual void SetData(const GLsizei& posX, const GLsizei& posY, const T& data)
 	{
 		this->_data[(long long)(posX)*M + posY] = data;
 	}
@@ -141,15 +141,47 @@ protected:
 	std::array<T, N* M> _data;
 };
 
-class GlobalUniformDataPool
+class UniformDataPool
 {
 public:
+	template <typename T>
 	// get global uniform data pointer by its name
-	static std::shared_ptr<UniformDataBase> Get(const std::string& name);
+	static UniformData<T>* Get(const std::string& name)
+	{
+		auto target = _namePointerMap.find(name);
+		if (target != _namePointerMap.end())
+			return dynamic_cast<UniformData<T>*>(target->second.get());
+		else
+			throw(std::string("No Global Uniform Data Name = ") + name);
+	}
+	// get global uniform data itself by its name
+	template <typename T>
+	static T GetData(const std::string& name)
+	{
+		return Get<T>(name)->GetData();
+	}
+	// get global uniform data itself by its name
+	template <typename T>
+	static void SetData(const std::string& name, const T& data)
+	{
+		return Get<T>(name)->SetData(data);
+	}
 	// add a global uniform data with name(alternative)
-	static void Add(const std::shared_ptr<UniformDataBase>& data);
+	template <typename T>
+	static void Add(const std::string& name, const T& data)
+	{
+		std::shared_ptr<UniformData<T>> ptr(new UniformData<T>(name, data));
+		_namePointerMap.insert(std::pair<std::string, std::shared_ptr<UniformDataBase>>(name, ptr));
+	}
 	// delete a global uniform data by its name
-	static void Delete(const std::string& name);
+	static void Delete(const std::string& name)
+	{
+		auto target = _namePointerMap.find(name);
+		if (target != _namePointerMap.end())
+			_namePointerMap.erase(target);
+		else
+			throw(std::string("No Global Uniform Data Name = ") + name);
+	}
 protected:
 	static std::map<std::string, std::shared_ptr<UniformDataBase>> _namePointerMap;
 };

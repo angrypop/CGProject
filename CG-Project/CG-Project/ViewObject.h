@@ -20,6 +20,10 @@ public:
 	void Rotate(const GLfloat& angle, const glm::vec3& axis = glm::vec3(0.0f, 0.0f, 1.0f));
 	// translate this object by displacement vector
 	void Translate(const glm::vec3& displacement);
+	// scale this object with (x, y, z)
+	void Scale(const glm::vec3& scaler);
+	// get M(model matrix) of this object
+	glm::mat4 GetM() const;
 
 	// add uniform data
 	void AddUniformData(std::shared_ptr<UniformDataBase>&& uniformData);
@@ -73,6 +77,7 @@ protected:
 	GLuint _VAO = 0;
 	GLsizei _verNum;
 	bool _showFlag = true;
+
 	glm::mat4 _M = glm::mat4(1.0f);	// the model matrix
 
 	std::vector<std::shared_ptr<UniformDataBase>> _uniformData;
@@ -90,25 +95,26 @@ public:
 
 	virtual ~ViewTriangle() {}
 protected:
-	GLfloat _transAngle = 45.0f;
+
+	//GLfloat _transAngle = 45.0f;
 };
 
-class ViewPlane : public ViewObject
-{
-public:
-	ViewPlane();
-	virtual ~ViewPlane();
-protected:
-
-};
-
-class ViewBall : public ViewObject
-{
-public:
-	ViewBall();
-	virtual ~ViewBall();
-protected:
-
-}; 
+//class ViewPlane : public ViewObject
+//{
+//public:
+//	ViewPlane();
+//	virtual ~ViewPlane();
+//protected:
+//
+//};
+//
+//class ViewBall : public ViewObject
+//{
+//public:
+//	ViewBall();
+//	virtual ~ViewBall();
+//protected:
+//
+//}; 
 
 

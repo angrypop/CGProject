@@ -34,6 +34,9 @@
     <ClCompile Include="GameObject.cpp">
       <Filter>GameWorld</Filter>
     </ClCompile>
+    <ClCompile Include="Interaction.cpp">
+      <Filter>Toolkit</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ViewObject.h">
@@ -65,6 +68,12 @@
     </ClInclude>
     <ClInclude Include="GameObject.h">
       <Filter>GameWorld</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>Toolkit</Filter>
+    </ClInclude>
+    <ClInclude Include="Interaction.h">
+      <Filter>Toolkit</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -213,6 +222,9 @@
     </Filter>
     <Filter Include="GameWorld">
       <UniqueIdentifier>{0c4578bf-4129-4164-b19c-da965f54a28e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Toolkit">
+      <UniqueIdentifier>{eb0bffb4-e4dc-4200-ace5-5edcac6ec61c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

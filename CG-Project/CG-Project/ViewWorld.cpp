@@ -41,7 +41,7 @@ void ViewWorld::Render()
 	{
 		static int cnt = 0;
 		cnt++;
-		if (cnt % 10 == 0)
+		if (cnt % 10 == 0 && PERFORMANCETEST)
 			group->PrintInfo();
 		if (cnt % 5 == 0 && PERFORMANCETEST)
 			dynamic_cast<TriangleGroup *>(group.get())->AddTriangle(30);
@@ -49,7 +49,7 @@ void ViewWorld::Render()
 		if (!PERFORMANCETEST)
 		{
 			using namespace std::chrono_literals;
-			std::this_thread::sleep_for(750ms);
+			//std::this_thread::sleep_for(750ms);
 		}
 	}
 
@@ -179,17 +179,27 @@ void GameWorld::InitGroups()
 void GameWorld::InitCallback()
 {
 	// bind callback function
-	glfwSetKeyCallback(_window, KeyCallback);
-	glfwSetCursorPosCallback(_window, MouseCallback);
-	glfwSetMouseButtonCallback(_window, MouseButtonCallback);
-	glfwSetScrollCallback(_window, ScrollCallback);
+	glfwSetKeyCallback(_window, Interaction::KeyCallback);
+	glfwSetCursorPosCallback(_window, Interaction::MouseCallback);
+	glfwSetMouseButtonCallback(_window, Interaction::MouseButtonCallback);
+	glfwSetScrollCallback(_window, Interaction::ScrollCallback);
 }
 
 void GameWorld::UpdateData()
 {
-	for (const auto& group : this->_groups)
-		for (const auto& obj : group->GetObjectList())
-			obj->Rotate(15.0f, glm::vec3(0.0f, 0.0f, 1.0f));
+	glm::mat4 Vnow = Interaction::camera.GetViewMatrix();
+	UniformDataPool::SetData<glm::mat4>("V", Vnow);
+	//std::cout << "Vnow = " << std::endl;
+	//for (int i = 0; i < 4; i++)
+	//{
+	//	for (int j = 0; j < 4; j++)
+	//		std::cout << Vnow[i][j] << " ";
+	//	std::cout << std::endl;
+	//}
+	if (Interaction::spaceFlag == false)
+		for (const auto& group : this->_groups)
+			for (const auto& obj : group->GetObjectList())
+				obj->Rotate(15.0f, glm::vec3(0.0f, 0.0f, 1.0f));
 }
 
 void GameWorld::InitTexture()
@@ -203,27 +213,23 @@ void GameWorld::InitTexture()
 
 void GameWorld::InitGlobalUniformData()
 {
-	//std::shared_ptr<UniformData<glm::mat4>> m(new UniformData<glm::mat4>(std::string("M"), glm::mat4()));
-	//GlobalUniformDataPool::Add(m);
 	// V and P matrix
-	std::shared_ptr<UniformData<glm::mat4>> v(new UniformData<glm::mat4>(std::string("V"), glm::mat4()));
-	GlobalUniformDataPool::Add(v);
-	std::shared_ptr<UniformData<glm::mat4>> p(new UniformData<glm::mat4>(std::string("P"), glm::mat4()));
-	GlobalUniformDataPool::Add(p);
+	UniformDataPool::Add("V", glm::mat4(1.0f));
+	UniformDataPool::Add("P", glm::perspective(glm::radians(45.0f), (float)_width / (float)_height, 0.1f, 500.0f));
 }
 
-void GameWorld::KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
-{
-	if (key == GLFW_KEY_W && action == GLFW_PRESS) {
-		printf("W\n");
-	}
-	if (key == GLFW_KEY_A && action == GLFW_PRESS) {
-		printf("A\n");
-	}
-	if (key == GLFW_KEY_S && action == GLFW_PRESS) {
-		printf("S\n");
-	}
-	if (key == GLFW_KEY_D && action == GLFW_PRESS) {
-		printf("D\n");
-	}
-}
+//void GameWorld::KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
+//{
+//	if (key == GLFW_KEY_W && action == GLFW_PRESS) {
+//		printf("W\n");
+//	}
+//	if (key == GLFW_KEY_A && action == GLFW_PRESS) {
+//		printf("A\n");
+//	}
+//	if (key == GLFW_KEY_S && action == GLFW_PRESS) {
+//		printf("S\n");
+//	}
+//	if (key == GLFW_KEY_D && action == GLFW_PRESS) {
+//		printf("D\n");
+//	}
+//}

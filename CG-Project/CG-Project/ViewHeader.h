@@ -1,5 +1,7 @@
 #pragma once
 #include "ViewBase.h"
+#include "Camera.h"
+#include "Interaction.h"
 #include "ViewData.h"
 #include "ViewTexture.h"
 #include "ShaderObject.h"

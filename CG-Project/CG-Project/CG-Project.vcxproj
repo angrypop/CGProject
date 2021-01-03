@@ -167,7 +167,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Camera.h" />
     <ClInclude Include="GameObject.h" />
+    <ClInclude Include="Interaction.h" />
     <ClInclude Include="ShaderObject.h" />
     <ClInclude Include="ViewBase.h" />
     <ClInclude Include="ViewData.h" />
@@ -181,6 +183,7 @@
   <ItemGroup>
     <ClCompile Include="..\include\OpenGL\glad.c" />
     <ClCompile Include="GameObject.cpp" />
+    <ClCompile Include="Interaction.cpp" />
     <ClCompile Include="ShaderObject.cpp" />
     <ClCompile Include="ViewBase.cpp" />
     <ClCompile Include="ViewData.cpp" />

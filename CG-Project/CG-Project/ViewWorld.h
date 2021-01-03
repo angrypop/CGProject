@@ -1,7 +1,7 @@
 #pragma once
 #include "ViewBase.h"
 
-constexpr bool PERFORMANCETEST = true;					// whether use performance test
+constexpr bool PERFORMANCETEST = false;					// whether use performance test
 
 class ViewWorld : public ViewBase, public std::enable_shared_from_this<ViewWorld>
 {
@@ -74,10 +74,13 @@ protected:
 
 	virtual void UpdateData();
 
-	static void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
-	static void MouseCallback(GLFWwindow* window, double xpos, double ypos) {}
-	static void MouseButtonCallback(GLFWwindow* window, int button, int action, int mods) {}
-	static void ScrollCallback(GLFWwindow* window, double xoffset, double yoffset) {}
-
-
+	//static void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
+	//static void MouseCallback(GLFWwindow* window, double xpos, double ypos) {}
+	//static void MouseButtonCallback(GLFWwindow* window, int button, int action, int mods) {}
+	//static void ScrollCallback(GLFWwindow* window, double xoffset, double yoffset) {}
+private:
+	//ViewCamera _camera = 
+	glm::mat4 _model = glm::mat4(1.0f);
+	glm::mat4 _view = glm::mat4(1.0f);
+	glm::mat4 _projection = glm::perspective(glm::radians(45.0f), (float)_width / (float)_height, 0.1f, 500.0f);
 };

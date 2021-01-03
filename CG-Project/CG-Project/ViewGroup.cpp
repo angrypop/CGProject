@@ -143,12 +143,13 @@ void TriangleGroup::AddTriangle(const GLsizei& num)
 //	0.5f, 0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f
 //};
 	std::array<GLfloat, POINTSIZE * 3> vertex{};
+	constexpr GLfloat SIZE = 10.0f;
 	for (int k = 0; k < num; k++)
 	{
 		for (long long i = 0; i < 3; i++)
 		{
 			for (long long j = 0; j < COORDSIZE; j++)
-				vertex[i * POINTSIZE + j] = ::RandomReal<GLfloat>(-1.0f, 1.0f);
+				vertex[i * POINTSIZE + j] = ::RandomReal<GLfloat>(-SIZE, SIZE);
 			for (long long j = COORDSIZE; j < POINTSIZE; j++)
 				vertex[i * POINTSIZE + j] = ::RandomReal<GLfloat>(-1.0f, 1.0f);
 		}

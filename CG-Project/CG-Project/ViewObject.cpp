@@ -38,6 +38,16 @@ void ViewObject::Translate(const glm::vec3& displacement)
 	this->_M = glm::translate(this->_M, displacement);
 }
 
+void ViewObject::Scale(const glm::vec3& scaler)
+{
+	this->_M = glm::scale(this->_M, scaler);
+}
+
+glm::mat4 ViewObject::GetM() const
+{
+	return this->_M;
+}
+
 void ViewObject::AddUniformData(std::shared_ptr<UniformDataBase>&& uniformData)
 {
 	this->_uniformData.push_back(uniformData);
@@ -140,6 +150,10 @@ void ViewTriangle::InitData(std::array<GLfloat, POINTSIZE * 3>&& vertices)
 	trans = glm::rotate(trans, glm::radians(45.0f), glm::vec3(0.0f, 0.0f, 1.0f));
 	this->AddUniformData(std::shared_ptr<UniformDataBase>(new UniformData<glm::mat4>(
 		"uniM", trans)));
+	this->AddUniformData(std::shared_ptr<UniformDataBase>(new UniformData<glm::mat4>(
+		"uniV", trans)));
+	this->AddUniformData(std::shared_ptr<UniformDataBase>(new UniformData<glm::mat4>(
+		"uniP", trans)));
 
 	// add texture buffer, whose name is defined in GameWorld::InitTexture()
 	this->AddTexture("ColorTexture");
@@ -157,8 +171,11 @@ void ViewTriangle::UpdateData(const GLuint& programHandle)
 	// change and update uniform data
 	//_transAngle += 1.0f;
 	//glm::mat4 trans = glm::rotate(glm::mat4(1.0), glm::radians(_transAngle), glm::vec3(0.0f, 0.0f, 1.0f));
-	auto trans_ptr = dynamic_cast<UniformData<glm::mat4>*>(this->GetUniformData("uniM"));
-	trans_ptr->SetData(std::move(this->_M));
+	dynamic_cast<UniformData<glm::mat4>*>(this->GetUniformData("uniM"))->SetData(std::move(this->_M));
+	glm::mat4 V = UniformDataPool::GetData<glm::mat4>("V");
+	dynamic_cast<UniformData<glm::mat4>*>(this->GetUniformData("uniV"))->SetData(std::move(V));
+	glm::mat4 P = UniformDataPool::GetData<glm::mat4>("P");
+	dynamic_cast<UniformData<glm::mat4>*>(this->GetUniformData("uniP"))->SetData(std::move(P));
 }
 
 

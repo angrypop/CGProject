@@ -32,7 +32,7 @@
       <Filter>ViewModule</Filter>
     </ClCompile>
     <ClCompile Include="GameObject.cpp">
-      <Filter>GameWorld</Filter>
+      <Filter>GameObject</Filter>
     </ClCompile>
     <ClCompile Include="Interaction.cpp">
       <Filter>Toolkit</Filter>
@@ -67,7 +67,7 @@
       <Filter>ViewBase</Filter>
     </ClInclude>
     <ClInclude Include="GameObject.h">
-      <Filter>GameWorld</Filter>
+      <Filter>GameObject</Filter>
     </ClInclude>
     <ClInclude Include="Camera.h">
       <Filter>Toolkit</Filter>
@@ -220,7 +220,7 @@
     <Filter Include="ViewBase">
       <UniqueIdentifier>{526fae83-1dec-4bfc-abad-9dc2f2d891b5}</UniqueIdentifier>
     </Filter>
-    <Filter Include="GameWorld">
+    <Filter Include="GameObject">
       <UniqueIdentifier>{0c4578bf-4129-4164-b19c-da965f54a28e}</UniqueIdentifier>
     </Filter>
     <Filter Include="Toolkit">

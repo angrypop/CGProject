@@ -16,7 +16,7 @@ private:
 	glm::vec3	coordinate;
 	glm::vec3	velocity;
 	glm::vec3	acceleration;
-	std::vector<face> faces;
+	std::vector<std::shared_ptr<ViewTriangle>> faces;
 
 // public functions
 public:

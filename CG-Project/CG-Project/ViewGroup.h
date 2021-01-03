@@ -73,3 +73,11 @@ public:
 protected:
 
 };
+
+class MyGroup : public ViewGroup, public std::enable_shared_from_this<TriangleGroup>
+{
+public:
+	MyGroup();
+	virtual void Init();
+	void AddGameObj(std::shared_ptr<GameObject> ptrGameObj);
+};

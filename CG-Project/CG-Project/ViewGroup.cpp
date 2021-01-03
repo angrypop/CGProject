@@ -1,4 +1,4 @@
-#include "ViewCppHeader.h"
+#include "ViewHeader.h"
 
 ViewGroup::ViewGroup()
 {
@@ -150,7 +150,7 @@ void TriangleGroup::AddTriangle(const GLsizei& num)
 			for (long long j = 0; j < COORDSIZE; j++)
 				vertex[i * POINTSIZE + j] = ::RandomReal<GLfloat>(-1.0f, 1.0f);
 			for (long long j = COORDSIZE; j < POINTSIZE; j++)
-				vertex[i * POINTSIZE + j] = ::RandomReal<GLfloat>(0.0f, 1.0f);
+				vertex[i * POINTSIZE + j] = ::RandomReal<GLfloat>(-1.0f, 1.0f);
 		}
 		this->AddObject(std::shared_ptr<ViewTriangle>(new ViewTriangle(std::move(vertex))));
 	}

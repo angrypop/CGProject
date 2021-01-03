@@ -1,4 +1,4 @@
-#include "ViewCppHeader.h"
+#include "ViewHeader.h"
 
 void ViewWorld::Init()
 {
@@ -11,6 +11,12 @@ void ViewWorld::Init()
 	// basic GL settings
 	this->InitGLSetting();
 
+	// texture buffer initial
+	this->InitTexture();
+
+	// global uniform data initial
+	this->InitGlobalUniformData();
+
 	// world class modules initial
 	this->InitModules();
 
@@ -19,6 +25,8 @@ void ViewWorld::Init()
 
 	// key & mouse & etc callback initial
 	this->InitCallback();
+
+
 }
 
 void ViewWorld::Render()
@@ -56,6 +64,18 @@ void ViewWorld::Render()
 
 }
 
+std::shared_ptr<ViewObject> ViewWorld::GetObject(const HandleT& ID) const
+{
+	for (const auto& group : this->_groups)
+	{
+		auto objs = group->GetObjectList();
+		for (const auto& obj : objs)
+			if (obj->GetHandle() == ID)
+				return obj;
+	}
+	throw(std::string("No object has ID = ") + std::to_string(ID));
+}
+
 void ViewWorld::Loop()
 {
 	constexpr double FPSsamplingRate = 0.25;
@@ -64,10 +84,11 @@ void ViewWorld::Loop()
 	int cnt = 0, index = 0;
 	static double fps[5] {0.0};
 	while (!glfwWindowShouldClose(_window)) {
+		//gameWorldModel->Update();
+		this->UpdateData();
 		this->Render();
-
-		glfwSwapBuffers(_window);
-		glfwPollEvents();
+		::glfwSwapBuffers(_window);
+		::glfwPollEvents();
 		cnt++;
 		end = clock();
 		if ((double)(end - start) / CLOCKS_PER_SEC >= FPSsamplingRate)
@@ -162,6 +183,33 @@ void GameWorld::InitCallback()
 	glfwSetCursorPosCallback(_window, MouseCallback);
 	glfwSetMouseButtonCallback(_window, MouseButtonCallback);
 	glfwSetScrollCallback(_window, ScrollCallback);
+}
+
+void GameWorld::UpdateData()
+{
+	for (const auto& group : this->_groups)
+		for (const auto& obj : group->GetObjectList())
+			obj->Rotate(15.0f, glm::vec3(0.0f, 0.0f, 1.0f));
+}
+
+void GameWorld::InitTexture()
+{
+	const std::string TexturePath = "..\\texture\\";
+	std::shared_ptr<ViewTexture> ptr;
+	ptr.reset(new ViewTexture(TexturePath + "Ground003_4K-JPG\\" + "Ground003_4K_Color.jpg", "uniColorSampler"));
+	ViewTexturePool::Add(ptr, "ColorTexture");
+
+}
+
+void GameWorld::InitGlobalUniformData()
+{
+	//std::shared_ptr<UniformData<glm::mat4>> m(new UniformData<glm::mat4>(std::string("M"), glm::mat4()));
+	//GlobalUniformDataPool::Add(m);
+	// V and P matrix
+	std::shared_ptr<UniformData<glm::mat4>> v(new UniformData<glm::mat4>(std::string("V"), glm::mat4()));
+	GlobalUniformDataPool::Add(v);
+	std::shared_ptr<UniformData<glm::mat4>> p(new UniformData<glm::mat4>(std::string("P"), glm::mat4()));
+	GlobalUniformDataPool::Add(p);
 }
 
 void GameWorld::KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)

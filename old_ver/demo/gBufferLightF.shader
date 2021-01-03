@@ -25,7 +25,8 @@ uniform mat4 lightSpaceMatrix;
 uniform mat4 P;
 uniform mat4 V;
 
-uniform sampler2D gPosition;
+uniform 
+gPosition;
 uniform sampler2D gNormal;
 uniform sampler2D gAlbedoSpec;
 uniform sampler2D gDepthID;

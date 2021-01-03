@@ -1,4 +1,4 @@
-#include "ViewCppHeader.h"
+#include "ViewHeader.h"
 
 void ViewObject::Render(const ViewModule& module)
 {
@@ -9,6 +9,12 @@ void ViewObject::Render(const ViewModule& module)
 	for (const auto& data : this->_uniformData)
 	{
 		data->Transfer(programHandle);
+	}
+	int index = 0;
+	for (const auto& texture : this->_textures)
+	{
+		texture->Render(programHandle, index);
+		index++;
 	}
 	::glDrawArrays(module.GetDrawType(), 0, this->GetPointCount());
 }
@@ -21,6 +27,16 @@ UniformDataBase* ViewObject::GetUniformData(std::string&& name) const
 	return nullptr;
 }
 
+
+void ViewObject::Rotate(const GLfloat& angle, const glm::vec3& axis)
+{
+	this->_M = glm::rotate(this->_M, glm::radians(angle), axis);
+}
+
+void ViewObject::Translate(const glm::vec3& displacement)
+{
+	this->_M = glm::translate(this->_M, displacement);
+}
 
 void ViewObject::AddUniformData(std::shared_ptr<UniformDataBase>&& uniformData)
 {
@@ -35,6 +51,12 @@ void ViewObject::AddBufferData(std::shared_ptr<BufferDataBase>&& bufferData)
 BufferDataBase* ViewObject::GetBufferData(const GLuint& position) const
 {
 	return this->_bufferData[position].get();
+}
+
+void ViewObject::AddTexture(const std::string& name)
+{
+	std::shared_ptr<ViewTexture> texture = ViewTexturePool::Get(name);
+	this->_textures.push_back(texture);
 }
 
 void ViewObject::Bind(const std::weak_ptr<ViewGroup>& groupPtr)
@@ -117,7 +139,10 @@ void ViewTriangle::InitData(std::array<GLfloat, POINTSIZE * 3>&& vertices)
 	glm::mat4 trans = glm::mat4(1.0);
 	trans = glm::rotate(trans, glm::radians(45.0f), glm::vec3(0.0f, 0.0f, 1.0f));
 	this->AddUniformData(std::shared_ptr<UniformDataBase>(new UniformData<glm::mat4>(
-		"uniRotate", trans)));
+		"uniM", trans)));
+
+	// add texture buffer, whose name is defined in GameWorld::InitTexture()
+	this->AddTexture("ColorTexture");
 
 	// bind bufferdata
 	for (const auto& data : _bufferData)
@@ -130,10 +155,10 @@ void ViewTriangle::InitData(std::array<GLfloat, POINTSIZE * 3>&& vertices)
 void ViewTriangle::UpdateData(const GLuint& programHandle)
 {
 	// change and update uniform data
-	_transAngle += 1.0f;
-	glm::mat4 trans = glm::rotate(glm::mat4(1.0), glm::radians(_transAngle), glm::vec3(0.0f, 0.0f, 1.0f));
-	auto trans_ptr = dynamic_cast<UniformData<glm::mat4>*>(this->GetUniformData("uniRotate"));
-	trans_ptr->SetData(std::move(trans));
+	//_transAngle += 1.0f;
+	//glm::mat4 trans = glm::rotate(glm::mat4(1.0), glm::radians(_transAngle), glm::vec3(0.0f, 0.0f, 1.0f));
+	auto trans_ptr = dynamic_cast<UniformData<glm::mat4>*>(this->GetUniformData("uniM"));
+	trans_ptr->SetData(std::move(this->_M));
 }
 
 

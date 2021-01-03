@@ -8,9 +8,14 @@ class ViewWorld : public ViewBase, public std::enable_shared_from_this<ViewWorld
 // pure virtual function zone
 protected:
 	virtual void InitGLSetting() = 0;
+	virtual void InitTexture() = 0;
+	virtual void InitGlobalUniformData() = 0;
 	virtual void InitModules() = 0;
 	virtual void InitGroups() = 0;
 	virtual void InitCallback() = 0;
+
+	virtual void UpdateData() = 0;
+
 
 // non-pure virtual function zone
 public:
@@ -23,6 +28,9 @@ public:
 public:
 	// main render
 	virtual void Render() final;
+
+	// get a object from all the group
+	std::shared_ptr<ViewObject> GetObject(const HandleT& ID) const;
 
 	// return the handle id of object
 	HandleT AddGroup(std::shared_ptr<ViewGroup>&& group);
@@ -58,9 +66,14 @@ public:
 	GameWorld();
 protected:
 	virtual void InitGLSetting();
+	virtual void InitTexture();
+	virtual void InitGlobalUniformData();
 	virtual void InitModules();
 	virtual void InitGroups();
 	virtual void InitCallback();
+
+	virtual void UpdateData();
+
 	static void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
 	static void MouseCallback(GLFWwindow* window, double xpos, double ypos) {}
 	static void MouseButtonCallback(GLFWwindow* window, int button, int action, int mods) {}

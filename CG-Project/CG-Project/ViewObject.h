@@ -16,6 +16,11 @@ public:
 
 // other function zone
 public:
+	// rotate this object around certain axis(x, y, z) and angle degree
+	void Rotate(const GLfloat& angle, const glm::vec3& axis = glm::vec3(0.0f, 0.0f, 1.0f));
+	// translate this object by displacement vector
+	void Translate(const glm::vec3& displacement);
+
 	// add uniform data
 	void AddUniformData(std::shared_ptr<UniformDataBase>&& uniformData);
 	// get uniform data by name, NEVER FREE this pointer
@@ -25,6 +30,9 @@ public:
 	void AddBufferData(std::shared_ptr<BufferDataBase>&& bufferData);
 	// get buffer data by index, NEVER FREE this pointer
 	BufferDataBase* GetBufferData(const GLuint & position) const;
+
+	// add texture buffer
+	void AddTexture(const std::string & name);
 
 	// bind this object to its group
 	void Bind(const std::weak_ptr<ViewGroup>& groupPtr);
@@ -65,9 +73,11 @@ protected:
 	GLuint _VAO = 0;
 	GLsizei _verNum;
 	bool _showFlag = true;
+	glm::mat4 _M = glm::mat4(1.0f);	// the model matrix
 
 	std::vector<std::shared_ptr<UniformDataBase>> _uniformData;
 	std::vector<std::shared_ptr<BufferDataBase>> _bufferData;
+	std::vector<std::shared_ptr<ViewTexture>> _textures;
 };
 
 

@@ -1,5 +1,5 @@
 #include "GameObject.h"
-#include "ViewCppHeader.h"
+#include "ViewHeader.h"
 #include <fstream>
 
 std::vector<std::shared_ptr<ViewTriangle>> getAllRenderData() {
@@ -18,7 +18,7 @@ void GameObject::loadFromObj(std::string filename) {
 	while (fin >> op) {
 		if (op == "v") {
 			std::cout << vertices.size();
-			vertex v = {0, 0, 0, 0, 0, 0, 0};
+			vertex v = {0, 0, 0, 0, 0};
 			fin >> v[0] >> v[1] >> v[2];
 			vertices.push_back(v);
 			cnt++;

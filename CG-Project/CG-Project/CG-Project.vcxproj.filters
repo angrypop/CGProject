@@ -19,15 +19,20 @@
     <ClCompile Include="..\include\OpenGL\glad.c">
       <Filter>Others</Filter>
     </ClCompile>
-    <ClCompile Include="ShaderObject.cpp" />
     <ClCompile Include="ViewData.cpp">
       <Filter>ViewBase</Filter>
     </ClCompile>
     <ClCompile Include="ViewBase.cpp">
       <Filter>ViewBase</Filter>
     </ClCompile>
+    <ClCompile Include="ViewTexture.cpp">
+      <Filter>ViewBase</Filter>
+    </ClCompile>
+    <ClCompile Include="ShaderObject.cpp">
+      <Filter>ViewModule</Filter>
+    </ClCompile>
     <ClCompile Include="GameObject.cpp">
-      <Filter>ViewObject</Filter>
+      <Filter>GameWorld</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -46,17 +51,20 @@
     <ClInclude Include="ViewModule.h">
       <Filter>ViewModule</Filter>
     </ClInclude>
-    <ClInclude Include="ViewCppHeader.h">
-      <Filter>ViewBase</Filter>
-    </ClInclude>
     <ClInclude Include="ShaderObject.h">
       <Filter>ViewModule</Filter>
     </ClInclude>
     <ClInclude Include="ViewData.h">
       <Filter>ViewBase</Filter>
     </ClInclude>
+    <ClInclude Include="ViewTexture.h">
+      <Filter>ViewBase</Filter>
+    </ClInclude>
+    <ClInclude Include="ViewHeader.h">
+      <Filter>ViewBase</Filter>
+    </ClInclude>
     <ClInclude Include="GameObject.h">
-      <Filter>ViewObject</Filter>
+      <Filter>GameWorld</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -202,6 +210,9 @@
     </Filter>
     <Filter Include="ViewBase">
       <UniqueIdentifier>{526fae83-1dec-4bfc-abad-9dc2f2d891b5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameWorld">
+      <UniqueIdentifier>{0c4578bf-4129-4164-b19c-da965f54a28e}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

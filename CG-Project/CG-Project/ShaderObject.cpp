@@ -1,4 +1,4 @@
-#include "ViewCppHeader.h"
+#include "ViewHeader.h"
 
 std::set<ShaderObject> ShaderPool::_shaders;
 

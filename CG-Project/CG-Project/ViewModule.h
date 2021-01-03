@@ -9,7 +9,6 @@ class ViewModule
 public:
 	// use AddShader() to initialize shaders orderly
 	virtual void InitShader() = 0;
-
 // non-pure virtual function zone
 public:
 
@@ -18,6 +17,7 @@ public:
 public:
 	// add a shader to this program by filename and mode
 	void AddShader(std::string filename, GLenum mode);
+
 	// get draw type in glDrawArrays()
 	GLuint GetDrawType() const;
 	// return the program handle of this module

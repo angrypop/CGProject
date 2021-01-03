@@ -1,5 +1,5 @@
 #pragma once
-#include "ViewBase.h"
+#include "ViewHeader.h"
 
 class ViewGroup : public ViewBase, public std::enable_shared_from_this<ViewGroup>
 {
@@ -66,6 +66,7 @@ class TriangleGroup : public ViewGroup, public std::enable_shared_from_this<Tria
 {
 public:
 	TriangleGroup();
+	// add modules and objects
 	virtual void Init();
 	// add some triangles
 	void AddTriangle(const GLsizei & num);

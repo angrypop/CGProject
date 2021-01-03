@@ -15,6 +15,7 @@
 #include <chrono>
 #include <thread>
 #include <random>
+#include <map>
 
 #include <glad/glad.h>
 #include <glfw3.h>
@@ -22,11 +23,12 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include "stb_image.h"
 
 typedef long long HandleT;
 
 constexpr int COORDSIZE = 3;							// every point has coordinate data like (x, y, z)
-constexpr int COLORSIZE = 4;							// every point has color data like (r, g, b, a)
+constexpr int COLORSIZE = 2;							// every point has color data like (r, g, b, a)
 constexpr int POINTSIZE = COORDSIZE + COLORSIZE;		// every point has color and coordinate data
 
 enum class ViewObjectEnum { PlaneObject, BallObject, TriangleObject };
@@ -49,6 +51,12 @@ enum class ViewObjectEnum { PlaneObject, BallObject, TriangleObject };
 	// View World
 	class ViewWorld;
 		class GameWorld;
+// Texture class
+	class ViewTexture;
+	class ViewTexturePool;
+// Texture class
+	class ViewFrame;
+	class ViewFramePool;
 
 // Shader class
 	class ShaderObject;
@@ -101,5 +109,4 @@ protected:
 private:
 	static HandleT _handleCnt;
 };
-
 

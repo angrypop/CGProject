@@ -16,6 +16,7 @@ static const float YAW = -90.0f;
 static const float PITCH = 0.0f;
 static const float SPEED = 2.5f;
 static const float SENSITIVITY = 0.1f;
+static const float SCROLLRATE = 3.0f;
 static const float ZOOM = 45.0f;
 
 class ViewCamera {
@@ -101,7 +102,7 @@ public:
 	// processes input received from a mouse scroll-wheel event. Only requires input on the vertical wheel-axis
 	void ProcessMouseScroll(float yoffset)
 	{
-		Position += Front * SENSITIVITY * yoffset;
+		Position += Front * SENSITIVITY * yoffset * SCROLLRATE;
 	}
 
 private:

@@ -164,7 +164,11 @@ MyGroup::MyGroup()
 void MyGroup::Init()
 {
 	this->AddModule(std::shared_ptr<TestModule>(new TestModule()));
-	std::vector<std::shared_ptr<ViewTriangle>> renderData = getAllRenderData();
+}
+
+void MyGroup::AddGameObj(std::shared_ptr<GameObject> ptrGameObj)
+{
+	std::vector<std::shared_ptr<ViewTriangle>> renderData = ptrGameObj->getRenderData();
 	for (auto ptr : renderData) {
 		this->AddObject(ptr);
 	}

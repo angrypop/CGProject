@@ -79,4 +79,5 @@ class MyGroup : public ViewGroup, public std::enable_shared_from_this<TriangleGr
 public:
 	MyGroup();
 	virtual void Init();
+	void AddGameObj(std::shared_ptr<GameObject> ptrGameObj);
 };

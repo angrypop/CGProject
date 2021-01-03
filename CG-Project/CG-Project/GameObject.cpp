@@ -48,8 +48,16 @@ void GameObject::loadFromObj(std::string filename) {
 				coord_index.push_back(coord_index_this);
 			}
 			for (int i = 2; i < coord_index.size(); i++) {
+				// create view triangle
 				face f = { vertices[coord_index[0]], vertices[coord_index[1]], vertices[coord_index[i]] };
-				faces.push_back(f);
+				std::array<GLfloat, POINTSIZE * 3> data{};
+				for (size_t i = 0; i < 3; i++) {
+					for (size_t j = 0; j < COORDSIZE; j++)
+						data[i * POINTSIZE + j] = f[i][j];
+					for (size_t j = COORDSIZE; j < POINTSIZE; j++)
+						data[i * POINTSIZE + j] = 0; // texture coord
+				}
+				faces.push_back(std::shared_ptr<ViewTriangle>(new ViewTriangle(std::move(data))));
 			}
 		}
 		else {
@@ -61,6 +69,12 @@ void GameObject::loadFromObj(std::string filename) {
 }
 
 bool GameObject::intersect(GameObject& obj) {
+	// treat all objects as balls
+	
+	GLfloat dist_sq = (this->coordinate[0] - obj.coordinate[0]) * (this->coordinate[0] - obj.coordinate[0])
+		+ (this->coordinate[1] - obj.coordinate[1]) * (this->coordinate[1] - obj.coordinate[1])
+		+ (this->coordinate[2] - obj.coordinate[2]) * (this->coordinate[2] - obj.coordinate[2]);
+	// GLfloat r1_sq = 
 	return false;
 }
 
@@ -68,23 +82,15 @@ void GameObject::collide(GameObject& obj) {
 }
 
 std::vector<std::shared_ptr<ViewTriangle>> GameObject::getRenderData() {
-	std::vector<std::shared_ptr<ViewTriangle>> ret;
-	for (auto f : this->faces) {
-		std::array<GLfloat, POINTSIZE * 3> vertex{};
-		for (long long i = 0; i < 3; i++)
-		{
-			for (long long j = 0; j < COORDSIZE; j++)
-				vertex[i * POINTSIZE + j] = f[i][j];
-			for (long long j = COORDSIZE; j < POINTSIZE; j++)
-				vertex[i * POINTSIZE + j] = ::RandomReal<GLfloat>(0.0f, 1.0f);
-		}
-		ret.push_back(std::shared_ptr<ViewTriangle>(new ViewTriangle(std::move(vertex))));
-	}
-	return ret;
+	return faces;
 }
 
-GameObject::GameObject(): fixed(true){
-
+GameObject::GameObject() {
+	fixed = true;
+	mass = 100;
+	coordinate = { 0, 0, 0 };
+	velocity = { 0, 0, 0 };
+	acceleration = { 0,0,0 };
 }
 
 void GameObject::error(std::string msg, bool fatal) {

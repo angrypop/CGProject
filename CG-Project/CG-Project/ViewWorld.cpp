@@ -174,7 +174,11 @@ void GameWorld::InitGroups()
 {
 	// add groups
 	// this->AddGroup(std::shared_ptr<TriangleGroup>(new TriangleGroup()));
-	this->AddGroup(std::shared_ptr<MyGroup>(new MyGroup()));
+	GameObjects.push_back(std::shared_ptr<GameObject>(new GameObject()));
+	GameObjects[0]->loadFromObj("resources/wolf.obj");
+	auto ptrGrp = std::shared_ptr<MyGroup>(new MyGroup());
+	ptrGrp->AddGameObj(GameObjects[0]);
+	this->AddGroup(ptrGrp);
 }
 
 void GameWorld::InitCallback()

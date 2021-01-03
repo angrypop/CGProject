@@ -1,5 +1,6 @@
 #pragma once
 #include "ViewBase.h"
+#include "ViewCppHeader.h"
 
 constexpr bool PERFORMANCETEST = true;					// whether use performance test
 
@@ -78,6 +79,6 @@ protected:
 	static void MouseCallback(GLFWwindow* window, double xpos, double ypos) {}
 	static void MouseButtonCallback(GLFWwindow* window, int button, int action, int mods) {}
 	static void ScrollCallback(GLFWwindow* window, double xoffset, double yoffset) {}
-
-
+private:
+	std::vector<std::shared_ptr<GameObject>> GameObjects;
 };

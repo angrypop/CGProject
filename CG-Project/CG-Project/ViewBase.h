@@ -32,7 +32,7 @@ constexpr int COORDSIZE = 3;							// every point has coordinate data like (x, y
 constexpr int COLORSIZE = 2;							// every point has color data like (r, g, b, a)
 constexpr int POINTSIZE = COORDSIZE + COLORSIZE;		// every point has color and coordinate data
 
-enum class ViewObjectEnum { PlaneObject, BallObject, TriangleObject };
+enum class ViewObjectEnum { PlaneObject, BallObject, TriangleObject, PolygonObject };
 // Base Class
 	class ViewBase;
 

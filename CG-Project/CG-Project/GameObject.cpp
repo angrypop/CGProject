@@ -52,7 +52,7 @@ void GameObject::loadFromObj(std::string filename) {
 					for (size_t j = 0; j < COORDSIZE; j++)
 						data[i * POINTSIZE + j] = f[i][j];
 					for (size_t j = COORDSIZE; j < POINTSIZE; j++)
-						data[i * POINTSIZE + j] = 0; // texture coord
+						data[i * POINTSIZE + j] = ::RandomReal<GLfloat>(-1.0f, 1.0f); // texture coord
 				}
 				faces.push_back(std::shared_ptr<ViewTriangle>(new ViewTriangle(std::move(data))));
 			}

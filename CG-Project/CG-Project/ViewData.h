@@ -141,6 +141,65 @@ protected:
 	std::array<T, N* M> _data;
 };
 
+// data type: T
+template <typename T, GLsizei M>
+class BufferDataVector : public BufferDataBase
+{
+public:
+	// return reference of data to be operated
+	std::vector<T>& Data()
+	{
+		return this->_data;
+	}
+	// bind this data to given VAO
+	virtual void BindVAO(const GLuint& VAO)
+	{
+		::glBindVertexArray(VAO);
+		::glBindBuffer(GL_ARRAY_BUFFER, _vbo);
+
+		GLuint position = 0;
+		GLsizei offset = 0;
+		auto it = _lengths.begin();
+		for (; it != _lengths.end(); position++, offset += *it, it++)
+		{
+			::glVertexAttribPointer(position, *it, GL_FLOAT, GL_FALSE, M * sizeof(T), (void*)(((T*)0) + offset));
+			//			std::cout << M * sizeof(T) << " " << (int)(void*)(((T*)0) + offset) << std::endl;
+			::glEnableVertexAttribArray(position);
+		}
+		// the _lengths is not correct
+		if (offset != M)
+			throw("Buffer Data Lengths NOT Correct!");
+
+		::glBindVertexArray(0);
+		::glBindBuffer(GL_ARRAY_BUFFER, 0);
+	}
+	// set data[pos]
+	virtual void SetData(const GLsizei& pos, const T& data)
+	{
+		this->_data[pos] = data;
+	}
+	// set data[posX, posY]
+	virtual void SetData(const GLsizei& posX, const GLsizei& posY, const T& data)
+	{
+		this->_data[(long long)(posX)*M + posY] = data;
+	}
+
+	// data: the data array, length: the vector of lengths of every location data
+	// e.g. for length {3, 4}, means location = 0 has 3 floats, location = 1 has 4 floats
+	BufferDataVector(const std::vector<T>& data, const std::vector<GLsizei>& lengthInfo)
+		: BufferDataBase(lengthInfo), _data(data), N((GLsizei)data.size())
+	{
+		glCreateBuffers(1, &_vbo);
+		glNamedBufferStorage(_vbo, N * M * sizeof(T), _data.data(), 0);
+	}
+
+protected:
+
+	GLuint _vbo = 0;
+	GLsizei N;
+	std::vector<T> _data;
+};
+
 class UniformDataPool
 {
 public:

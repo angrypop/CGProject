@@ -99,22 +99,15 @@ protected:
 	//GLfloat _transAngle = 45.0f;
 };
 
-//class ViewPlane : public ViewObject
-//{
-//public:
-//	ViewPlane();
-//	virtual ~ViewPlane();
-//protected:
-//
-//};
-//
-//class ViewBall : public ViewObject
-//{
-//public:
-//	ViewBall();
-//	virtual ~ViewBall();
-//protected:
-//
-//}; 
+class ViewPolygon : public ViewObject
+{
+public:
+	// sizeof vertices must be the multiple of POINTSIZE
+	ViewPolygon(const std::vector<GLfloat>& vertices);
+	virtual void UpdateData(const GLuint& programHandle);
+	void InitData(const std::vector<GLfloat>& vertices);
+
+	virtual ~ViewPolygon() {}
+};
 
 

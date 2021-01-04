@@ -163,7 +163,6 @@ void ViewTriangle::InitData(std::array<GLfloat, POINTSIZE * 3>&& vertices)
 	{
 		data->BindVAO(_VAO);
 	}
-	// no need to bind uniform data since we will do it later in UpdateData
 }
 
 void ViewTriangle::UpdateData(const GLuint& programHandle)
@@ -178,5 +177,48 @@ void ViewTriangle::UpdateData(const GLuint& programHandle)
 	dynamic_cast<UniformData<glm::mat4>*>(this->GetUniformData("uniP"))->SetData(std::move(P));
 }
 
+ViewPolygon::ViewPolygon(const std::vector<GLfloat>& vertices)
+	: ViewObject(ViewObjectEnum::PolygonObject, (GLsizei)vertices.size() / POINTSIZE)
+{
+	if (vertices.size() % POINTSIZE != 0)
+		throw(std::string("ViewPolygon:: vertices array size must be mutiple of POINTSIZE"));
+	this->InitData(vertices);
+}
 
+void ViewPolygon::UpdateData(const GLuint& programHandle)
+{
+	dynamic_cast<UniformData<glm::mat4>*>(this->GetUniformData("uniM"))->SetData(std::move(this->_M));
+	glm::mat4 V = UniformDataPool::GetData<glm::mat4>("V");
+	dynamic_cast<UniformData<glm::mat4>*>(this->GetUniformData("uniV"))->SetData(std::move(V));
+	glm::mat4 P = UniformDataPool::GetData<glm::mat4>("P");
+	dynamic_cast<UniformData<glm::mat4>*>(this->GetUniformData("uniP"))->SetData(std::move(P));
+}
 
+void ViewPolygon::InitData(const std::vector<GLfloat>& vertices)
+{
+	// generate VAO
+	::glGenVertexArrays(1, &_VAO);
+
+	// add buffer data
+	std::vector<GLsizei> bufferInfo = std::vector<GLsizei>{ COORDSIZE, COLORSIZE };
+	this->AddBufferData(std::shared_ptr<BufferDataBase>(new BufferDataVector<GLfloat, POINTSIZE>(vertices, bufferInfo)));
+	
+	// add uniform data
+	glm::mat4 trans = glm::mat4(1.0);
+	trans = glm::rotate(trans, glm::radians(45.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+	this->AddUniformData(std::shared_ptr<UniformDataBase>(new UniformData<glm::mat4>(
+		"uniM", trans)));
+	this->AddUniformData(std::shared_ptr<UniformDataBase>(new UniformData<glm::mat4>(
+		"uniV", trans)));
+	this->AddUniformData(std::shared_ptr<UniformDataBase>(new UniformData<glm::mat4>(
+		"uniP", trans)));
+
+	// add texture buffer, whose name is defined in GameWorld::InitTexture()
+	this->AddTexture("ColorTexture");
+
+	// bind bufferdata
+	for (const auto& data : _bufferData)
+	{
+		data->BindVAO(_VAO);
+	}
+}

@@ -142,7 +142,7 @@ protected:
 };
 
 // data type: T
-template <typename T, GLsizei M>
+template <typename T>
 class BufferDataVector : public BufferDataBase
 {
 public:
@@ -186,17 +186,18 @@ public:
 
 	// data: the data array, length: the vector of lengths of every location data
 	// e.g. for length {3, 4}, means location = 0 has 3 floats, location = 1 has 4 floats
-	BufferDataVector(const std::vector<T>& data, const std::vector<GLsizei>& lengthInfo)
-		: BufferDataBase(lengthInfo), _data(data), N((GLsizei)data.size())
+	BufferDataVector(const std::vector<T>& data, const GLsizei & M, const std::vector<GLsizei>& lengthInfo)
+		: BufferDataBase(lengthInfo), _data(data), N((GLsizei)data.size() / M), M(M)
 	{
 		glCreateBuffers(1, &_vbo);
-		glNamedBufferStorage(_vbo, N * M * sizeof(T), _data.data(), 0);
+		glNamedBufferStorage(_vbo, (short)N * (short)M * sizeof(T), _data.data(), 0);
 	}
 
 protected:
 
 	GLuint _vbo = 0;
 	GLsizei N;
+	GLsizei M;
 	std::vector<T> _data;
 };
 

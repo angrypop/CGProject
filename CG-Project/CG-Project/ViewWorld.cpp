@@ -179,8 +179,8 @@ void GameWorld::InitGroups()
 	GameObjects[1]->loadFromObj("resources/cottage.obj");
 	GameObjects[1]->scale({ 0.1, 0.1, 0.1 });
 	GameObjects[1]->translate({ -5, 0, 0 });
-	auto ptrGrp = std::shared_ptr<MyGroup>(new MyGroup());
-	for (auto i : GameObjects) {
+	std::shared_ptr<MyGroup> ptrGrp = std::shared_ptr<MyGroup>(new MyGroup());
+	for (const auto & i : GameObjects) {
 		ptrGrp->AddGameObj(i);
 	}
 	this->AddGroup(ptrGrp);
@@ -197,8 +197,11 @@ void GameWorld::InitCallback()
 
 void GameWorld::UpdateData()
 {
+
 	glm::mat4 Vnow = Interaction::camera.GetViewMatrix();
 	UniformDataPool::SetData<glm::mat4>("V", Vnow);
+	if (GameObjects.size() == 0)
+		return;
 	double delta = 0.1;
 	if (Interaction::key_w_pressed) {
 		GameObjects[0]->translate({ 0, 0, delta });

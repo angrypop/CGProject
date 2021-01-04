@@ -180,8 +180,8 @@ void ViewTriangle::UpdateData(const GLuint& programHandle)
 ViewPolygon::ViewPolygon(const std::vector<GLfloat>& vertices)
 	: ViewObject(ViewObjectEnum::PolygonObject, (GLsizei)vertices.size() / POINTSIZE)
 {
-	if (vertices.size() % POINTSIZE != 0)
-		throw(std::string("ViewPolygon:: vertices array size must be mutiple of POINTSIZE"));
+	if (vertices.size() % (POINTSIZE * 3) != 0)
+		throw(std::string("ViewPolygon:: vertices array size must be mutiple of (3 * POINTSIZE)"));
 	this->InitData(vertices);
 }
 
@@ -201,7 +201,7 @@ void ViewPolygon::InitData(const std::vector<GLfloat>& vertices)
 
 	// add buffer data
 	std::vector<GLsizei> bufferInfo = std::vector<GLsizei>{ COORDSIZE, COLORSIZE };
-	this->AddBufferData(std::shared_ptr<BufferDataBase>(new BufferDataVector<GLfloat, POINTSIZE>(vertices, bufferInfo)));
+	this->AddBufferData(std::shared_ptr<BufferDataBase>(new BufferDataVector<GLfloat>(vertices, POINTSIZE, bufferInfo)));
 	
 	// add uniform data
 	glm::mat4 trans = glm::mat4(1.0);

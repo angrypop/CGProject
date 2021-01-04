@@ -56,6 +56,28 @@ public:
 	ViewObjectEnum GetType() const;
 	// get number of its points
 	GLsizei GetPointCount() const;
+	// get its buffer data vector by index
+	template <typename T>
+	std::vector<T>& GetBufferData(const int& index = 0) const
+	{
+		if (index >= this->_bufferData.size() || index < 0)
+			throw("ViewObject::GetBufferData:: Index OUT of range");
+		BufferDataVector<T>* ptr = dynamic_cast<BufferDataVector<T>*>(this->_bufferData[index].get());
+		if (ptr == nullptr)
+			throw("ViewObject::GetBufferData:: Bad Index");
+		return ptr->Data();
+	}
+	// get its buffer data array by index
+	template <typename T, GLsizei N, GLsizei M>
+	std::array<T, N * M>& GetBufferData(const int& index = 0) const
+	{
+		if (index >= this->_bufferData.size() || index < 0)
+			throw("ViewObject::GetBufferData:: Index OUT of range");
+		BufferData<T, N, M>* ptr = dynamic_cast<BufferData<T, N, M>*>(this->_bufferData[index].get());
+		if (ptr == nullptr)
+			throw("ViewObject::GetBufferData:: Bad Index");
+		return ptr->Data();
+	}
 
 	// compare with its handle 
 	bool operator == (const ViewObject& rhs);
@@ -102,7 +124,7 @@ protected:
 class ViewPolygon : public ViewObject
 {
 public:
-	// sizeof vertices must be the multiple of POINTSIZE
+	// sizeof vertices must be the multiple of (3 * POINTSIZE)
 	ViewPolygon(const std::vector<GLfloat>& vertices);
 	virtual void UpdateData(const GLuint& programHandle);
 	void InitData(const std::vector<GLfloat>& vertices);

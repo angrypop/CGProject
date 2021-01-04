@@ -80,4 +80,8 @@ public:
 	MyGroup();
 	virtual void Init();
 	void AddGameObj(std::shared_ptr<GameObject> ptrGameObj);
+	// add some triangles
+	void AddTriangle(const GLsizei& num);
+	// add a test polygon
+	void AddTestPolygon(const GLsizei& triangleNum);
 };

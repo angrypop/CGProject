@@ -164,13 +164,63 @@ MyGroup::MyGroup()
 
 void MyGroup::Init()
 {
+	// initialize objects
+	this->AddTestPolygon(10000);
+	//auto vec = this->_objs[0]->GetBufferData<GLfloat>();
+
+	//for (const auto& it : vec)
+	//	std::cout << it << " ";
+	//std::cout << std::endl;
+
+	//this->AddTriangle(10);
+	//auto vecc = this->_objs[1]->GetBufferData<GLfloat, 3, POINTSIZE>();
+	//for (const auto& it : vecc)
+	//	std::cout << it << " ";
+	//std::cout << std::endl;
+	// initialize modules
 	this->AddModule(std::shared_ptr<TestModule>(new TestModule()));
 }
 
 void MyGroup::AddGameObj(std::shared_ptr<GameObject> ptrGameObj)
 {
 	std::vector<std::shared_ptr<ViewTriangle>> renderData = ptrGameObj->getRenderData();
-	for (auto ptr : renderData) {
+	for (const auto &ptr : renderData) {
 		this->AddObject(ptr);
 	}
+}
+
+void MyGroup::AddTriangle(const GLsizei& num)
+{
+	std::array<GLfloat, POINTSIZE * 3> vertex{};
+	constexpr GLfloat SIZE = 10.0f;
+	for (int k = 0; k < num; k++)
+	{
+		for (long long i = 0; i < 3; i++)
+		{
+			for (long long j = 0; j < COORDSIZE; j++)
+				vertex[i * POINTSIZE + j] = ::RandomReal<GLfloat>(-SIZE, SIZE);
+			for (long long j = COORDSIZE; j < POINTSIZE; j++)
+				vertex[i * POINTSIZE + j] = ::RandomReal<GLfloat>(-1.0f, 1.0f);
+		}
+		this->AddObject(std::shared_ptr<ViewTriangle>(new ViewTriangle(std::move(vertex))));
+	}
+}
+
+void MyGroup::AddTestPolygon(const GLsizei& triangleNum)
+{
+	std::vector<GLfloat> polyVertex;
+	constexpr GLfloat SIZE = 3.0f;
+	for (int k = 0; k < triangleNum; k++)
+	{
+		for (long long i = 0; i < 3; i++)
+		{
+			for (long long j = 0; j < COORDSIZE; j++)
+				polyVertex.push_back(::RandomReal<GLfloat>(-SIZE, SIZE));
+			for (long long j = COORDSIZE; j < POINTSIZE; j++)
+				polyVertex.push_back(::RandomReal<GLfloat>(-1.0f, 1.0f));
+		}
+	}
+	std::shared_ptr<ViewPolygon> ptr(new ViewPolygon(polyVertex));
+	ptr->Translate(glm::vec3(0.0f, -10.0f, -10.0f));
+	this->AddObject(ptr);
 }

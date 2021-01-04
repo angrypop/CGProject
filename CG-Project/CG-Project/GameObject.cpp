@@ -17,9 +17,6 @@ void GameObject::loadFromObj(std::string filename) {
 	while (fin >> op) {
 		cnt++;
 		// std::cout << " line: " << cnt << std::endl;
-		if (cnt == 16255) {
-			std::cout << "ÔÚÕâÍ£¶Ù£¡";
-		}
 		if (op == "v") {
 			vertex v = {0, 0, 0, 0, 0};
 			fin >> v[0] >> v[1] >> v[2];

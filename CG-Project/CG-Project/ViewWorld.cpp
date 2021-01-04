@@ -175,8 +175,14 @@ void GameWorld::InitGroups()
 	GameObjects.push_back(std::shared_ptr<GameObject>(new GameObject()));
 	GameObjects[0]->loadFromObj("resources/wolf.obj");
 	GameObjects[0]->scale({ 20, 20, 20 });
+	GameObjects.push_back(std::shared_ptr<GameObject>(new GameObject()));
+	GameObjects[1]->loadFromObj("resources/cottage.obj");
+	GameObjects[1]->scale({ 0.1, 0.1, 0.1 });
+	GameObjects[1]->translate({ -5, 0, 0 });
 	auto ptrGrp = std::shared_ptr<MyGroup>(new MyGroup());
-	ptrGrp->AddGameObj(GameObjects[0]);
+	for (auto i : GameObjects) {
+		ptrGrp->AddGameObj(i);
+	}
 	this->AddGroup(ptrGrp);
 }
 
@@ -193,11 +199,21 @@ void GameWorld::UpdateData()
 {
 	glm::mat4 Vnow = Interaction::camera.GetViewMatrix();
 	UniformDataPool::SetData<glm::mat4>("V", Vnow);
-	
+	double delta = 0.1;
+	if (Interaction::key_w_pressed) {
+		GameObjects[0]->translate({ 0, 0, delta });
+	}
+	if (Interaction::key_s_pressed) {
+		GameObjects[0]->translate({ 0, 0, -delta });
+	}
+	if (Interaction::key_a_pressed) {
+		GameObjects[0]->translate({ delta, 0, 0 });
+	}
+	if (Interaction::key_d_pressed) {
+		GameObjects[0]->translate({ -delta, 0, 0 });
+	}
 	if (Interaction::spaceFlag == false)
-		for (const auto& group : this->_groups)
-			for (const auto& obj : group->GetObjectList())
-				obj->Rotate(1.0f, glm::vec3(0.0f, 1.0f, 0.0f));
+		GameObjects[0]->rotate(1.0f, glm::vec3(0.0f, 1.0f, 0.0f));
 }
 
 void GameWorld::InitTexture()

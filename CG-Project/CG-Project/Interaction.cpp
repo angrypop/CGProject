@@ -4,6 +4,10 @@ ViewCamera Interaction::camera = ViewCamera(glm::vec3(40.0f, 40.0f, 40.0f), glm:
 glm::vec3 Interaction::ObjPos = glm::vec3(0.0f);
 glm::vec3 Interaction::ObjVel = glm::vec3(0.0f);
 bool Interaction::spaceFlag = false;
+bool Interaction::key_w_pressed = false;
+bool Interaction::key_s_pressed = false;
+bool Interaction::key_a_pressed = false;
+bool Interaction::key_d_pressed = false;
 
 float Interaction::lastX = 0.0f;
 float Interaction::lastY = 0.0f;
@@ -93,24 +97,40 @@ void Interaction::KeyCallback(GLFWwindow* window, int key, int scancode, int act
 		spaceFlag = !spaceFlag;
 		printf("Key Space\n");
 	}
-	if (key == GLFW_KEY_W && action == GLFW_REPEAT) {
+	if (key == GLFW_KEY_W && action == GLFW_PRESS) {
 		ObjPos += glm::vec3(-0.05, 0, 0);
 		ObjVel = glm::vec3(-1, 0, 0);
+		key_w_pressed = true;
 		printf("Key W\n");
 	}
-	if (key == GLFW_KEY_A && action == GLFW_REPEAT) {
+	if (key == GLFW_KEY_W && action == GLFW_RELEASE) {
+		key_w_pressed = false;
+	}
+	if (key == GLFW_KEY_A && action == GLFW_PRESS) {
 		ObjPos += glm::vec3(0, 0, 0.05);
 		ObjVel = glm::vec3(0, 0, 1);
+		key_a_pressed = true;
 		printf("Key A\n");
 	}
-	if (key == GLFW_KEY_S && action == GLFW_REPEAT) {
+	if (key == GLFW_KEY_A && action == GLFW_RELEASE) {
+		key_a_pressed = false;
+	}
+	if (key == GLFW_KEY_S && action == GLFW_PRESS) {
 		ObjPos += glm::vec3(0.05, 0, 0);
 		ObjVel = glm::vec3(1, 0, 0);
+		key_s_pressed = true;
 		printf("Key S\n");
 	}
-	if (key == GLFW_KEY_D && action == GLFW_REPEAT) {
+	if (key == GLFW_KEY_S && action == GLFW_RELEASE) {
+		key_s_pressed = false;
+	}
+	if (key == GLFW_KEY_D && action == GLFW_PRESS) {
 		ObjPos += glm::vec3(0, 0, -0.05);
 		ObjVel = glm::vec3(0, 0, -1);
+		key_d_pressed = true;
 		printf("Key D\n");
+	}
+	if (key == GLFW_KEY_D && action == GLFW_RELEASE) {
+		key_d_pressed = false;
 	}
 }

@@ -14,6 +14,10 @@ public:
 	static glm::vec3 ObjPos;
 	static glm::vec3 ObjVel;
 	static bool spaceFlag;
+	static bool key_w_pressed;
+	static bool key_s_pressed;
+	static bool key_a_pressed;
+	static bool key_d_pressed;
 
 private:
 	static float lastX;

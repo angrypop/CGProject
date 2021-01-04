@@ -1,5 +1,5 @@
 #pragma once
-#include "ViewBase.h"
+#include "ViewCppHeader.h"
 
 constexpr bool PERFORMANCETEST = false;					// whether use performance test
 
@@ -83,4 +83,5 @@ private:
 	glm::mat4 _model = glm::mat4(1.0f);
 	glm::mat4 _view = glm::mat4(1.0f);
 	glm::mat4 _projection = glm::perspective(glm::radians(45.0f), (float)_width / (float)_height, 0.1f, 500.0f);
+	std::vector<std::shared_ptr<GameObject>> GameObjects;
 };

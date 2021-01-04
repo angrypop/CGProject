@@ -172,8 +172,12 @@ void GameWorld::InitModules()
 
 void GameWorld::InitGroups()
 {
-	// add groups
-	this->AddGroup(std::shared_ptr<TriangleGroup>(new TriangleGroup()));
+	GameObjects.push_back(std::shared_ptr<GameObject>(new GameObject()));
+	GameObjects[0]->loadFromObj("resources/wolf.obj");
+	GameObjects[0]->scale({ 20, 20, 20 });
+	auto ptrGrp = std::shared_ptr<MyGroup>(new MyGroup());
+	ptrGrp->AddGameObj(GameObjects[0]);
+	this->AddGroup(ptrGrp);
 }
 
 void GameWorld::InitCallback()
@@ -189,17 +193,11 @@ void GameWorld::UpdateData()
 {
 	glm::mat4 Vnow = Interaction::camera.GetViewMatrix();
 	UniformDataPool::SetData<glm::mat4>("V", Vnow);
-	//std::cout << "Vnow = " << std::endl;
-	//for (int i = 0; i < 4; i++)
-	//{
-	//	for (int j = 0; j < 4; j++)
-	//		std::cout << Vnow[i][j] << " ";
-	//	std::cout << std::endl;
-	//}
+	
 	if (Interaction::spaceFlag == false)
 		for (const auto& group : this->_groups)
 			for (const auto& obj : group->GetObjectList())
-				obj->Rotate(15.0f, glm::vec3(0.0f, 0.0f, 1.0f));
+				obj->Rotate(1.0f, glm::vec3(0.0f, 1.0f, 0.0f));
 }
 
 void GameWorld::InitTexture()

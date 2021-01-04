@@ -81,6 +81,24 @@ bool GameObject::intersect(GameObject& obj) {
 void GameObject::collide(GameObject& obj) {
 }
 
+void GameObject::scale(const glm::vec3& vec) {
+	for (auto f : faces) {
+		f->Scale(vec);
+	}
+}
+
+void GameObject::translate(const glm::vec3& vec) {
+	for (auto f : faces) {
+		f->Translate(vec);
+	}
+}
+
+void GameObject::rotate(const GLfloat& angle, const glm::vec3& vec) {
+	for (auto f : faces) {
+		f->Rotate(angle, vec);
+	}
+}
+
 std::vector<std::shared_ptr<ViewTriangle>> GameObject::getRenderData() {
 	return faces;
 }

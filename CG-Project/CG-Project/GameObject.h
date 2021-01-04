@@ -23,6 +23,9 @@ public:
 	void		loadFromObj(std::string filename);
 	bool		intersect(GameObject& obj);
 	void		collide(GameObject& obj);
+	void		scale(const glm::vec3& vec);
+	void		translate(const glm::vec3& vec);
+	void		rotate(const GLfloat& angle, const glm::vec3& vec);
 	std::vector<std::shared_ptr<ViewTriangle>> getRenderData();
 	GameObject();
 

@@ -109,7 +109,7 @@ void ViewGroup::Show()
 void ViewGroup::Render()
 {
 	
-	glPointSize(5);
+	//glPointSize(5);
 	for (const auto& module : _modules)
 	{
 		for (const auto& obj : _objs)
@@ -162,10 +162,12 @@ MyGroup::MyGroup()
 	this->Init();
 }
 
+
 void MyGroup::Init()
 {
 	// initialize objects
-	this->AddTestPolygon(10000);
+
+
 	//auto vec = this->_objs[0]->GetBufferData<GLfloat>();
 
 	//for (const auto& it : vec)

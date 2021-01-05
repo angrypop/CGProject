@@ -190,7 +190,7 @@ public:
 		: BufferDataBase(lengthInfo), _data(data), N((GLsizei)data.size() / M), M(M)
 	{
 		glCreateBuffers(1, &_vbo);
-		glNamedBufferStorage(_vbo, (short)N * (short)M * sizeof(T), _data.data(), 0);
+		glNamedBufferStorage(_vbo, N * (short)M * sizeof(T), _data.data(), 0);
 	}
 
 protected:

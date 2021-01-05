@@ -1,13 +1,26 @@
 #pragma once
-#define STB_IMAGE_IMPLEMENTATION
+
 #include "ViewBase.h"
 #include "ViewData.h"
 
-
-class ViewTexture
+class ViewBufferObject
 {
 public:
-	GLuint GetTBO() const;
+	GLuint GetBO() const;
+	ViewBufferObject(const std::string& samplerName)
+	{
+		_sampler.reset(new UniformData<GLint>(samplerName, 0));
+	}
+
+protected:
+	std::shared_ptr<UniformData<GLint>> _sampler;
+	GLuint _BO = 0;
+};
+
+class ViewTexture : public ViewBufferObject
+{
+public:
+
 
 	ViewTexture(const GLsizei& width, const GLsizei& height, const std::string& samplerName,
 		const GLint& internalformat = GL_RGB16F, const GLenum& format = GL_RGB);
@@ -16,7 +29,7 @@ public:
 		const GLint& internalformat = GL_RGB16F, const GLenum& format = GL_RGB);
 
 	// bind this texture to given attachment and level in CURRENT Frame Buffer
-	// e.g. BindFBO(GL_DEPTH_ATTACHMENT, 0)
+	// e.g. BindFBO(GL_COLOR_ATTACHMENT0, 0)
 	void BindFrame(const GLuint& attachment, const GLint& level = 0);
 	
 	// send sampler to GPU
@@ -31,46 +44,24 @@ public:
 	virtual ~ViewTexture();
 protected:
 	GLsizei _width, _height;
-	std::shared_ptr<UniformData<GLint>> _sampler;
-private:
-	GLuint _TBO;
+
+
 	//static GLuint _TextureCnt;
 };
 
-
-
-
-class ViewFrame
+class ViewRenderBuffer : public ViewBufferObject
 {
 public:
-	GLuint GetFBO() const
-	{
-		return _FBO;
-	}
-
-	GLuint AddTexture(std::shared_ptr<ViewTexture> texturePtr, const GLuint& attachment, const GLint& level = 0)
-	{
-		::glBindFramebuffer(GL_FRAMEBUFFER, _FBO);
-		texturePtr->BindFrame(attachment, level);
-		::glBindFramebuffer(GL_FRAMEBUFFER, 0);
-	}
-
-	ViewFrame()
-	{
-		::glGenFramebuffers(1, &_FBO);
-		::glBindFramebuffer(GL_FRAMEBUFFER, _FBO);
-
-		::glBindFramebuffer(GL_FRAMEBUFFER, 0);
-	}
-
-	virtual ~ViewFrame()
-	{
-		::glDeleteFramebuffers(1, &_FBO);
-	}
-
+	ViewRenderBuffer (const GLsizei& width, const GLsizei& height, const std::string& samplerName);
+	~ViewRenderBuffer();
+	// bind this texture to given attachment and level in CURRENT Frame Buffer
+	// e.g. BindFBO(GL_DEPTH_ATTACHMENT)
+	void BindFrame(const GLuint& attachment);
 protected:
-	GLuint _FBO;
+	GLsizei _width, _height;
+
 };
+
 
 class ViewTexturePool
 {
@@ -91,19 +82,3 @@ protected:
 	static constexpr std::string_view DefaultName = "___DEFAULT___";
 };
 
-class ViewFramePool
-{
-public:
-	// get FBO of a frame by its name
-	static GLuint GetFrameFBO(const std::string& name);
-	// get frame pointer by its FBO
-	static std::shared_ptr<ViewFrame> GetFrame(const GLuint& FBO);
-	// get frame pointer by its name
-	static std::shared_ptr<ViewFrame> GetFrame(const std::string& name);
-	// add a frame with name(alternative), return its FBO
-	static GLuint AddFrame(const std::string& name = DefaultName.data());
-protected:
-	static std::map<std::string, GLuint> _nameFBOMap;
-	static std::map<GLuint, std::shared_ptr<ViewFrame>> _FBOFrameMap;
-	static constexpr std::string_view DefaultName = "___DEFAULT___";
-}; 

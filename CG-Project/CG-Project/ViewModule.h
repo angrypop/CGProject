@@ -11,7 +11,7 @@ public:
 	virtual void InitShader() = 0;
 // non-pure virtual function zone
 public:
-
+	virtual void Prepare();
 
 // other function zone
 public:
@@ -42,5 +42,12 @@ class TestModule : public ViewModule
 {
 public:
 	TestModule();
+	virtual void InitShader();
+};
+
+class GBufferLightModule : public ViewModule
+{
+public:
+	GBufferLightModule();
 	virtual void InitShader();
 };

@@ -68,7 +68,7 @@ std::shared_ptr<ViewObject> ViewWorld::GetObject(const HandleT& ID) const
 {
 	for (const auto& group : this->_groups)
 	{
-		auto objs = group->GetObjectList();
+		auto && objs = group->GetObjectList();
 		for (const auto& obj : objs)
 			if (obj->GetHandle() == ID)
 				return obj;
@@ -172,17 +172,18 @@ void GameWorld::InitModules()
 
 void GameWorld::InitGroups()
 {
-	GameObjects.push_back(std::shared_ptr<GameObject>(new GameObject()));
-	GameObjects[0]->loadFromObj("resources/wolf.obj");
-	GameObjects[0]->scale({ 20, 20, 20 });
-	GameObjects.push_back(std::shared_ptr<GameObject>(new GameObject()));
-	GameObjects[1]->loadFromObj("resources/cottage.obj");
-	GameObjects[1]->scale({ 0.1, 0.1, 0.1 });
-	GameObjects[1]->translate({ -5, 0, 0 });
+	//GameObjects.push_back(std::shared_ptr<GameObject>(new GameObject()));
+	//GameObjects[0]->loadFromObj("resources/wolf.obj");
+	//GameObjects[0]->scale({ 20, 20, 20 });
+	//GameObjects.push_back(std::shared_ptr<GameObject>(new GameObject()));
+	//GameObjects[1]->loadFromObj("resources/cottage.obj");
+	//GameObjects[1]->scale({ 0.1, 0.1, 0.1 });
+	//GameObjects[1]->translate({ -5, 0, 0 });
 	std::shared_ptr<MyGroup> ptrGrp = std::shared_ptr<MyGroup>(new MyGroup());
 	for (const auto & i : GameObjects) {
 		ptrGrp->AddGameObj(i);
 	}
+	ptrGrp->AddTestPolygon(1000000);
 	this->AddGroup(ptrGrp);
 }
 
@@ -226,6 +227,8 @@ void GameWorld::InitTexture()
 	ptr.reset(new ViewTexture(TexturePath + "Ground003_4K-JPG\\" + "Ground003_4K_Color.jpg", "uniColorSampler"));
 	ViewTexturePool::Add(ptr, "ColorTexture");
 
+	std::shared_ptr<GBufferFrame> gBufferFrame(new GBufferFrame(this->_width, this->_height));
+	ViewFramePool::AddFrame(gBufferFrame, "GBuffer");
 }
 
 void GameWorld::InitGlobalUniformData()

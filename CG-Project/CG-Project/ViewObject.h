@@ -11,11 +11,12 @@ public:
 
 // non-pure virutal function zone
 public:
-	// bind this object to VAO in given module, return size of VBO
-	virtual void Render(const ViewModule& module);
+
 
 // other function zone
 public:
+	// bind this object to VAO in given module, return size of VBO
+	virtual void Render(const ViewModule& module) final;
 	// rotate this object around certain axis(x, y, z) and angle degree
 	void Rotate(const GLfloat& angle, const glm::vec3& axis = glm::vec3(0.0f, 0.0f, 1.0f));
 	// translate this object by displacement vector

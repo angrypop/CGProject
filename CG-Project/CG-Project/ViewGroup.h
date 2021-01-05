@@ -10,11 +10,11 @@ public:
 
 // non-pure virtual function zone
 public:
+	// render this group
+	virtual void Render();
 
 // other function zone
 public:
-	// render this group
-	virtual void Render() final;
 	// return the handle id of object
 	int AddObject(const std::shared_ptr<ViewObject>& obj);
 	// return object pointer

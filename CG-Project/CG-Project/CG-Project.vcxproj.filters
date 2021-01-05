@@ -37,6 +37,9 @@
     <ClCompile Include="Interaction.cpp">
       <Filter>Toolkit</Filter>
     </ClCompile>
+    <ClCompile Include="ViewFrame.cpp">
+      <Filter>ViewBase</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ViewObject.h">
@@ -73,6 +76,12 @@
       <Filter>Toolkit</Filter>
     </ClInclude>
     <ClInclude Include="Interaction.h">
+      <Filter>Toolkit</Filter>
+    </ClInclude>
+    <ClInclude Include="ViewFrame.h">
+      <Filter>ViewBase</Filter>
+    </ClInclude>
+    <ClInclude Include="Light.h">
       <Filter>Toolkit</Filter>
     </ClInclude>
   </ItemGroup>
@@ -112,12 +121,6 @@
     </None>
     <None Include="gBufferGrassF.shader">
       <Filter>Shader\Grass</Filter>
-    </None>
-    <None Include="gBufferLightV.shader">
-      <Filter>Shader\Illuminate</Filter>
-    </None>
-    <None Include="gBufferLightF.shader">
-      <Filter>Shader\Illuminate</Filter>
     </None>
     <None Include="gBufferTexturePlaneV.shader">
       <Filter>Shader\Texture</Filter>
@@ -172,6 +175,12 @@
     </None>
     <None Include="shadowV.shader">
       <Filter>Shader\Others</Filter>
+    </None>
+    <None Include="GBufferIlluminate.frag">
+      <Filter>Shader\Illuminate</Filter>
+    </None>
+    <None Include="GBufferIlluminate.vert">
+      <Filter>Shader\Illuminate</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

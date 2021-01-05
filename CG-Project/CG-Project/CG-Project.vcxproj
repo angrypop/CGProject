@@ -170,9 +170,11 @@
     <ClInclude Include="Camera.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="Interaction.h" />
+    <ClInclude Include="Light.h" />
     <ClInclude Include="ShaderObject.h" />
     <ClInclude Include="ViewBase.h" />
     <ClInclude Include="ViewData.h" />
+    <ClInclude Include="ViewFrame.h" />
     <ClInclude Include="ViewModule.h" />
     <ClInclude Include="ViewGroup.h" />
     <ClInclude Include="ViewHeader.h" />
@@ -188,6 +190,7 @@
     <ClCompile Include="ViewBase.cpp" />
     <ClCompile Include="ViewData.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="ViewFrame.cpp" />
     <ClCompile Include="ViewModule.cpp" />
     <ClCompile Include="ViewGroup.cpp" />
     <ClCompile Include="ViewObject.cpp" />
@@ -200,8 +203,8 @@
     <None Include="DisplayOITV.shader" />
     <None Include="EvaluationT.shader" />
     <None Include="gBufferGrassF.shader" />
-    <None Include="gBufferLightF.shader" />
-    <None Include="gBufferLightV.shader" />
+    <None Include="GBufferIlluminate.frag" />
+    <None Include="GBufferIlluminate.vert" />
     <None Include="gBufferShowF.shader" />
     <None Include="gBufferShowShadowF.shader" />
     <None Include="gBufferShowShadowV.shader" />

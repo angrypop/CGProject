@@ -19,18 +19,18 @@ out float depth_GS_FS;
 //out vec3 normal_GS_FS;
 out vec4 color_GS_FS;
 
-uniform mat4 M;
-uniform mat4 P;
-uniform mat4 V;
-uniform float time;
+uniform mat4 uniM;
+uniform mat4 uniP;
+uniform mat4 uniV;
+uniform float uniTime;
 //TODO : ันตน
 uniform vec3 ObjPos;
 
 float getLinearDepthOfViewCoord(vec4 viewCoord) {
-	vec4 p = viewCoord;
-	p = P * p;
-	p /= p.w;
-	return p.z;//linearizeDepth(p.z) / far;
+	vec4 uniP = viewCoord;
+	uniP = uniP * uniP;
+	uniP /= uniP.w;
+	return uniP.z;//linearizeDepth(uniP.z) / far;
 }
 
 #define BottomColor vec4(0.05, 0.4, 0.1, 1.0)
@@ -78,39 +78,39 @@ void deal_with_debug() {
 	vec4 point1;
 
 	point1 = vec4(fragPos[0], 1.0f);
-	gl_Position = P * V * point1;
+	gl_Position = uniP * uniV * point1;
 	fragPos_GS_FS = point1.xyz;
 	color_GS_FS = BottomColor;
 	EmitVertex();
 	point1 = vec4(fragPos[1], 1.0f);
-	gl_Position = P * V * point1;
+	gl_Position = uniP * uniV * point1;
 	fragPos_GS_FS = point1.xyz;
 	color_GS_FS = TopColor;
 	EmitVertex();
 	point1 = vec4(fragPos[2], 1.0f);
-	gl_Position = P * V * point1;
+	gl_Position = uniP * uniV * point1;
 	fragPos_GS_FS = point1.xyz;
 	color_GS_FS = TopColor / 2;
 	EmitVertex();
 	point1 = vec4(fragPos[0], 1.0f);
-	gl_Position = P * V * point1;
+	gl_Position = uniP * uniV * point1;
 	fragPos_GS_FS = point1.xyz;
 	color_GS_FS = BottomColor;
 	EmitVertex();
 	EndPrimitive();
 
 	////point1 = vec4(groundSize, groundSize * 3 / 2, groundSize, 1.0);
-	////gl_Position = P * V * point1;
+	////gl_Position = uniP * uniV * point1;
 	////fragPos_GS_FS = point1.xyz;
 	////color_GS_FS = BottomColor;
 	////EmitVertex();
 	////point1 = vec4(groundSize, groundSize * 3 / 2, groundSize * 3, 1.0);
-	////gl_Position = P * V * point1;
+	////gl_Position = uniP * uniV * point1;
 	////fragPos_GS_FS = point1.xyz;
 	////color_GS_FS = TopColor;
 	////EmitVertex();
 	////point1 = vec4(groundSize * 3, groundSize * 3 / 2, groundSize, 1.0);
-	////gl_Position = P * V * point1;
+	////gl_Position = uniP * uniV * point1;
 	////fragPos_GS_FS = point1.xyz;
 	////color_GS_FS = TopColor;
 	////EmitVertex();
@@ -149,14 +149,14 @@ void deal_with_grass() {
 
 	for (int n = 0; n < layers_num; n++) {
 		point3 = (point1 * coe + point2 * 1) / (1 + coe);
-		gl_Position = P * V * point3;
-		depth_GS_FS = getLinearDepthOfViewCoord(V * point3);
+		gl_Position = uniP * uniV * point3;
+		depth_GS_FS = getLinearDepthOfViewCoord(uniV * point3);
 		fragPos_GS_FS = point3.xyz;
 		color_GS_FS = mix(BottomColor, TopColor, 1.0f * n / 2 / layers_num);
 		EmitVertex();
 		point4 = (point1 * 1 + point2 * coe) / (1 + coe);
-		gl_Position = P * V * point4;
-		depth_GS_FS = getLinearDepthOfViewCoord(V * point4);
+		gl_Position = uniP * uniV * point4;
+		depth_GS_FS = getLinearDepthOfViewCoord(uniV * point4);
 		fragPos_GS_FS = point4.xyz;
 		color_GS_FS = mix(BottomColor, TopColor, 1.0f * n / 2 / layers_num);
 		EmitVertex();
@@ -167,14 +167,14 @@ void deal_with_grass() {
 	coe = 100;
 	for (int n = 0; n < layers_num; n++) {
 		point3 = (point1 * coe + point2 * 1) / (1 + coe);
-		gl_Position = P * V * point3;
-		depth_GS_FS = getLinearDepthOfViewCoord(V * point3);
+		gl_Position = uniP * uniV * point3;
+		depth_GS_FS = getLinearDepthOfViewCoord(uniV * point3);
 		fragPos_GS_FS = point3.xyz;
 		color_GS_FS = mix(BottomColor, TopColor, 0.5f + 1.0f * n / 2 / layers_num);
 		EmitVertex();
 		point4 = (point1 * 1 + point2 * coe) / (1 + coe);
-		gl_Position = P * V * point4;
-		depth_GS_FS = getLinearDepthOfViewCoord(V * point4);
+		gl_Position = uniP * uniV * point4;
+		depth_GS_FS = getLinearDepthOfViewCoord(uniV * point4);
 		fragPos_GS_FS = point4.xyz;
 		color_GS_FS = mix(BottomColor, TopColor, 0.5f + 1.0f * n / 2 / layers_num);
 		EmitVertex();
@@ -184,8 +184,8 @@ void deal_with_grass() {
 		point2 = point4 + vec4(0.0f, layers_height, 0.0f, 0.0f);
 	}
 	point3 = (point1 + point2) / 2 + vec4(0.0f, layers_height, 0.0f, 0.0f);
-	gl_Position = P * V * point3;
-	depth_GS_FS = getLinearDepthOfViewCoord(V * point3);
+	gl_Position = uniP * uniV * point3;
+	depth_GS_FS = getLinearDepthOfViewCoord(uniV * point3);
 	fragPos_GS_FS = point3.xyz;
 	color_GS_FS = mix(BottomColor, TopColor, 1);
 	//EmitVertex();
@@ -211,7 +211,7 @@ void deal_with_wind_grass() {
 	float affectR = 5;
 	float affectY = 10;
 	float swiftCoe = 70;
-	float windStrength = /*pow(abs(sin(time/10 + pointC.x + pointC.z)), swiftCoe) **/ 30;
+	float windStrength = /*pow(abs(sin(uniTime/10 + pointC.x + pointC.z)), swiftCoe) **/ 30;
 	for (int n = 0; n < layers_num; n++) {
 		float part = 1.0f * n / 2 / layers_num;
 		float shiftx;
@@ -219,27 +219,27 @@ void deal_with_wind_grass() {
 		float shiftz;
 		float dist = sqrt(pow(ObjPos.x - pointC.x, 2) + pow(ObjPos.z - pointC.z, 2));
 		if (dist <= affectR && ObjPos.y - pointC.y <= affectY) {
-			shiftx = windStrength * pow(part * layers_height, heightCoe) * sin(speed * /*pow(abs(sin((pointC.x + pointC.z))), swiftCoe) **/ time + pow(pointC.z, 1) + pow(pointC.x, 1));
+			shiftx = windStrength * pow(part * layers_height, heightCoe) * sin(speed * /*pow(abs(sin((pointC.x + pointC.z))), swiftCoe) **/ uniTime + pow(pointC.z, 1) + pow(pointC.x, 1));
 			shifty = -grass_height * (1 - dist / affectR);
-			shiftz = windStrength * pow(part * layers_height, heightCoe) * sin(speed * /*pow(abs(sin((pointC.x + pointC.z))), swiftCoe) * */time + pow(pointC.z, 1) - pow(pointC.x, 1));
+			shiftz = windStrength * pow(part * layers_height, heightCoe) * sin(speed * /*pow(abs(sin((pointC.x + pointC.z))), swiftCoe) * */uniTime + pow(pointC.z, 1) - pow(pointC.x, 1));
 		}
 		else {
-			shiftx = windStrength * pow(part * layers_height, heightCoe) * sin(speed * /*pow(abs(sin((pointC.x + pointC.z))), swiftCoe) **/ time + pow(pointC.z, 1) + pow(pointC.x, 1));
+			shiftx = windStrength * pow(part * layers_height, heightCoe) * sin(speed * /*pow(abs(sin((pointC.x + pointC.z))), swiftCoe) **/ uniTime + pow(pointC.z, 1) + pow(pointC.x, 1));
 			shifty = 0;
-			shiftz = windStrength * pow(part * layers_height, heightCoe) * sin(speed * /*pow(abs(sin((pointC.x + pointC.z))), swiftCoe) * */time + pow(pointC.z, 1) - pow(pointC.x, 1));
+			shiftz = windStrength * pow(part * layers_height, heightCoe) * sin(speed * /*pow(abs(sin((pointC.x + pointC.z))), swiftCoe) * */uniTime + pow(pointC.z, 1) - pow(pointC.x, 1));
 		}
 
 		point3 = (point1 * coe + point2 * 1) / (1 + coe);
 		tempPoint = point3 + vec4(shiftx, shifty, shiftz, 0);
-		gl_Position = P * V * tempPoint;
-		depth_GS_FS = getLinearDepthOfViewCoord(V * tempPoint);
+		gl_Position = uniP * uniV * tempPoint;
+		depth_GS_FS = getLinearDepthOfViewCoord(uniV * tempPoint);
 		fragPos_GS_FS = tempPoint.xyz;
 		color_GS_FS = mix(BottomColor, TopColor, part);
 		EmitVertex();
 		point4 = (point1 * 1 + point2 * coe) / (1 + coe);
 		tempPoint = point4 + vec4(shiftx, shifty, shiftz, 0);
-		gl_Position = P * V * tempPoint;
-		depth_GS_FS = getLinearDepthOfViewCoord(V * tempPoint);
+		gl_Position = uniP * uniV * tempPoint;
+		depth_GS_FS = getLinearDepthOfViewCoord(uniV * tempPoint);
 		fragPos_GS_FS = tempPoint.xyz;
 		color_GS_FS = mix(BottomColor, TopColor, part);
 		EmitVertex();
@@ -255,27 +255,27 @@ void deal_with_wind_grass() {
 		float shiftz;
 		float dist = sqrt(pow(ObjPos.x - pointC.x, 2) + pow(ObjPos.z - pointC.z, 2));
 		if (dist <= affectR && ObjPos.y - pointC.y <= affectY) {
-			shiftx = windStrength * pow(part * layers_height, heightCoe) * sin(speed * /*pow(abs(sin((pointC.x + pointC.z))), swiftCoe) **/ time + pow(pointC.z, 1) + pow(pointC.x, 1));
+			shiftx = windStrength * pow(part * layers_height, heightCoe) * sin(speed * /*pow(abs(sin((pointC.x + pointC.z))), swiftCoe) **/ uniTime + pow(pointC.z, 1) + pow(pointC.x, 1));
 			shifty = -grass_height * (1 - dist / affectR);
-			shiftz = windStrength * pow(part * layers_height, heightCoe) * sin(speed * /*pow(abs(sin((pointC.x + pointC.z))), swiftCoe) * */time + pow(pointC.z, 1) - pow(pointC.x, 1));
+			shiftz = windStrength * pow(part * layers_height, heightCoe) * sin(speed * /*pow(abs(sin((pointC.x + pointC.z))), swiftCoe) * */uniTime + pow(pointC.z, 1) - pow(pointC.x, 1));
 		}
 		else {
-			shiftx = windStrength * pow(part * layers_height, heightCoe) * sin(speed * /*pow(abs(sin((pointC.x + pointC.z))), swiftCoe) **/ time + pow(pointC.z, 1) + pow(pointC.x, 1));
+			shiftx = windStrength * pow(part * layers_height, heightCoe) * sin(speed * /*pow(abs(sin((pointC.x + pointC.z))), swiftCoe) **/ uniTime + pow(pointC.z, 1) + pow(pointC.x, 1));
 			shifty = 0;
-			shiftz = windStrength * pow(part * layers_height, heightCoe) * sin(speed * /*pow(abs(sin((pointC.x + pointC.z))), swiftCoe) * */time + pow(pointC.z, 1) - pow(pointC.x, 1));
+			shiftz = windStrength * pow(part * layers_height, heightCoe) * sin(speed * /*pow(abs(sin((pointC.x + pointC.z))), swiftCoe) * */uniTime + pow(pointC.z, 1) - pow(pointC.x, 1));
 		}
 
 		point3 = (point1 * coe + point2 * 1) / (1 + coe);
 		tempPoint = point3 + vec4(shiftx, shifty, shiftz, 0);
-		gl_Position = P * V * tempPoint;
-		depth_GS_FS = getLinearDepthOfViewCoord(V * tempPoint);
+		gl_Position = uniP * uniV * tempPoint;
+		depth_GS_FS = getLinearDepthOfViewCoord(uniV * tempPoint);
 		fragPos_GS_FS = tempPoint.xyz;
 		color_GS_FS = mix(BottomColor, TopColor, part);
 		EmitVertex();
 		point4 = (point1 * 1 + point2 * coe) / (1 + coe);
 		tempPoint = point4 + vec4(shiftx, shifty, shiftz, 0);
-		gl_Position = P * V * tempPoint;
-		depth_GS_FS = getLinearDepthOfViewCoord(V * tempPoint);
+		gl_Position = uniP * uniV * tempPoint;
+		depth_GS_FS = getLinearDepthOfViewCoord(uniV * tempPoint);
 		fragPos_GS_FS = tempPoint.xyz;
 		color_GS_FS = mix(BottomColor, TopColor, part);
 		EmitVertex();
@@ -284,8 +284,8 @@ void deal_with_wind_grass() {
 		point2 = point4 + vec4(0.0f, layers_height, 0.0f, 0.0f);
 	}
 	point3 = (point1 + point2) / 2 + vec4(0.0f, layers_height, 0.0f, 0.0f);
-	gl_Position = P * V * point3;
-	depth_GS_FS = getLinearDepthOfViewCoord(V * point3);
+	gl_Position = uniP * uniV * point3;
+	depth_GS_FS = getLinearDepthOfViewCoord(uniV * point3);
 	fragPos_GS_FS = point3.xyz;
 	color_GS_FS = mix(BottomColor, TopColor, 1);
 	//EmitVertex();

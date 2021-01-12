@@ -13,6 +13,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="ViewObject">
+      <UniqueIdentifier>{41d0d022-96a1-4900-afaa-c99d9167388a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="baseElement.h">
@@ -30,17 +33,32 @@
     <ClInclude Include="Shadow.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="TexturedPlane.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="toolkit.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Water.h">
+    <ClInclude Include="Sence.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Scene.h">
+    <ClInclude Include="SkyBox.h">
       <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Water.h">
+      <Filter>ViewObject</Filter>
+    </ClInclude>
+    <ClInclude Include="FitTexturePlane.h">
+      <Filter>ViewObject</Filter>
+    </ClInclude>
+    <ClInclude Include="TexturedPlane.h">
+      <Filter>ViewObject</Filter>
+    </ClInclude>
+    <ClInclude Include="TransparentPlane.h">
+      <Filter>ViewObject</Filter>
+    </ClInclude>
+    <ClInclude Include="ViewHeader.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="ViewObject.h">
+      <Filter>ViewObject</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -49,6 +67,9 @@
     </ClCompile>
     <ClCompile Include="..\include\OpenGL\glad.c">
       <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="ViewObject.cpp">
+      <Filter>ViewObject</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -140,6 +161,39 @@
       <Filter>资源文件</Filter>
     </None>
     <None Include="waterV.shader">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="FitUpdateF.shader">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="FitUpdateV.shader">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="gBufferFitTexturePlaneF.shader">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="gBufferSkyBoxF.shader">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="gBufferTransPlaneV.shader">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="PlaneCT.shader">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="PlaneET.shader">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="PlaneGeo.shader">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="PlaneOITF.shader">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="SkyBoxF.shader">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="SkyBoxV.shader">
       <Filter>资源文件</Filter>
     </None>
   </ItemGroup>

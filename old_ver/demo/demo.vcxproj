@@ -161,23 +161,32 @@
   <ItemGroup>
     <ClInclude Include="baseElement.h" />
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="FitTexturePlane.h" />
     <ClInclude Include="Interaction.h" />
     <ClInclude Include="Light.h" />
-    <ClInclude Include="Scene.h" />
+    <ClInclude Include="Sence.h" />
     <ClInclude Include="Shadow.h" />
+    <ClInclude Include="SkyBox.h" />
     <ClInclude Include="TexturedPlane.h" />
     <ClInclude Include="toolkit.h" />
+    <ClInclude Include="TransparentPlane.h" />
+    <ClInclude Include="ViewHeader.h" />
+    <ClInclude Include="ViewObject.h" />
     <ClInclude Include="Water.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\include\OpenGL\glad.c" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="ViewObject.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ControlT.shader" />
     <None Include="DisplayOITF.shader" />
     <None Include="DisplayOITV.shader" />
     <None Include="EvaluationT.shader" />
+    <None Include="FitUpdateF.shader" />
+    <None Include="FitUpdateV.shader" />
+    <None Include="gBufferFitTexturePlaneF.shader" />
     <None Include="gBufferGrassF.shader" />
     <None Include="gBufferLightF.shader" />
     <None Include="gBufferLightV.shader" />
@@ -185,8 +194,10 @@
     <None Include="gBufferShowShadowF.shader" />
     <None Include="gBufferShowShadowV.shader" />
     <None Include="gBufferShowV.shader" />
+    <None Include="gBufferSkyBoxF.shader" />
     <None Include="gBufferTexturePlaneF.shader" />
     <None Include="gBufferTexturePlaneV.shader" />
+    <None Include="gBufferTransPlaneV.shader" />
     <None Include="gBufferWaterF.shader" />
     <None Include="gBufferWaterV.shader" />
     <None Include="GroundF.shader" />
@@ -194,11 +205,17 @@
     <None Include="LightF.shader" />
     <None Include="LightV.shader" />
     <None Include="NormalG.shader" />
+    <None Include="PlaneCT.shader" />
+    <None Include="PlaneET.shader" />
+    <None Include="PlaneGeo.shader" />
+    <None Include="PlaneOITF.shader" />
     <None Include="RankOITF.shader" />
     <None Include="RankOITV.shader" />
     <None Include="shadowF.shader" />
     <None Include="shadowGF.shader" />
     <None Include="shadowV.shader" />
+    <None Include="SkyBoxF.shader" />
+    <None Include="SkyBoxV.shader" />
     <None Include="waterF.shader" />
     <None Include="WaterMeshF.shader" />
     <None Include="WaterOITF.shader" />

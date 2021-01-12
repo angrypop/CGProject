@@ -1,7 +1,7 @@
 #pragma once
 enum { ShadowBuffer, NumShadowTextureBuffer};
 enum { ShadowFrameBuffer , NumShadowFrameBuffer};
-enum { PlaneProgram, WaterProgram, GrassProgram, DisplayShadowProgram, NumShadowProgram };
+enum { PlaneProgram, WaterProgram, GrassProgram, DisplayShadowProgram, FitPlaneShadowProgram, NumShadowProgram };
 GLuint shadowBuffers[NumShadowTextureBuffer];
 GLuint shadowFrameBuffers[NumShadowFrameBuffer];
 GLuint shadowPrograms[NumShadowProgram];
@@ -15,8 +15,8 @@ void initShadow() {
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, SHADOW_WIDTH, SHADOW_HEIGHT, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
 	glBindFramebuffer(GL_FRAMEBUFFER, shadowFrameBuffers[ShadowFrameBuffer]);
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, shadowBuffers[ShadowBuffer], 0);
@@ -71,4 +71,18 @@ void initShadow() {
 		glAttachShader(shadowPrograms[DisplayShadowProgram], shader);
 	}
 	glLinkProgram(shadowPrograms[DisplayShadowProgram]);
+
+	shadowPrograms[FitPlaneShadowProgram] = glCreateProgram();
+	ShaderInfo shadersFitPlane[] = {
+	{GL_VERTEX_SHADER,"gBufferTexturePlaneV.shader"} ,
+			{GL_TESS_CONTROL_SHADER,"PlaneCT.shader"},
+		{GL_TESS_EVALUATION_SHADER,"PlaneET.shader"},
+		{GL_GEOMETRY_SHADER,"PlaneGeo.shader"},
+	{GL_FRAGMENT_SHADER,"shadowGF.shader"} ,
+	{GL_NONE,""} };
+	for (int i = 0; shadersFitPlane[i].mode != GL_NONE; i++) {
+		GLuint shader = LoadShader(shadersFitPlane[i]);
+		glAttachShader(shadowPrograms[FitPlaneShadowProgram], shader);
+	}
+	glLinkProgram(shadowPrograms[FitPlaneShadowProgram]);
 }

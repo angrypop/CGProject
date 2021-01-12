@@ -30,7 +30,7 @@ public:
 	void setSpecular(glm::vec3 specular) { this->specular = specular; }
 
 	virtual void prepare() {}
-	virtual void render(glm::mat4 V, glm::mat4 P, glm::mat4 translate = glm::mat4(1)) {}
+	virtual void render(glm::mat4 uniV, glm::mat4 uniP, glm::mat4 translate = glm::mat4(1)) {}
 };
 
 class SpotLight : public Light {
@@ -71,15 +71,15 @@ public:
 	}
 	virtual void prepare() {}
 
-	virtual void render(glm::mat4 V, glm::mat4 P, glm::mat4 translate = glm::mat4(1)) {
+	virtual void render(glm::mat4 uniV, glm::mat4 uniP, glm::mat4 translate = glm::mat4(1)) {
 		GLint location;
 		glUseProgram(Program);
-		location = glGetUniformLocation(Program, "M");
+		location = glGetUniformLocation(Program, "uniM");
 		glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(translate * modelMat));
-		location = glGetUniformLocation(Program, "V");
-		glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(V));
-		location = glGetUniformLocation(Program, "P");
-		glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(P));
+		location = glGetUniformLocation(Program, "uniV");
+		glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(uniV));
+		location = glGetUniformLocation(Program, "uniP");
+		glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(uniP));
 
 		glBindVertexArray(this->VAOs[LightVAO]);
 		glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);

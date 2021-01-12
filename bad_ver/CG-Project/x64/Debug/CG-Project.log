@@ -1,0 +1,18 @@
+﻿  glad.c
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\um\winbase.h(9305,5): warning C5105: 生成“已定义”的宏扩展具有未定义的行为
+  GameObject.cpp
+  Interaction.cpp
+  RenderPassGroup.cpp
+  ShaderObject.cpp
+  ShadowModule.cpp
+  ViewBase.cpp
+  ViewData.cpp
+  main.cpp
+  ViewFrame.cpp
+  ViewModule.cpp
+  ViewGroup.cpp
+  ViewObject.cpp
+  ViewTexture.cpp
+  ViewWorld.cpp
+  正在生成代码...
+  CG-Project.vcxproj -> C:\Users\HASEE\source\repos\CGProject\bad_ver\x64\Debug\CG-Project.exe

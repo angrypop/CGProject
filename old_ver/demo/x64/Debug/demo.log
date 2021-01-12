@@ -1,23 +1,27 @@
-﻿  glad.c
+﻿C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\MSBuild\Microsoft\VC\v160\Microsoft.CppBuild.targets(491,5): warning MSB8028: 中间目录(x64\Debug\)包含从另一个项目(WaterTestWithTextureAndLight.vcxproj)共享的文件。   这会导致错误的清除和重新生成行为。
   main.cpp
-D:\重要文件\大学\大三上\CG\project\old_ver\include\OpenGL\GL\gl.h(1,1): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
-D:\重要文件\大学\大三上\CG\project\old_ver\demo\Water.h(25,21): warning C4018: “<=”: 有符号/无符号不匹配
-D:\重要文件\大学\大三上\CG\project\old_ver\demo\Water.h(26,22): warning C4018: “<=”: 有符号/无符号不匹配
-D:\重要文件\大学\大三上\CG\project\old_ver\demo\Water.h(33,21): warning C4018: “<”: 有符号/无符号不匹配
-D:\重要文件\大学\大三上\CG\project\old_ver\demo\Water.h(34,22): warning C4018: “<”: 有符号/无符号不匹配
-D:\重要文件\大学\大三上\CG\project\old_ver\demo\Water.h(46,21): warning C4018: “<”: 有符号/无符号不匹配
-D:\重要文件\大学\大三上\CG\project\old_ver\demo\Water.h(47,22): warning C4018: “<”: 有符号/无符号不匹配
-D:\重要文件\大学\大三上\CG\project\old_ver\demo\Light.h(70,1): warning C4305: “=”: 从“double”到“float”截断
-D:\重要文件\大学\大三上\CG\project\old_ver\demo\Scene.h(118,16): warning C4305: “初始化”: 从“double”到“float”截断
-D:\重要文件\大学\大三上\CG\project\old_ver\demo\Interaction.h(16,17): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
-D:\重要文件\大学\大三上\CG\project\old_ver\demo\Interaction.h(17,17): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
-D:\重要文件\大学\大三上\CG\project\old_ver\demo\Interaction.h(35,17): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
-D:\重要文件\大学\大三上\CG\project\old_ver\demo\Interaction.h(36,17): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
-D:\重要文件\大学\大三上\CG\project\old_ver\demo\Interaction.h(71,28): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
-D:\重要文件\大学\大三上\CG\project\old_ver\demo\main.cpp(56,12): warning C4244: “=”: 从“double”转换到“int”，可能丢失数据
-D:\重要文件\大学\大三上\CG\project\old_ver\demo\main.cpp(63,29): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
-D:\重要文件\大学\大三上\CG\project\old_ver\demo\main.cpp(139,70): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
-D:\重要文件\大学\大三上\CG\project\old_ver\demo\main.cpp(372,56): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
-D:\重要文件\大学\大三上\CG\project\old_ver\demo\main.cpp(414,104): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
-LINK : warning LNK4098: 默认库“MSVCRT”与其他库的使用冲突；请使用 /NODEFAULTLIB:library
-  demo.vcxproj -> D:\重要文件\大学\大三上\CG\project\old_ver\x64\Debug\demo.exe
+C:\Users\HASEE\source\repos\CGProject\old_ver\demo\Water.h(23,21): warning C4018: “<=”: 有符号/无符号不匹配
+C:\Users\HASEE\source\repos\CGProject\old_ver\demo\Water.h(24,22): warning C4018: “<=”: 有符号/无符号不匹配
+C:\Users\HASEE\source\repos\CGProject\old_ver\demo\Water.h(30,21): warning C4018: “<”: 有符号/无符号不匹配
+C:\Users\HASEE\source\repos\CGProject\old_ver\demo\Water.h(31,22): warning C4018: “<”: 有符号/无符号不匹配
+C:\Users\HASEE\source\repos\CGProject\old_ver\demo\Water.h(40,21): warning C4018: “<”: 有符号/无符号不匹配
+C:\Users\HASEE\source\repos\CGProject\old_ver\demo\Water.h(41,22): warning C4018: “<”: 有符号/无符号不匹配
+C:\Users\HASEE\source\repos\CGProject\old_ver\demo\Light.h(70,1): warning C4305: “=”: 从“double”到“float”截断
+C:\Users\HASEE\source\repos\CGProject\old_ver\demo\Sence.h(126,11): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
+C:\Users\HASEE\source\repos\CGProject\old_ver\demo\Sence.h(126,74): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
+C:\Users\HASEE\source\repos\CGProject\old_ver\demo\Sence.h(127,11): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
+C:\Users\HASEE\source\repos\CGProject\old_ver\demo\Sence.h(127,74): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
+C:\Users\HASEE\source\repos\CGProject\old_ver\demo\Sence.h(128,11): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
+C:\Users\HASEE\source\repos\CGProject\old_ver\demo\Sence.h(128,74): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
+C:\Users\HASEE\source\repos\CGProject\old_ver\demo\Sence.h(129,11): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
+C:\Users\HASEE\source\repos\CGProject\old_ver\demo\Sence.h(129,74): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
+C:\Users\HASEE\source\repos\CGProject\old_ver\demo\Sence.h(157,16): warning C4305: “初始化”: 从“double”到“float”截断
+C:\Users\HASEE\source\repos\CGProject\old_ver\demo\Interaction.h(16,17): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
+C:\Users\HASEE\source\repos\CGProject\old_ver\demo\Interaction.h(17,17): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
+C:\Users\HASEE\source\repos\CGProject\old_ver\demo\Interaction.h(35,17): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
+C:\Users\HASEE\source\repos\CGProject\old_ver\demo\Interaction.h(36,17): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
+C:\Users\HASEE\source\repos\CGProject\old_ver\demo\Interaction.h(71,28): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+C:\Users\HASEE\source\repos\CGProject\old_ver\demo\main.cpp(58,29): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
+C:\Users\HASEE\source\repos\CGProject\old_ver\demo\main.cpp(121,70): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+C:\Users\HASEE\source\repos\CGProject\old_ver\demo\main.cpp(334,104): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+  demo.vcxproj -> C:\Users\HASEE\source\repos\CGProject\old_ver\x64\Debug\demo.exe

@@ -1,15 +1,14 @@
 #pragma once
+#include "ViewObject.h"
 
-#define STB_IMAGE_IMPLEMENTATION
-#include "stb_image.h"
-
-enum { PlaneVAO, NumPlaneVAO };
-enum { PlaneArrayBuffer, PlaneElementBuffer, NumPlaneBuffer };
-enum { position = 0, texCoord = 1 }; 
-enum { PlaneColorTexture = AmbientTexture, PlaneNormalTexture = NormalTexture, PlaneRoughnessTexture = RoughnessTexture, NumPlaneTexture };
-
-class TexturedPlane {
+class TexturedPlane : public ViewObject
+{
 public:
+	enum { PlaneVAO, NumPlaneVAO };
+	enum { PlaneArrayBuffer, PlaneElementBuffer, NumPlaneBuffer };
+	enum { position = 0, texCoord = 1 };
+	enum { PlaneColorTexture = AmbientTexture, PlaneNormalTexture = NormalTexture, PlaneRoughnessTexture = RoughnessTexture, NumPlaneTexture };
+
 	GLuint VAOs[NumPlaneVAO];
 	GLuint Buffers[NumPlaneBuffer];
 	GLuint hasTextures[NumPlaneTexture];
@@ -17,14 +16,13 @@ public:
 	GLuint Program;
 	GLuint GBufferProgram;
 	GLuint GrassProgram;
-	glm::mat4 modelMat;
 	glm::mat3 TBN;
 
 public:
 	TexturedPlane() {};
 	TexturedPlane(glm::vec3 position, GLfloat points[], GLint sizeofPoints, GLuint indices[], GLint sizeofIndices, ShaderInfo shaders[], TextureInfo textures[]) {
-		glGenVertexArrays(NumLightVAO, this->VAOs);
-		glCreateBuffers(NumLightBuffer, this->Buffers);
+		glGenVertexArrays(NumPlaneVAO, this->VAOs);
+		glCreateBuffers(NumPlaneBuffer, this->Buffers);
 
 		glNamedBufferStorage(this->Buffers[PlaneArrayBuffer], sizeofPoints, points, 0);
 		glNamedBufferStorage(this->Buffers[PlaneElementBuffer], sizeofIndices, indices, 0);
@@ -119,20 +117,18 @@ public:
 		glLinkProgram(GrassProgram);
 	}
 
-	void translate(glm::mat4 translate) { this->modelMat = translate * modelMat; }
-
-	void grassRender(glm::mat4 V, glm::mat4 P, float time, glm::vec3 ObjPos) {
+	void grassRender(glm::mat4 uniV, glm::mat4 uniP, float uniTime, glm::vec3 ObjPos) {
 		GLint location;
 		glUseProgram(GrassProgram);
 
-		location = glGetUniformLocation(GrassProgram, "M");
+		location = glGetUniformLocation(GrassProgram, "uniM");
 		glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(this->modelMat));
-		location = glGetUniformLocation(GrassProgram, "V");
-		glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(V));
-		location = glGetUniformLocation(GrassProgram, "P");
-		glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(P));
-		location = glGetUniformLocation(GrassProgram, "time");
-		glUniform1f(location, time);
+		location = glGetUniformLocation(GrassProgram, "uniV");
+		glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(uniV));
+		location = glGetUniformLocation(GrassProgram, "uniP");
+		glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(uniP));
+		location = glGetUniformLocation(GrassProgram, "uniTime");
+		glUniform1f(location, uniTime);
 		location = glGetUniformLocation(GrassProgram, "ObjPos");
 		glUniform3fv(location, 1, glm::value_ptr(ObjPos));
 		glBindVertexArray(this->VAOs[PlaneVAO]);
@@ -144,16 +140,16 @@ public:
 		//glDrawElements(GL_PATCHES, 6, GL_UNSIGNED_INT, 0);
 	}
 
-	void gBufferRender(glm::mat4 V, glm::mat4 P) {
+	void gBufferRender(glm::mat4 uniV, glm::mat4 uniP) {
 		GLint location;
 		glUseProgram(GBufferProgram);
 
-		location = glGetUniformLocation(GBufferProgram, "M");
+		location = glGetUniformLocation(GBufferProgram, "uniM");
 		glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(this->modelMat));
-		location = glGetUniformLocation(GBufferProgram, "V");
-		glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(V));
-		location = glGetUniformLocation(GBufferProgram, "P");
-		glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(P));
+		location = glGetUniformLocation(GBufferProgram, "uniV");
+		glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(uniV));
+		location = glGetUniformLocation(GBufferProgram, "uniP");
+		glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(uniP));
 		location = glGetUniformLocation(GBufferProgram, "TBN");
 		glUniformMatrix3fv(location, 1, GL_FALSE, glm::value_ptr(this->TBN));
 		location = glGetUniformLocation(GBufferProgram, "colorTexture");
@@ -173,18 +169,19 @@ public:
 		glBindVertexArray(this->VAOs[PlaneVAO]);
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 	}
-	void shadowGrassBufferRender(GLuint program, glm::mat4 V, glm::mat4 P, float time, glm::vec3 ObjPos) {
+
+	void shadowGrassBufferRender(GLuint program, glm::mat4 uniV, glm::mat4 uniP, float uniTime, glm::vec3 ObjPos) {
 		GLint location;
 		glUseProgram(program);
 
-		location = glGetUniformLocation(program, "M");
+		location = glGetUniformLocation(program, "uniM");
 		glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(this->modelMat));
-		location = glGetUniformLocation(program, "V");
-		glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(V));
-		location = glGetUniformLocation(program, "P");
-		glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(P));
-		location = glGetUniformLocation(program, "time");
-		glUniform1f(location, time);
+		location = glGetUniformLocation(program, "uniV");
+		glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(uniV));
+		location = glGetUniformLocation(program, "uniP");
+		glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(uniP));
+		location = glGetUniformLocation(program, "uniTime");
+		glUniform1f(location, uniTime);
 		location = glGetUniformLocation(program, "ObjPos");
 		glUniform3fv(location, 1, glm::value_ptr(ObjPos));
 		glBindVertexArray(this->VAOs[PlaneVAO]);
@@ -193,16 +190,16 @@ public:
 		glDrawArrays(GL_PATCHES, 0, 4);
 	}
 
-	void shadowBufferRender(GLuint program,glm::mat4 V, glm::mat4 P) {
+	void shadowBufferRender(GLuint program, glm::mat4 uniV, glm::mat4 uniP) {
 		GLint location;
 		glUseProgram(program);
 
-		location = glGetUniformLocation(program, "M");
+		location = glGetUniformLocation(program, "uniM");
 		glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(this->modelMat));
-		location = glGetUniformLocation(program, "V");
-		glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(V));
-		location = glGetUniformLocation(program, "P");
-		glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(P));
+		location = glGetUniformLocation(program, "uniV");
+		glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(uniV));
+		location = glGetUniformLocation(program, "uniP");
+		glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(uniP));
 
 		glBindVertexArray(this->VAOs[PlaneVAO]);
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
@@ -236,30 +233,5 @@ public:
 		glUniform1f(location, light.quadratic);
 		location = glGetUniformLocation(Program, "TBN");
 		glUniformMatrix3fv(location, 1, GL_FALSE, glm::value_ptr(this->TBN));
-	}
-
-	void render(glm::vec3 lightPosition, glm::vec3 viewPosition, glm::mat4 V, glm::mat4 P, glm::mat4 translate = glm::mat4(1)) {
-		GLint location;
-		glUseProgram(Program);
-		location = glGetUniformLocation(Program, "M");
-		glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(translate * this->modelMat));
-		location = glGetUniformLocation(Program, "V");
-		glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(V));
-		location = glGetUniformLocation(Program, "P");
-		glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(P));
-		location = glGetUniformLocation(Program, "viewPos");
-		glUniform3fv(location, 1, glm::value_ptr(viewPosition));
-		location = glGetUniformLocation(Program, "light.position");
-		glUniform3fv(location, 1, glm::value_ptr(lightPosition));
-
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, this->Textures[PlaneColorTexture]);
-		glActiveTexture(GL_TEXTURE1);
-		glBindTexture(GL_TEXTURE_2D, this->Textures[PlaneNormalTexture]);
-		glActiveTexture(GL_TEXTURE2);
-		glBindTexture(GL_TEXTURE_2D, this->Textures[PlaneRoughnessTexture]);
-
-		glBindVertexArray(this->VAOs[PlaneVAO]);
-		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 	}
 };

@@ -1,0 +1,28 @@
+﻿  main.cpp
+Q:\include\OpenGL\GL\gl.h(1,1): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+Q:\OpenGL\RecoverTest\RecoverTest\WaterTestWithTextureAndLight\Water.h(25,21): warning C4018: “<=”: 有符号/无符号不匹配
+Q:\OpenGL\RecoverTest\RecoverTest\WaterTestWithTextureAndLight\Water.h(26,22): warning C4018: “<=”: 有符号/无符号不匹配
+Q:\OpenGL\RecoverTest\RecoverTest\WaterTestWithTextureAndLight\Water.h(33,21): warning C4018: “<”: 有符号/无符号不匹配
+Q:\OpenGL\RecoverTest\RecoverTest\WaterTestWithTextureAndLight\Water.h(34,22): warning C4018: “<”: 有符号/无符号不匹配
+Q:\OpenGL\RecoverTest\RecoverTest\WaterTestWithTextureAndLight\Water.h(46,21): warning C4018: “<”: 有符号/无符号不匹配
+Q:\OpenGL\RecoverTest\RecoverTest\WaterTestWithTextureAndLight\Water.h(47,22): warning C4018: “<”: 有符号/无符号不匹配
+Q:\OpenGL\RecoverTest\RecoverTest\WaterTestWithTextureAndLight\Light.h(70,1): warning C4305: “=”: 从“double”到“float”截断
+Q:\OpenGL\RecoverTest\RecoverTest\WaterTestWithTextureAndLight\Sence.h(129,11): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
+Q:\OpenGL\RecoverTest\RecoverTest\WaterTestWithTextureAndLight\Sence.h(129,74): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
+Q:\OpenGL\RecoverTest\RecoverTest\WaterTestWithTextureAndLight\Sence.h(130,11): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
+Q:\OpenGL\RecoverTest\RecoverTest\WaterTestWithTextureAndLight\Sence.h(130,74): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
+Q:\OpenGL\RecoverTest\RecoverTest\WaterTestWithTextureAndLight\Sence.h(131,11): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
+Q:\OpenGL\RecoverTest\RecoverTest\WaterTestWithTextureAndLight\Sence.h(131,74): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
+Q:\OpenGL\RecoverTest\RecoverTest\WaterTestWithTextureAndLight\Sence.h(132,11): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
+Q:\OpenGL\RecoverTest\RecoverTest\WaterTestWithTextureAndLight\Sence.h(132,74): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
+Q:\OpenGL\RecoverTest\RecoverTest\WaterTestWithTextureAndLight\Sence.h(162,16): warning C4305: “初始化”: 从“double”到“float”截断
+Q:\OpenGL\RecoverTest\RecoverTest\WaterTestWithTextureAndLight\Interaction.h(16,17): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
+Q:\OpenGL\RecoverTest\RecoverTest\WaterTestWithTextureAndLight\Interaction.h(17,17): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
+Q:\OpenGL\RecoverTest\RecoverTest\WaterTestWithTextureAndLight\Interaction.h(35,17): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
+Q:\OpenGL\RecoverTest\RecoverTest\WaterTestWithTextureAndLight\Interaction.h(36,17): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
+Q:\OpenGL\RecoverTest\RecoverTest\WaterTestWithTextureAndLight\Interaction.h(71,28): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+Q:\OpenGL\RecoverTest\RecoverTest\WaterTestWithTextureAndLight\main.cpp(66,29): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
+Q:\OpenGL\RecoverTest\RecoverTest\WaterTestWithTextureAndLight\main.cpp(140,70): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+Q:\OpenGL\RecoverTest\RecoverTest\WaterTestWithTextureAndLight\main.cpp(375,56): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+Q:\OpenGL\RecoverTest\RecoverTest\WaterTestWithTextureAndLight\main.cpp(417,104): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+  WaterTestWithTextureAndLight.vcxproj -> Q:\OpenGL\RecoverTest\RecoverTest\x64\Debug\WaterTestWithTextureAndLight.exe

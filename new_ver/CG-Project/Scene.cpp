@@ -260,18 +260,18 @@ void Scene::InitScene() {
 void Scene::InitGameObject()
 {
 	airplane = std::shared_ptr<Airplane>(new Airplane({ 0, -1, 0 }, { 0, 0, 1 }));
-	GameObjects.push_back(std::static_pointer_cast<GameObject>(airplane));
-	GameObjects[0]->loadFromObj("../resources/jet.obj");
-	GameObjects[0]->scale({ 0.2, 0.2, 0.2 });
-	GameObjects[0]->translate({ 0, 100, 0 });
-	GameObjects[0]->rotate(-90, { 1, 0, 0 });
+	GameObject::allObjs.push_back(std::static_pointer_cast<GameObject>(airplane));
+	GameObject::allObjs[0]->loadFromObj("../resources/jet.obj");
+	GameObject::allObjs[0]->scale({ 0.2, 0.2, 0.2 });
+	GameObject::allObjs[0]->translate({ 0, 100, 0 });
+	GameObject::allObjs[0]->rotate(-90, { 1, 0, 0 });
 	for (int i = 1; i <= 5; i++) {
-		GameObjects.push_back(std::shared_ptr<GameObject>(new GameObject()));
-		GameObjects[i]->loadFromObj("../resources/wolf.obj");
-		GameObjects[i]->scale({ RandomReal(10.0, 20.0), RandomReal(10.0, 20.0), RandomReal(10.0, 20.0) });
-		GameObjects[i]->translate({ RandomReal(-10.0, 10.0), RandomReal(-10.0, 10.0), RandomReal(0.0, 10.0) });
+		GameObject::allObjs.push_back(std::shared_ptr<GameObject>(new GameObject()));
+		GameObject::allObjs[i]->loadFromObj("../resources/wolf.obj");
+		GameObject::allObjs[i]->scale({ RandomReal(100.0, 200.0), RandomReal(100.0, 200.0), RandomReal(100.0, 200.0) });
+		GameObject::allObjs[i]->translate({ RandomReal(-1000.0, 1000.0), RandomReal(-1000.0, 1000.0), RandomReal(0.0, 200.0) });
 	}
-	for (const auto& i : GameObjects) {
+	for (const auto& i : GameObject::allObjs) {
 		AddGameObject(ViewObjectEnum::TextureObject, i->getRenderData());
 	}
 }

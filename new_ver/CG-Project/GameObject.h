@@ -14,9 +14,10 @@ protected:
 	bool		fixed;
 	GLfloat		mass;
 	glm::vec3	velocity;
+	GLfloat		hitRadius;
 	std::vector<face> faces;
 	std::shared_ptr<ViewPolygon> viewObj;
-	std::shared_ptr<ViewPolygon> hitBox;
+	std::vector<glm::vec3> hitBox;
 
 // public functions
 public:
@@ -36,6 +37,8 @@ public:
 	glm::vec3	getLeftDir();
 	std::shared_ptr<ViewPolygon> getRenderData();
 	GameObject(glm::vec3 _Front = { 0, 0, 1 }, glm::vec3 _Up = { 0, 1, 0 });
+	static std::vector<std::shared_ptr<GameObject>> allObjs;
+	// static void	bindGameObjVector(std::vector<std::shared_ptr<GameObject>>& inVector);
 
 // helper functions
 private:

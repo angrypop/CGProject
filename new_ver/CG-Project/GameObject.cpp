@@ -1,6 +1,8 @@
 #include "GameObject.h"
 #include <fstream>
 
+
+std::vector<std::shared_ptr<GameObject>> GameObject::allObjs;
 bool Airplane::enableGravity = false;
 
 void GameObject::loadFromObj(std::string filename) {
@@ -17,6 +19,8 @@ void GameObject::loadFromObj(std::string filename) {
 			vertex v = {0, 0, 0, 0, 0};
 			fin >> v[0] >> v[1] >> v[2];
 			vertices.push_back(v);
+			if (v[0] * v[0] + v[1] * v[1] + v[2] * v[2] > hitRadius * hitRadius)
+				hitRadius = sqrt(v[0] * v[0] + v[1] * v[1] + v[2] * v[2]);
 		}
 		else if (op == "f") {
 			std::vector<std::string> vertex_info;
@@ -43,13 +47,6 @@ void GameObject::loadFromObj(std::string filename) {
 			for (int i = 2; i < coord_index.size(); i++) {
 				// create view triangle
 				face f = { vertices[coord_index[0]], vertices[coord_index[1]], vertices[coord_index[i]] };
-				/*std::array<GLfloat, POINTSIZE * 3> data{};
-				for (size_t i = 0; i < 3; i++) {
-					for (size_t j = 0; j < COORDSIZE; j++)
-						data[i * POINTSIZE + j] = f[i][j];
-					for (size_t j = COORDSIZE; j < POINTSIZE; j++)
-						data[i * POINTSIZE + j] = ::RandomReal<GLfloat>(-1.0f, 1.0f); // texture coord
-				}*/
 				faces.push_back(f);
 			}
 		}
@@ -75,11 +72,13 @@ void GameObject::loadFromObj(std::string filename) {
 bool GameObject::collisionPossible(GameObject& obj) {
 	// fast 
 	// treat all objects as balls
-	/*GLfloat dist_sq = (coord[0] - obj.coordinate[0]) * (this->coordinate[0] - obj.coordinate[0])
-		+ (this->coordinate[1] - obj.coordinate[1]) * (this->coordinate[1] - obj.coordinate[1])
-		+ (this->coordinate[2] - obj.coordinate[2]) * (this->coordinate[2] - obj.coordinate[2]);
-	// GLfloat r1_sq = */
-	return false;
+	glm::vec3 coord = this->getPosition();
+	glm::vec3 coord2 = obj.getPosition();
+	GLfloat dist_sq = (coord[0] - coord2[0]) * (coord[0] - coord2[0])
+		+ (coord[1] - coord2[1]) * (coord[1] - coord2[1])
+		+ (coord[2] - coord2[2]) * (coord[2] - coord2[2]);
+	printf("thisR: %.1f    thatR: %.1f    dist: %.1f", hitRadius, hitRadius, sqrt(dist_sq));
+	return sqrt(dist_sq) <= (hitRadius + obj.hitRadius);
 }
 
 bool GameObject::collision(GameObject& obj) {
@@ -87,11 +86,16 @@ bool GameObject::collision(GameObject& obj) {
 }
 
 void GameObject::scale(const glm::vec3& vec) {
+	hitRadius *= (GLfloat(vec.x) + GLfloat(vec.y) + GLfloat(vec.z)) / 3.0;
 	this->viewObj->Scale(vec);
 }
 
 void GameObject::translate(const glm::vec3& vec) {
+	// prevent the translation if collision detected
 	this->viewObj->Translate(vec);
+	if (!checkMoveConstraints()) {
+		this->viewObj->Translate(-vec);
+	}
 }
 
 void GameObject::rotate(const GLfloat& angle, const glm::vec3& vec) {
@@ -152,11 +156,16 @@ GameObject::GameObject(glm::vec3 _Front, glm::vec3 _Up) {
 	velocity = { 0, 0, 0 };
 	localFront = _Front;
 	localUp = _Up;
+	hitRadius = 0;
 }
 
 bool GameObject::checkMoveConstraints()
 {
-	if (this->getPosition()[1] < 0) return false;
+	if (this->getPosition().y < 0) return false;
+	for (auto ptr : allObjs) {
+		if (this->viewObj->GetHandle() == ptr->viewObj->GetHandle()) continue;
+		if (collisionPossible(*ptr)) return false;
+	}
 	return true;
 }
 
@@ -232,6 +241,7 @@ void Airplane::simulate(GLfloat delta_time)
 	// debug info
 	static int cnt = 0; // print every 100 calls
 	if (cnt++ % 100) return;
+	printf("%-10s ", "pos"); printVec(getPosition());
 	printf("%-10s ", "front"); printVec(getFrontDir());
 	printf("%-10s ", "acceleration"); printVec(acceleration);
 	printf("%-10s %f\n", "velocity", v);

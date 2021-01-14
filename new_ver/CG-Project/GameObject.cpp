@@ -110,10 +110,15 @@ void GameObject::setDir(const glm::vec3& currentDir, const glm::vec3& dir)
 	this->viewObj->Rotate(rotateAngle, rotateAxis);
 }
 
+void GameObject::setVelocity(glm::vec3 in_v)
+{
+	velocity = in_v;
+}
+
 glm::vec3 GameObject::getPosition()
 {
 	glm::vec4 coord = this->viewObj->GetM() * glm::vec4({ 0, 0, 0, 1 });
-	return glm::vec3({ coord[0], coord[1], coord[2] });
+	return glm::vec3(coord);
 }
 
 glm::vec3 GameObject::getFrontDir()
@@ -166,7 +171,7 @@ void Airplane::changePower(GLfloat delta_power)
 {
 	power += delta_power;
 	if (power > 1.0) power = 1.0;
-	else if (power < -1.0) power = 0.0;
+	else if (power < -1.0) power = -1.0;
 }
 
 void Airplane::changeRoll(GLfloat angle)
@@ -188,23 +193,28 @@ void Airplane::simulate(GLfloat delta_time)
 {
 	// constants
 	static const GLfloat liftFactor = 1e-2f;
-	static const GLfloat resisFactor = 1e-4f;
+	static const GLfloat resisFactor = 1e-3f;
+	static const GLfloat vFollowFactor = 0.1f;
+	static const GLfloat maxPower = 1e5f;
+	// static const GLfloat maxSpeed = 1e2;
+	// let velocity follow front dir
+	velocity = vFollowFactor * localFront * glm::length(velocity) + (1 - vFollowFactor) * velocity;
 	// directions
-	glm::vec3 dir_front = getFrontDir();
-	glm::vec3 dir_up = getUpDir();
+	glm::vec3 dir_front = localFront;
+	glm::vec3 dir_up = localUp;
 	glm::vec3 dir_v = glm::normalize(velocity);
 	if (velocity == glm::vec3({ 0,0,0 })) dir_v = dir_front;
-	// let velocity follow front dir
-	//velocity = dir_front * glm::length(velocity);
 	// temp values
 	GLfloat v = glm::length(velocity);
 	GLfloat v_front = glm::length(velocity * dir_front);
 	// forces
-	static const GLfloat maxPower = 100;
 	glm::vec3 gravity = { 0, -9.8 * mass, 0 };
 	if (!enableGravity) gravity = { 0, 0, 0 };
 	glm::vec3 lift = glm::vec3({ 0, 1, 0 }) * liftFactor * (v_front * v_front) * glm::dot(dir_up, glm::vec3(0, 1, 0));
-	glm::vec3 thrust = dir_front * maxPower * power / (v + 0.01f);
+	glm::vec3 thrust = dir_front * maxPower * power;
+	if (glm::length(thrust) * v > maxPower) { // P = FV
+		thrust = dir_front * maxPower * power / v;
+	}
 	glm::vec3 resistance = -dir_v * resisFactor * (v * v);
 	// check lift vs gravity
 	if (glm::length(lift) > glm::length(gravity)) {
@@ -222,8 +232,10 @@ void Airplane::simulate(GLfloat delta_time)
 	// debug info
 	static int cnt = 0; // print every 100 calls
 	if (cnt++ % 100) return;
-	//printf("%-10s ", "front"); printVec(getFrontDir());
-	//printf("%-10s ", "velocity"); printVec(velocity);
+	printf("%-10s ", "front"); printVec(getFrontDir());
+	printf("%-10s ", "acceleration"); printVec(acceleration);
+	printf("%-10s %f\n", "velocity", v);
+	printf("%-10s %f\n", "power", power);
 	printf("%-10s %f\n", "thrust", glm::length(thrust));
 	printf("%-10s %f\n", "resistance", glm::length(resistance));
 	printf("%-10s %f\n", "lift", glm::length(lift));
@@ -231,7 +243,15 @@ void Airplane::simulate(GLfloat delta_time)
 	std::cout << std::endl;
 }
 
+void Airplane::reset()
+{
+}
+
 Airplane::Airplane(glm::vec3 _Front, glm::vec3 _Up): GameObject(_Front, _Up)
 {
 	power = 0.0;
+}
+
+void printVec(glm::vec3 vec) {
+	std::cout << vec.x << " " << vec.y << " " << vec.z << "\n";
 }

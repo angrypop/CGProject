@@ -75,24 +75,28 @@ void ScreenShot(const int & width, const int & height, const std::string &filena
 {
 	constexpr int components = 3;
 	constexpr int BMP_Header_Length = 54;
+	int lengthW = (width * components + 3) / 4 * 4;
 	std::cout << "Screen Shotting..." << std::endl;
 
 	std::string&& realFilename = (std::string(ScreenShotPath) + filename);
 	std::cout << "\tScreen Shot Filename = " << realFilename << std::endl;
-	GLubyte* imageBuf = (GLubyte*)calloc(3, width * height);
+	char * imageBuf = (char*)malloc(lengthW * height * sizeof(char));
 	if (!imageBuf)
 		throw("ScreenShot:: Memory NOT ENOUGH");
 
+	glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
 	glReadPixels((GLint)0, (GLint)0, (GLint)width, (GLint)height,
 		GL_RGB, GL_UNSIGNED_BYTE, imageBuf);
+	
 	// reverse the image
-	//for (int i = 0; i < height; i++)
-	//	for (int j = 0; j < width * components; j++)
-	//	{
-	//		int pos = i * width + j;
-	//		int spos = (height - 1 - i) * width + j;
-	//		swap(imageBuf[pos], imageBuf[spos]);
-	//	}
+
+	for (int i = 0; i < height / 2; i++)
+		for (int j = 0; j < lengthW; j++)
+		{
+			int pos = i * lengthW + j;
+			int spos = (height - 1 - i) * lengthW + j;
+			swap(imageBuf[pos], imageBuf[spos]);
+		}
 
 	// write the image into file
 	stbi_write_jpg(realFilename.c_str(), width, height, 3, imageBuf, 0);

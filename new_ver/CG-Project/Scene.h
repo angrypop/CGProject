@@ -20,6 +20,9 @@ namespace Scene
 	extern ViewGroup<WaterPlane> waterPlaneGroup;
 	extern ViewGroup<SkyBox> skyBoxGroup;
 
+	extern std::shared_ptr<Airplane> airplane;
+	extern std::vector<std::shared_ptr<GameObject>> GameObjects;
+
 	void InitGlobalData();
 	void InitGameObject();
 	void InitScene();

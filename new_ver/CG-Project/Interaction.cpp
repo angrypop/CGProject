@@ -129,17 +129,13 @@ void Interaction::KeyCallback(GLFWwindow* window, int key, int scancode, int act
 	}
 
 	if (key == GLFW_KEY_W && action == GLFW_PRESS) {
-
 		key_w_pressed = true;
 		printf("Key W\n");
 	}
-
-
 	if (key == GLFW_KEY_W && action == GLFW_RELEASE) {
 		key_w_pressed = false;
 	}
 	if (key == GLFW_KEY_A && action == GLFW_PRESS) {
-
 		key_a_pressed = true;
 		printf("Key A\n");
 	}
@@ -147,7 +143,6 @@ void Interaction::KeyCallback(GLFWwindow* window, int key, int scancode, int act
 		key_a_pressed = false;
 	}
 	if (key == GLFW_KEY_S && action == GLFW_PRESS) {
-
 		key_s_pressed = true;
 		printf("Key S\n");
 	}
@@ -155,7 +150,6 @@ void Interaction::KeyCallback(GLFWwindow* window, int key, int scancode, int act
 		key_s_pressed = false;
 	}
 	if (key == GLFW_KEY_D && action == GLFW_PRESS) {
-
 		key_d_pressed = true;
 		printf("Key D\n");
 	}
@@ -164,21 +158,26 @@ void Interaction::KeyCallback(GLFWwindow* window, int key, int scancode, int act
 	}
 	if (key == GLFW_KEY_Y && action == GLFW_PRESS)
 	{
+		camera.SetWorldUpDir({ 0, 1, 0 });
 		key_y_flag = !key_y_flag;
 	}
 	if (key == GLFW_KEY_W && action == GLFW_REPEAT) {
+		//camera.ProcessKeyboard(CameraMovement::FORWARD, 1);
 		ObjPos += glm::vec3(-0.05, 0, 0);
 		ObjVel = glm::vec3(-1, 0, 0);
 	}
 	if (key == GLFW_KEY_A && action == GLFW_REPEAT) {
+		//camera.ProcessKeyboard(CameraMovement::LEFT, 1);
 		ObjPos += glm::vec3(0, 0, 0.05);
 		ObjVel = glm::vec3(0, 0, 1);
 	}
 	if (key == GLFW_KEY_S && action == GLFW_REPEAT) {
+		//camera.ProcessKeyboard(CameraMovement::BACKWARD, 1);
 		ObjPos += glm::vec3(0.05, 0, 0);
 		ObjVel = glm::vec3(1, 0, 0);
 	}
 	if (key == GLFW_KEY_D && action == GLFW_REPEAT) {
+		//camera.ProcessKeyboard(CameraMovement::RIGHT, 1);
 		ObjPos += glm::vec3(0, 0, -0.05);
 		ObjVel = glm::vec3(0, 0, -1);
 	}

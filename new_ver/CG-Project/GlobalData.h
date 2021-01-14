@@ -111,7 +111,7 @@ void glUniformProcess(const GLuint& location, const glm::mat4& data);
 template <typename T>
 void SendUniformData(const GLuint & program, const std::string & name)
 {
-	GLuint location = glGetUniformLocation(program, name);
-	glUniformProcess(location, GlobalDataPool::GetData(name));
+	GLuint location = glGetUniformLocation(program, name.c_str());
+	glUniformProcess(location, GlobalDataPool::GetData(name.c_str()));
 }
 

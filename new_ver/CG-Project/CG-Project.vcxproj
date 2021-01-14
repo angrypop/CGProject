@@ -172,6 +172,7 @@
     <ClInclude Include="Camera.h" />
     <ClInclude Include="FitTexturePlane.h" />
     <ClInclude Include="GameObject.h" />
+    <ClInclude Include="GameScene.h" />
     <ClInclude Include="GlobalData.h" />
     <ClInclude Include="Interaction.h" />
     <ClInclude Include="Light.h" />
@@ -190,6 +191,7 @@
     <ClCompile Include="..\include\OpenGL\glad.c" />
     <ClCompile Include="FitTexturePlane.cpp" />
     <ClCompile Include="GameObject.cpp" />
+    <ClCompile Include="GameScene.cpp" />
     <ClCompile Include="GlobalData.cpp" />
     <ClCompile Include="Interaction.cpp" />
     <ClCompile Include="main.cpp" />

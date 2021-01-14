@@ -13,13 +13,13 @@ uniform sampler2D normalTexture;
 uniform sampler2D roughnessTexture;
 uniform mat3 TBN;
 
-float near = 0.1;
-float far = 500.0f;
+uniform float uniNear;
+uniform float uniFar;
 
 float LinearizeDepth(float depth)
 {
 	float z = depth * 2.0 - 1.0; // back to NDC 
-	return (2.0 * near * far) / (far + near - z * (far - near)); 
+	return (2.0 * uniNear * uniFar) / (uniFar + uniNear - z * (uniFar - uniNear)); 
 }
 
 void main() {
@@ -32,6 +32,6 @@ void main() {
 	// 存储镜面强度到gAlbedoSpec的alpha分量
 	gAlbedoSpec.a = texture(roughnessTexture, textureCoord).r;
 
-	gDepthID.rgb = vec3(LinearizeDepth(gl_FragCoord.z) / far);
-	//gDepthID.rgb = vec3(LinearizeDepth(depth) / far);
+	gDepthID.rgb = vec3(LinearizeDepth(gl_FragCoord.z) / uniFar);
+	//gDepthID.rgb = vec3(LinearizeDepth(depth) / uniFar);
 }

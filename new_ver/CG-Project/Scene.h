@@ -6,6 +6,7 @@
 #include "GlobalData.h"
 #include "ViewGroup.h"
 #include "GameObject.h"
+#include "GameScene.h"
 
 
 
@@ -28,6 +29,8 @@ namespace Scene
 	void InitScene();
 	void InitGBuffer();
 	void InitOIT();
+
+	void AddGameObject(const ViewObjectEnum& type, const std::shared_ptr<ViewObject>& ptr);
 
 	extern DirectionalLight directionalLight;
 	extern ViewCamera camera;

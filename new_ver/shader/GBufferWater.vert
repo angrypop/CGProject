@@ -35,7 +35,7 @@ float getLinearDepthOfViewCoord(vec3 viewCoord) {
 	vec4 uniP = vec4(viewCoord, 1.0);
 	uniP = uniP * uniP;
 	uniP /= uniP.w;
-	return uniP.z;//linearizeDepth(uniP.z) / far;
+	return uniP.z;//linearizeDepth(uniP.z) / uniFar;
 }
 out float depth;
 

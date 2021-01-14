@@ -63,16 +63,10 @@ public:
 		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GL_FLOAT), 0);
 		glEnableVertexAttribArray(0);
 
-		Program = glCreateProgram();
-		ShaderInfo shaders[] = {
-		{GL_VERTEX_SHADER,"Water.vert"} ,
-		{GL_FRAGMENT_SHADER,"Water.frag"} ,
-		{GL_NONE,""} };
-		for (int i = 0; shaders[i].mode != GL_NONE; i++) {
-			GLuint shader = LoadShader(shaders[i]);
-			glAttachShader(Program, shader);
-		}
-		glLinkProgram(Program);
+		Program = GenerateProgram({
+			{GL_VERTEX_SHADER,"Water.vert"} ,
+			{GL_FRAGMENT_SHADER,"Water.frag"}
+		});
 
 		glBindVertexArray(VAOs[WaterMeshVAO]);
 		glBindBuffer(GL_ARRAY_BUFFER, Buffers[WaterArrayBuffer]);
@@ -80,27 +74,15 @@ public:
 		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GL_FLOAT), 0);
 		glEnableVertexAttribArray(0);
 
-		ProgramMesh = glCreateProgram();
-		ShaderInfo shadersMesh[] = {
-		{GL_VERTEX_SHADER,"GBufferWater.vert"} ,
-		{GL_FRAGMENT_SHADER,"WaterMesh.frag"} ,
-		{GL_NONE,""} };
-		for (int i = 0; shadersMesh[i].mode != GL_NONE; i++) {
-			GLuint shader = LoadShader(shadersMesh[i]);
-			glAttachShader(ProgramMesh, shader);
-		}
-		glLinkProgram(ProgramMesh);
+		ProgramMesh = GenerateProgram({
+			{GL_VERTEX_SHADER,"GBufferWater.vert"} ,
+			{GL_FRAGMENT_SHADER,"WaterMesh.frag"} 
+		});
 
-		gBufferProgram = glCreateProgram();
-		ShaderInfo shadersGBuffer[] = {
-		{GL_VERTEX_SHADER,"GBufferWater.vert"} ,
-		{GL_FRAGMENT_SHADER,"GBufferWater.frag"} ,
-		{GL_NONE,""} };
-		for (int i = 0; shadersGBuffer[i].mode != GL_NONE; i++) {
-			GLuint shader = LoadShader(shadersGBuffer[i]);
-			glAttachShader(gBufferProgram, shader);
-		}
-		glLinkProgram(gBufferProgram);
+		gBufferProgram = GenerateProgram({
+			{GL_VERTEX_SHADER,"GBufferWater.vert"} ,
+			{GL_FRAGMENT_SHADER,"GBufferWater.frag"} ,
+		});
 	}
 
 	virtual void RenderGBuffer(glm::mat4 uniV, glm::mat4 uniP, float uniTime) {
@@ -113,6 +95,14 @@ public:
 		glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(uniP));
 		location = glGetUniformLocation(gBufferProgram, "uniTime");
 		glUniform1f(location, uniTime);
+
+		GLfloat uniNear = GlobalDataPool::GetData<GLfloat>("uniNear");
+		location = glGetUniformLocation(gBufferProgram, "uniNear");
+		glUniform1f(location, uniNear);
+		GLfloat uniFar = GlobalDataPool::GetData<GLfloat>("uniFar");
+		location = glGetUniformLocation(gBufferProgram, "uniFar");
+		glUniform1f(location, uniFar);
+
 		glBindVertexArray(this->VAOs[WaterVAO]);
 		glDrawElements(GL_TRIANGLES, numTri * 3, GL_UNSIGNED_INT, 0);
 

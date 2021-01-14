@@ -15,8 +15,8 @@ struct Light {
 	float quadratic;
 };
 
-float near = 0.1;
-float far = 500.0f;
+uniform float uniNear;
+uniform float uniFar;
 
 uniform Light light;
 uniform vec3 lightColor;
@@ -79,21 +79,21 @@ float ShadowCalculation(float bias, vec4 fragPosLightSpace)
 	//return currentDepth - closestDepth;
 }
 
-#define BISEARCH(SEARCHPOINT, DIRVEC, SIGN) DIRVEC *= 0.5; \
-                    SEARCHPOINT+= DIRVEC * SIGN; \
-                    uv = getScreenCoordByViewCoord(SEARCHPOINT); \
-                    sampleDepth = linearizeDepth(texture(gDepthID, uv).x); \
-                    testDepth = getLinearDepthOfViewCoord(SEARCHPOINT); \
-                    SIGN = sign(sampleDepth - testDepth);
+//#define BISEARCH(SEARCHPOINT, DIRVEC, SIGN) DIRVEC *= 0.5; \
+//                    SEARCHPOINT+= DIRVEC * SIGN; \
+//                    uv = getScreenCoordByViewCoord(SEARCHPOINT); \
+//                    sampleDepth = linearizeDepth(texture(gDepthID, uv).x); \
+//                    testDepth = getLinearDepthOfViewCoord(SEARCHPOINT); \
+//                    SIGN = sign(sampleDepth - testDepth);
 float linearizeDepth(float depth) {
 	float z = depth * 2.0 - 1.0;
-	return (2.0 * near * far) / (far + near - z * (far - near));
+	return (2.0 * uniNear * uniFar) / (uniFar + uniNear - z * (uniFar - uniNear));
 }
 float getLinearDepthOfViewCoord(vec3 viewCoord) {
 	vec4 uniP = vec4(viewCoord, 1.0);
 	uniP = uniP * uniP;
 	uniP /= uniP.w;
-	return linearizeDepth(uniP.z) / far;
+	return linearizeDepth(uniP.z) / uniFar;
 }
 vec2 getScreenCoordByViewCoord(vec3 viewCoord) {
 	vec4 uniP = vec4(viewCoord, 1.0);
@@ -185,8 +185,8 @@ vec3 reflectEffect(vec3 color, vec3 normal, vec2 uv, vec3 worldPos, float attr) 
 		float c = (uv2.x + uv2.y) * 0.25;
 		float jitter = mod(c, 1.0);
 		float schlick = 0.02 + 0.98 * pow(1.0 - dot(viewReflectRay, normal), 5.0);
-		//color = waterRayTarcing(viewPos + normal * (-viewPos.z / far * 0.2 + 0.05), viewReflectRay, color, jitter, schlick);
-		color = waterRayTarcing(worldPos + normal * (-worldPos.z / far * 0.2 + 0.05), viewReflectRay, color, 0, schlick);
+		//color = waterRayTarcing(viewPos + normal * (-viewPos.z / uniFar * 0.2 + 0.05), viewReflectRay, color, jitter, schlick);
+		color = waterRayTarcing(worldPos + normal * (-worldPos.z / uniFar * 0.2 + 0.05), viewReflectRay, color, 0, schlick);
 	}
 	return color;
 }
@@ -221,14 +221,14 @@ vec3 aces_tonemap(vec3 color) {
 //
 //float linearizeDepth(float depth) {
 //	float z = depth * 2.0 - 1.0; // back to NDC 
-//	return (2.0 * near * far) / (far + near - z * (far - near));
+//	return (2.0 * uniNear * uniFar) / (uniFar + uniNear - z * (uniFar - uniNear));
 //}
 //
 //float getLinearDepthOfViewCoord(vec3 viewCoord) {
 //	vec4 uniP = vec4(viewCoord, 1.0);
 //	uniP = uniP * uniP;
 //	uniP /= uniP.w;
-//	return linearizeDepth(uniP.z) / far;
+//	return linearizeDepth(uniP.z) / uniFar;
 //}
 //vec3 waterRayTarcing(vec3 startPoint, vec3 direction, vec3 color, float schlick) {
 //	const float stepBase = 0.05;
@@ -263,7 +263,7 @@ vec3 aces_tonemap(vec3 color) {
 //	if (attr == 1.0) {
 //		vec3 viewRefRay = reflect(normalize(worldPos - viewPos), normal);
 //		float schlick = 0.02 + 0.98 * pow(1.0 - dot(viewRefRay, normal), 5.0);
-//		color = waterRayTarcing(worldPos + normal * (-worldPos.z / far * 0.2 + 0.05), viewRefRay, color, schlick);
+//		color = waterRayTarcing(worldPos + normal * (-worldPos.z / uniFar * 0.2 + 0.05), viewRefRay, color, schlick);
 //	}
 //	return color;
 //}

@@ -1,16 +1,1 @@
-﻿  GameObject.cpp
-  Interaction.cpp
-  RenderPassGroup.cpp
-  ShaderObject.cpp
-  ShadowModule.cpp
-  ViewBase.cpp
-  ViewData.cpp
-  ViewFrame.cpp
-  ViewGroup.cpp
-  ViewModule.cpp
-  ViewObject.cpp
-  ViewTexture.cpp
-  ViewWorld.cpp
-  main.cpp
-  正在生成代码...
-  CG-Project.vcxproj -> C:\Users\HASEE\source\repos\CGProject\bad_ver\x64\Debug\CG-Project.exe
+﻿  CG-Project.vcxproj -> C:\Users\HASEE\source\repos\CGProject\bad_ver\x64\Debug\CG-Project.exe

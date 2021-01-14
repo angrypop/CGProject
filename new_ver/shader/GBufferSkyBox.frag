@@ -8,13 +8,13 @@ layout(location = 3) out vec4 gDepthID;
 in vec3 textureCoord;
 uniform samplerCube skybox;
 
-float near = 0.1;
-float far = 500.0f;
+uniform float uniNear;
+uniform float uniFar;
 
 float LinearizeDepth(float depth)
 {
 	float z = depth * 2.0 - 1.0; // back to NDC 
-	return (2.0 * near * far) / (far + near - z * (far - near));
+	return (2.0 * uniNear * uniFar) / (uniFar + uniNear - z * (uniFar - uniNear));
 }
 
 vec3 hsv2rgb(vec3 c) {

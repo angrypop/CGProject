@@ -22,6 +22,14 @@ void TexturedPlane::RenderShadowGrassBuffer()
 	glUniform1f(location, time);
 	location = glGetUniformLocation(program, "uniObjPos");
 	glUniform3fv(location, 1, glm::value_ptr(uniObjPos));
+
+	GLfloat uniNear = GlobalDataPool::GetData<GLfloat>("uniNear");
+	location = glGetUniformLocation(program, "uniNear");
+	glUniform1f(location, uniNear);
+	GLfloat uniFar = GlobalDataPool::GetData<GLfloat>("uniFar");
+	location = glGetUniformLocation(program, "uniFar");
+	glUniform1f(location, uniFar);
+
 	glBindVertexArray(this->VAOs[PlaneVAO]);
 	//glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 	glPatchParameteri(GL_PATCH_VERTICES, 4);
@@ -46,6 +54,13 @@ void TexturedPlane::RenderShadowBuffer()
 	glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(lightView));
 	location = glGetUniformLocation(program, "uniP");
 	glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(lightProjection));
+
+	GLfloat uniNear = GlobalDataPool::GetData<GLfloat>("uniNear");
+	location = glGetUniformLocation(program, "uniNear");
+	glUniform1f(location, uniNear);
+	GLfloat uniFar = GlobalDataPool::GetData<GLfloat>("uniFar");
+	location = glGetUniformLocation(program, "uniFar");
+	glUniform1f(location, uniFar);
 
 	glBindVertexArray(this->VAOs[PlaneVAO]);
 	glDrawElements(GL_TRIANGLES, this->VertexNum, GL_UNSIGNED_INT, 0);

@@ -12,6 +12,7 @@ namespace Scene
 	ViewGroup<SkyBox> skyBoxGroup;
 
 	std::shared_ptr<Airplane> airplane;
+	std::shared_ptr<DesertScene> desertScene;
 	std::vector<std::shared_ptr<GameObject>> GameObjects;
 
 	void AddGameObject(const ViewObjectEnum & type, const std::shared_ptr<ViewObject>& ptr);
@@ -101,6 +102,7 @@ void Scene::AddGameObject(const ViewObjectEnum& type, const std::shared_ptr<View
 }
 
 void Scene::InitScene() {
+	//desertScene.reset(new DesertScene);
 	//plane set
 	GLfloat planePoints1[] = {
 		-groundSize , 0.0f , -groundSize , 0.0f , 0.0f ,
@@ -255,6 +257,7 @@ void Scene::InitScene() {
 	waterPlaneGroup.AddObject(std::shared_ptr<WaterPlane>(new WaterPlane(
 		-groundSize * waterPlaneSizeRatio, -groundSize * waterPlaneSizeRatio, groundSize * waterPlaneSizeRatio,
 		groundSize * waterPlaneSizeRatio, groundSize, 100, 100)));
+	
 }
 
 void Scene::InitGameObject()
@@ -265,10 +268,11 @@ void Scene::InitGameObject()
 	GameObject::allObjs[0]->scale({ 0.2, 0.2, 0.2 });
 	GameObject::allObjs[0]->translate({ 0, 100, 0 });
 	GameObject::allObjs[0]->rotate(-90, { 1, 0, 0 });
+	//GameObject::allObjs[0]->getRenderData()->renderGrassFlag = true;
 	for (int i = 1; i <= 5; i++) {
 		GameObject::allObjs.push_back(std::shared_ptr<GameObject>(new GameObject()));
 		GameObject::allObjs[i]->loadFromObj("../resources/wolf.obj");
-		GameObject::allObjs[i]->scale({ RandomReal(100.0, 200.0), RandomReal(100.0, 200.0), RandomReal(100.0, 200.0) });
+		//GameObject::allObjs[i]->scale({ RandomReal(100.0, 200.0), RandomReal(100.0, 200.0), RandomReal(100.0, 200.0) });
 		GameObject::allObjs[i]->translate({ RandomReal(-1000.0, 1000.0), RandomReal(-1000.0, 1000.0), RandomReal(0.0, 200.0) });
 	}
 	for (const auto& i : GameObject::allObjs) {
@@ -281,7 +285,7 @@ void Scene::InitGlobalData()
 	constexpr float e = 0.03f;
 
 	GlobalDataPool::Add<glm::mat4>("cameraView", camera.GetViewMatrix());
-	GlobalDataPool::Add<glm::mat4>("cameraProjection", glm::perspective(glm::radians(45.0f), (float)width / (float)height, 0.1f, 500.0f));
+	GlobalDataPool::Add<glm::mat4>("cameraProjection", glm::perspective(glm::radians(45.0f), (float)width / (float)height, 0.1f, 5000.0f));
 	GlobalDataPool::Add<glm::vec3>("cameraPosition", camera.GetViewPosition());
 	GlobalDataPool::Add<glm::mat4>("lightProjection",
 		glm::ortho(Shadow::SHADOW_WIDTH * -0.5f * e, Shadow::SHADOW_WIDTH * 0.5f * e,
@@ -290,6 +294,8 @@ void Scene::InitGlobalData()
 	GlobalDataPool::Add<GLfloat>("systemTime", (float)glfwGetTime());
 	GlobalDataPool::Add<glm::vec3>("uniObjPos", glm::vec3(0.0f, groundSize * 3 / 2, groundSize * 2));
 	GlobalDataPool::Add<glm::vec3>("uniObjVel", glm::vec3(0.0f, 0.0f, 0.0f));
+	GlobalDataPool::Add<GLfloat>("uniNear", 0.1f);
+	GlobalDataPool::Add<GLfloat>("uniFar", 5000.0f);
 }
 
 void Scene::InitGBuffer() {

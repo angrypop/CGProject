@@ -44,11 +44,21 @@ void GameObject::loadFromObj(std::string filename) {
 				int coord_index_this = std::stoi(s.substr(0, s.find('/'))) - 1;
 				coord_index.push_back(coord_index_this);
 			}
-			for (int i = 2; i < coord_index.size(); i++) {
-				// create view triangle
-				face f = { vertices[coord_index[0]], vertices[coord_index[1]], vertices[coord_index[i]] };
-				faces.push_back(f);
+			if (coord_index.size() == 4)
+			{
+				faces.push_back(face({ vertices[coord_index[0]], vertices[coord_index[2]], vertices[coord_index[1]] }));
+				faces.push_back(face({ vertices[coord_index[0]], vertices[coord_index[2]], vertices[coord_index[3]] }));
 			}
+			else
+			{
+				faces.push_back(face({ vertices[coord_index[0]], vertices[coord_index[1]], vertices[coord_index[2]] }));
+			}
+			//for (int i = 2; i < coord_index.size(); i++) {
+			//	// create view triangle
+			//	std::cout << "coord_index.size() = " << coord_index.size() << std::endl;
+			//	face f = { vertices[coord_index[0]], vertices[coord_index[1]], vertices[coord_index[i]] };
+			//	faces.push_back(f);
+			//}
 		}
 		else {
 			// ignore the line
@@ -86,16 +96,16 @@ bool GameObject::collision(GameObject& obj) {
 }
 
 void GameObject::scale(const glm::vec3& vec) {
-	hitRadius *= (GLfloat(vec.x) + GLfloat(vec.y) + GLfloat(vec.z)) / 3.0;
+	hitRadius *= (GLfloat(vec.x) + GLfloat(vec.y) + GLfloat(vec.z)) / 3.0f;
 	this->viewObj->Scale(vec);
 }
 
 void GameObject::translate(const glm::vec3& vec) {
 	// prevent the translation if collision detected
 	this->viewObj->Translate(vec);
-	if (!checkMoveConstraints()) {
-		this->viewObj->Translate(-vec);
-	}
+	//if (!checkMoveConstraints()) {
+	//	this->viewObj->Translate(-vec);
+	//}
 }
 
 void GameObject::rotate(const GLfloat& angle, const glm::vec3& vec) {

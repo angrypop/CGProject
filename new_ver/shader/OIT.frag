@@ -16,13 +16,13 @@ in vec3 normal;
 in float depth;
 in vec4 color;
 
-float near = 0.1;
-float far = 500.f;
+uniform float uniNear;
+uniform float uniFar;
 
 float LinearizeDepth(float depth)
 {
 	float z = depth * 2.0 - 1.0; // back to NDC 
-	return (2.0 * near * far) / (far + near - z * (far - near));
+	return (2.0 * uniNear * uniFar) / (uniFar + uniNear - z * (uniFar - uniNear));
 }
 
 void main() {
@@ -37,8 +37,8 @@ void main() {
 	item.y = packUnorm4x8(vec4(color));
 	item.z = packUnorm4x8(vec4(normal, 0.0f));
 	//item.w = floatBitsToUint(depth);
-	item.w = floatBitsToUint(LinearizeDepth(gl_FragCoord.z) / far);
-	//item.w = floatBitsToUint(LinearizeDepth(depth) / far);
+	item.w = floatBitsToUint(LinearizeDepth(gl_FragCoord.z) / uniFar);
+	//item.w = floatBitsToUint(LinearizeDepth(depth) / uniFar);
 
 	imageStore(list_buffer, int(index), item);
 	imageStore(list_buffer_worldPos, int(index), vec4(worldPos, 1.0f));
@@ -50,7 +50,7 @@ void main() {
 	//fColor = gl_FragCoord;
 	//fColor vec4(item.x)
 	//fColor = unpackUnorm4x8(item.z);
-	//fColor = vec4(vec3(LinearizeDepth(uintBitsToFloat(item.w)) / far), 1.0f);
+	//fColor = vec4(vec3(LinearizeDepth(uintBitsToFloat(item.w)) / uniFar), 1.0f);
 	//fColor = vec4(worldPos / 10, 1.0f);
 	//fColor = vec4(unpackUnorm4x8(item.y).xyz / 10, 1.0f);
 }

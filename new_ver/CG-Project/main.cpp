@@ -216,6 +216,13 @@ void RenderBlendOIT() {
 	location = glGetUniformLocation(OITPrograms[RankOIT], "gTransColor");
 	glUniform1i(location, GTransColorTexture);
 
+	GLfloat uniNear = GlobalDataPool::GetData<GLfloat>("uniNear");
+	location = glGetUniformLocation(OITPrograms[RankOIT], "uniNear");
+	glUniform1f(location, uniNear);
+	GLfloat uniFar = GlobalDataPool::GetData<GLfloat>("uniFar");
+	location = glGetUniformLocation(OITPrograms[RankOIT], "uniFar");
+	glUniform1f(location, uniFar);
+
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, GTextures[GPositionTexture]);
 	glActiveTexture(GL_TEXTURE1);
@@ -300,7 +307,12 @@ void RenderGBufferLight() {
 	location = glGetUniformLocation(gBufferLightProgram, "gTransColor");
 	glUniform1i(location, GTransColorTexture + 1);
 
-
+	GLfloat uniNear = GlobalDataPool::GetData<GLfloat>("uniNear");
+	location = glGetUniformLocation(gBufferLightProgram, "uniNear");
+	glUniform1f(location, uniNear);
+	GLfloat uniFar = GlobalDataPool::GetData<GLfloat>("uniFar");
+	location = glGetUniformLocation(gBufferLightProgram, "uniFar");
+	glUniform1f(location, uniFar);
 
 	location = glGetUniformLocation(gBufferLightProgram, "lightSpaceMatrix");
 	glm::mat4 temp = lightProjection * lightView;

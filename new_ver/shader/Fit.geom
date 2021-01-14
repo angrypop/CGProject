@@ -30,7 +30,7 @@ float getLinearDepthOfViewCoord(vec4 viewCoord) {
 	vec4 uniP = viewCoord;
 	uniP = uniP * uniP;
 	uniP /= uniP.w;
-	return uniP.z;//linearizeDepth(uniP.z) / far;
+	return uniP.z;//linearizeDepth(uniP.z) / uniFar;
 }
 
 float rand(vec2 co) {

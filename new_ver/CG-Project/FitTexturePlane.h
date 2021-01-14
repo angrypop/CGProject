@@ -232,6 +232,14 @@ public:
 		glUniform1f(location, radius);
 		location = glGetUniformLocation(updateProgram, "heightMap");
 		glUniform1i(location, FitHeightTexture);
+
+		GLfloat uniNear = GlobalDataPool::GetData<GLfloat>("uniNear");
+		location = glGetUniformLocation(updateProgram, "uniNear");
+		glUniform1f(location, uniNear);
+		GLfloat uniFar = GlobalDataPool::GetData<GLfloat>("uniFar");
+		location = glGetUniformLocation(updateProgram, "uniFar");
+		glUniform1f(location, uniFar);
+
 		glActiveTexture(GL_TEXTURE3);
 		glBindTexture(GL_TEXTURE_2D, this->Textures[FitHeightTexture]);
 
@@ -260,6 +268,16 @@ public:
 		glUniform1f(location, uniTime);
 		location = glGetUniformLocation(GrassProgram, "uniObjPos");
 		glUniform3fv(location, 1, glm::value_ptr(uniObjPos));
+
+		GLfloat uniNear = GlobalDataPool::GetData<GLfloat>("uniNear");
+		location = glGetUniformLocation(GrassProgram, "uniNear");
+		glUniform1f(location, uniNear);
+		GLfloat uniFar = GlobalDataPool::GetData<GLfloat>("uniFar");
+		location = glGetUniformLocation(GrassProgram, "uniFar");
+		glUniform1f(location, uniFar);
+
+
+
 		glBindVertexArray(this->VAOs[FitPlaneVAO]);
 
 		//glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
@@ -292,6 +310,14 @@ public:
 		glUniform1i(location, FitPlaneRoughnessTexture);
 		location = glGetUniformLocation(GBufferProgram, "heightMap");
 		glUniform1i(location, FitHeightTexture);
+
+		GLfloat uniNear = GlobalDataPool::GetData<GLfloat>("uniNear");
+		location = glGetUniformLocation(GBufferProgram, "uniNear");
+		glUniform1f(location, uniNear);
+		GLfloat uniFar = GlobalDataPool::GetData<GLfloat>("uniFar");
+		location = glGetUniformLocation(GBufferProgram, "uniFar");
+		glUniform1f(location, uniFar);
+
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, this->Textures[FitPlaneColorTexture]);
 		glActiveTexture(GL_TEXTURE1);
@@ -323,6 +349,14 @@ public:
 		glUniform1f(location, uniTime);
 		location = glGetUniformLocation(program, "uniObjPos");
 		glUniform3fv(location, 1, glm::value_ptr(uniObjPos));
+
+		GLfloat uniNear = GlobalDataPool::GetData<GLfloat>("uniNear");
+		location = glGetUniformLocation(program, "uniNear");
+		glUniform1f(location, uniNear);
+		GLfloat uniFar = GlobalDataPool::GetData<GLfloat>("uniFar");
+		location = glGetUniformLocation(program, "uniFar");
+		glUniform1f(location, uniFar);
+
 		glBindVertexArray(this->VAOs[FitPlaneVAO]);
 		//glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 		glPatchParameteri(GL_PATCH_VERTICES, 4);

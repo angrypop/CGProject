@@ -17,6 +17,14 @@ void TransparentPlane::RenderOITBuffer()
 	glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(uniP));
 	location = glGetUniformLocation(program, "planeColor");
 	glUniform4fv(location, 1, glm::value_ptr(color));
+
+	GLfloat uniNear = GlobalDataPool::GetData<GLfloat>("uniNear");
+	location = glGetUniformLocation(program, "uniNear");
+	glUniform1f(location, uniNear);
+	GLfloat uniFar = GlobalDataPool::GetData<GLfloat>("uniFar");
+	location = glGetUniformLocation(program, "uniFar");
+	glUniform1f(location, uniFar);
+
 	glBindVertexArray(this->VAOs[PlaneVAO]);
 	glDrawElements(GL_TRIANGLES, this->VertexNum, GL_UNSIGNED_INT, 0);
 }

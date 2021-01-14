@@ -18,6 +18,14 @@ void WaterPlane::RenderShadowBuffer()
 	glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(lightProjection));
 	location = glGetUniformLocation(program, "uniTime");
 	glUniform1f(location, waterTime);
+
+	GLfloat uniNear = GlobalDataPool::GetData<GLfloat>("uniNear");
+	location = glGetUniformLocation(program, "uniNear");
+	glUniform1f(location, uniNear);
+	GLfloat uniFar = GlobalDataPool::GetData<GLfloat>("uniFar");
+	location = glGetUniformLocation(program, "uniFar");
+	glUniform1f(location, uniFar);
+
 	glBindVertexArray(this->VAOs[WaterVAO]);
 	glDrawElements(GL_TRIANGLES, numTri * 3, GL_UNSIGNED_INT, 0);
 
@@ -40,6 +48,14 @@ void WaterPlane::RenderOITBuffer()
 	glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(uniP));
 	location = glGetUniformLocation(program, "uniTime");
 	glUniform1f(location, waterTime);
+
+	GLfloat uniNear = GlobalDataPool::GetData<GLfloat>("uniNear");
+	location = glGetUniformLocation(program, "uniNear");
+	glUniform1f(location, uniNear);
+	GLfloat uniFar = GlobalDataPool::GetData<GLfloat>("uniFar");
+	location = glGetUniformLocation(program, "uniFar");
+	glUniform1f(location, uniFar);
+
 	glBindVertexArray(this->VAOs[WaterVAO]);
 	glDrawElements(GL_TRIANGLES, numTri * 3, GL_UNSIGNED_INT, 0);
 

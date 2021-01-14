@@ -100,6 +100,14 @@ public:
 		glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(uniP));
 		location = glGetUniformLocation(GBufferProgram, "skybox");
 		glUniform1i(location, 0);
+
+		GLfloat uniNear = GlobalDataPool::GetData<GLfloat>("uniNear");
+		location = glGetUniformLocation(GBufferProgram, "uniNear");
+		glUniform1f(location, uniNear);
+		GLfloat uniFar = GlobalDataPool::GetData<GLfloat>("uniFar");
+		location = glGetUniformLocation(GBufferProgram, "uniFar");
+		glUniform1f(location, uniFar);
+
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_CUBE_MAP, cubemapTexture);
 		glBindVertexArray(this->VAOs[VAO]);
@@ -117,6 +125,14 @@ public:
 		location = glGetUniformLocation(program, "uniV");
 		glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(uniV));
 		location = glGetUniformLocation(program, "uniP");
+
+		GLfloat uniNear = GlobalDataPool::GetData<GLfloat>("uniNear");
+		location = glGetUniformLocation(program, "uniNear");
+		glUniform1f(location, uniNear);
+		GLfloat uniFar = GlobalDataPool::GetData<GLfloat>("uniFar");
+		location = glGetUniformLocation(program, "uniFar");
+		glUniform1f(location, uniFar);
+
 		glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(uniP));
 		glBindVertexArray(this->VAOs[VAO]);
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);

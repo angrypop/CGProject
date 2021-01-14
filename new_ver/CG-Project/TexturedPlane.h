@@ -112,6 +112,18 @@ public:
 			indices.data(), (int)indices.size() * sizeof(GLfloat), planeShaders, planeTextures);
 	}
 
+	TexturedPlane(std::vector<GLfloat> vertices, std::vector<GLuint> indices, std::vector<TextureInfo> planeTextures)
+	{
+		this->VertexNum = (int)indices.size();
+		ShaderInfo planeShaders[] = {
+	{GL_VERTEX_SHADER,"Ground.vert"} ,
+	{GL_FRAGMENT_SHADER,"Ground.frag"} ,
+	{GL_NONE,""} };
+		
+		this->Init(glm::vec3(0.0f), vertices.data(), (int)vertices.size() * sizeof(GLfloat),
+			indices.data(), (int)indices.size() * sizeof(GLfloat), planeShaders, planeTextures.data());
+	}
+
 	virtual void RenderGrassGBuffer() {
 		glm::mat4 cameraView = GlobalDataPool::GetData<glm::mat4>("cameraView");
 		GLfloat uniTime = GlobalDataPool::GetData<GLfloat>("systemTime");
@@ -130,9 +142,16 @@ public:
 		glUniform1f(location, uniTime);
 		location = glGetUniformLocation(GrassProgram, "uniObjPos");
 		glUniform3fv(location, 1, glm::value_ptr(ObjPos));
+
+		GLfloat uniNear = GlobalDataPool::GetData<GLfloat>("uniNear");
+		location = glGetUniformLocation(GrassProgram, "uniNear");
+		glUniform1f(location, uniNear);
+		GLfloat uniFar = GlobalDataPool::GetData<GLfloat>("uniFar");
+		location = glGetUniformLocation(GrassProgram, "uniFar");
+		glUniform1f(location, uniFar);
+
+
 		glBindVertexArray(this->VAOs[PlaneVAO]);
-
-
 		glPatchParameteri(GL_PATCH_VERTICES, 4);
 		glDrawArrays(GL_PATCHES, 0, 4);
 		glUseProgram(0);
@@ -162,6 +181,13 @@ public:
 		glUniform1i(location, PlaneNormalTexture);
 		location = glGetUniformLocation(GBufferProgram, "roughnessTexture");
 		glUniform1i(location, PlaneRoughnessTexture);
+		GLfloat uniNear = GlobalDataPool::GetData<GLfloat>("uniNear");
+		location = glGetUniformLocation(GBufferProgram, "uniNear");
+		glUniform1f(location, uniNear);
+		GLfloat uniFar = GlobalDataPool::GetData<GLfloat>("uniFar");
+		location = glGetUniformLocation(GBufferProgram, "uniFar");
+		glUniform1f(location, uniFar);
+
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, this->Textures[PlaneColorTexture]);
 		glActiveTexture(GL_TEXTURE1);

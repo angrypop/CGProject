@@ -30,7 +30,7 @@ float getLinearDepthOfViewCoord(vec4 viewCoord) {
 	vec4 uniP = viewCoord;
 	uniP = uniP * uniP;
 	uniP /= uniP.w;
-	return uniP.z;//linearizeDepth(uniP.z) / far;
+	return uniP.z;//linearizeDepth(uniP.z) / uniFar;
 }
 
 #define BottomColor vec4(0.05, 0.4, 0.1, 1.0)

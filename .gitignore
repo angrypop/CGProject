@@ -2,3 +2,8 @@ CG-Project/.vs
 CG-Project/CG-Project/x64
 CG-Project/x64
 old_ver/.vs
+*.suo
+*.log
+*.tlog
+*.obj
+*.pdb

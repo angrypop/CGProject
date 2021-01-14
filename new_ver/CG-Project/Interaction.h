@@ -14,6 +14,7 @@ public:
 	static GLfloat ReadYoffset();
 
 
+	static bool screenShotFlag;
 	static bool mouseReverseFlag;
 	static ViewCamera camera;
 	static glm::vec3 ObjPos;

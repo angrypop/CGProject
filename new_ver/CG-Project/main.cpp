@@ -10,8 +10,57 @@ void RenderGBufferLight();
 
 void RenderAllObject(const ViewPassEnum & pass);
 
+void UpdateCamera() {
+	if (Interaction::key_y_flag) {
+		// follow ground object
+	}
+	else {
+		// follow airplane
+		// locate camera at the back of the airplane
+		glm::vec3 objFront = airplane->getFrontDir();
+		glm::vec3 objPos = airplane->getPosition();
+		glm::vec3 cameraDelta = objFront * (-100.0f) + glm::vec3({ 0, 1, 0 });
+		Interaction::camera.SetPosition(objPos + cameraDelta);
+		if (!(Interaction::left_button_pressed || Interaction::key_y_flag)) {
+			// force camera to look at the airplane
+			Interaction::camera.SetFrontDir(objFront);
+			Interaction::camera.SetWorldUpDir(airplane->getUpDir());
+		}
+	}
+}
+
+void UpdateAirplane() {
+	if (Interaction::key_y_flag) {
+		// control ground object
+	}
+	else {
+		GLfloat deltaPower = 0.01f;
+		GLfloat deltaYaw = 0.5f;
+		airplane->changePitch(-Interaction::ReadYoffset());
+		airplane->changeRoll(Interaction::ReadXoffset());
+		if (Interaction::key_w_pressed) {
+			airplane->changePower(deltaPower);
+		}
+		if (Interaction::key_s_pressed) {
+			airplane->changePower(-deltaPower);
+		}
+		if (Interaction::key_a_pressed) {
+			airplane->changeYaw(deltaYaw);
+		}
+		if (Interaction::key_d_pressed) {
+			airplane->changeYaw(-deltaYaw);
+		}
+		if (Interaction::key_space_pressed) {
+			// airplane->reset();
+		}
+		airplane->simulate();
+	}
+}
+
 void UpdateData()
 {
+	UpdateAirplane();
+	UpdateCamera();
 	GlobalDataPool::SetData<GLfloat>("systemTime", (GLfloat)glfwGetTime());
 	for (const auto& plane : fitPlaneGroup.GetObjectList())
 	{

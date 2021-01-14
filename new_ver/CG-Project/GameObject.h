@@ -29,6 +29,7 @@ public:
 	void		translate(const glm::vec3& vec);
 	void		rotate(const GLfloat& angle, const glm::vec3& vec);
 	void		setDir(const glm::vec3& currentDir, const glm::vec3& dir);
+	void		setVelocity(glm::vec3 in_v);
 	glm::vec3	getPosition();
 	glm::vec3	getFrontDir();
 	glm::vec3	getUpDir();
@@ -51,6 +52,9 @@ public:
 	void		changePitch(GLfloat angle);
 	void		changeYaw(GLfloat angle);
 	void		simulate(GLfloat delta_time = 0.016); // asuming 60 ticks per second
+	void		reset();
 	static bool	enableGravity;
 	Airplane(glm::vec3 _Front = { 0, 0, 1 }, glm::vec3 _Up = { 0, 1, 0 });
 };
+
+void printVec(glm::vec3);

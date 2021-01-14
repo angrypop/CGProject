@@ -16,10 +16,10 @@ static const float YAW = 0.0f;
 static const float PITCH = 0.0f;
 static const float SPEED = 2.5f;
 static const float SENSITIVITY = 0.05f;
-static const float SCROLLRATE = 3.0f;
+static const float SCROLLRATE = 20.0f;
 static const float ZOOM = 45.0f;
 static const float RADIAN_TO_ANGLE = 180.0f / 3.1416f;
-static const float FOLLOW_SPEED = 0.01f; // must be in (0, 1)
+static const float FOLLOW_SPEED = 0.05f; // must be in (0, 1)
 
 class ViewCamera {
 public:

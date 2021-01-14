@@ -17,6 +17,7 @@
 #include <thread>
 #include <random>
 #include <map>
+#include <Windows.h>
 
 #include <glad/glad.h>
 #include <glfw3.h>
@@ -28,6 +29,7 @@
 enum class ViewPassEnum { ShadowBuffer, GBuffer, OITBuffer, BlendOIT, GBufferIlluminate };
 enum class ViewObjectEnum { TextureObject, FitTextureObject, TransparentObject, WaterObject, SkyBoxObject};
 constexpr std::string_view TexturePath = "..\\texture\\";
+constexpr std::string_view ScreenShotPath = "..\\screenshot\\";
 
 
 // get a random real number in [min, max]
@@ -67,3 +69,11 @@ protected:
 private:
 	static HandleT _handleCnt;
 };
+
+template <typename T>
+void swap(T& x, T& y)
+{
+	auto temp = x;
+	x = y;
+	y = temp;
+}

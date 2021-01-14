@@ -17,6 +17,25 @@ void UpdateData()
 	{
 		plane->UpdateHeight(radius, 0, camera.GetViewMatrix());
 	}
+	if (Interaction::screenShotFlag)
+	{
+		try
+		{
+			time_t now = time(nullptr);
+			struct tm info;
+			localtime_s(&info, &now);
+			char timeBuf[256];
+			strftime(timeBuf, 256, "%Y-%m-%d_%H:%M:%S", &info);
+			std::cout << "Time Now = " << timeBuf << std::endl;
+			std::string filename = std::string("IMG_") + timeBuf + ".jpg";
+			ScreenShot(Scene::width, Scene::height, filename);
+		}
+		catch (std::string msg)
+		{
+			std::cout << msg << std::endl;
+		}
+		Interaction::screenShotFlag = false;
+	}
 }
 
 int main(int argc, char** argv) {

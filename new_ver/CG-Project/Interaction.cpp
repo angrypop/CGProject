@@ -4,6 +4,7 @@
 
 bool Interaction::mouseReverseFlag = true;
 float Interaction::mouse_sensitivity = 0.0225f;
+bool Interaction::screenShotFlag = false;
 
 constexpr GLfloat groundSize = 15.0f;
 ViewCamera Interaction::camera = ViewCamera(glm::vec3(40.0f, 40.0f, 40.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
@@ -113,6 +114,11 @@ void Interaction::KeyCallback(GLFWwindow* window, int key, int scancode, int act
 		mouseReverseFlag = !mouseReverseFlag;
 	}
 
+	if (key == GLFW_KEY_F1 && action == GLFW_PRESS)	// screen shot
+	{
+		std::cout << "F1 Pressed" << std::endl;
+		screenShotFlag = true;
+	}
 	if (key == GLFW_KEY_SPACE && action == GLFW_PRESS)
 	{
 		key_space_pressed = true;

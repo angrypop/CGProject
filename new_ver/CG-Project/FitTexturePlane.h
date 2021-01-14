@@ -159,47 +159,28 @@ public:
 		//printf("T(%f,%f,%f)\nB(%f,%f,%f)\nN(%f,%f,%f)\n", T.x, T.y, T.z, B.x, B.y, B.z, N.x, N.y, N.z);
 		this->TBN = glm::mat3(T, B, N);
 
-		ShaderInfo shadersGBuffer[] = {
-		   {GL_VERTEX_SHADER,"GBufferTexture.vert"} ,
-		{GL_TESS_CONTROL_SHADER,"Fit.tesc"},
-		{GL_TESS_EVALUATION_SHADER,"Fit.tese"},
-		{GL_GEOMETRY_SHADER,"Fit.geom"},
-		   {GL_FRAGMENT_SHADER,"GBufferFitTexture.frag"} ,
-		   {GL_NONE,""} };
+		GBufferProgram = GenerateProgram({
+			{GL_VERTEX_SHADER,"GBufferTexture.vert"} ,
+			{GL_TESS_CONTROL_SHADER,"Fit.tesc"},
+			{GL_TESS_EVALUATION_SHADER,"Fit.tese"},
+			{GL_GEOMETRY_SHADER,"Fit.geom"},
+			{GL_FRAGMENT_SHADER,"GBufferFitTexture.frag"} ,
+		});
 
-		GBufferProgram = glCreateProgram();
-		for (int i = 0; shadersGBuffer[i].mode != GL_NONE; i++) {
-			GLuint shader = LoadShader(shadersGBuffer[i]);
-			glAttachShader(GBufferProgram, shader);
-		}
-		glLinkProgram(GBufferProgram);
 
-		ShaderInfo shadersGrass[] = {
-		{GL_VERTEX_SHADER,"GBufferTexture.vert"} ,
-		{GL_TESS_CONTROL_SHADER,"GrassControl.tesc"},
-		{GL_TESS_EVALUATION_SHADER,"GrassEvaluation.tese"},
-		{GL_GEOMETRY_SHADER,"GrassNormal.geom"},
-		{GL_FRAGMENT_SHADER,"GBufferGrass.frag"},
-		//{GL_FRAGMENT_SHADER,"gBufferTexturePlaneF.shader"} ,
-		{GL_NONE,""} };
+		GrassProgram = GenerateProgram({
+			{GL_VERTEX_SHADER,"GBufferTexture.vert"} ,
+			{GL_TESS_CONTROL_SHADER,"GrassControl.tesc"},
+			{GL_TESS_EVALUATION_SHADER,"GrassEvaluation.tese"},
+			{GL_GEOMETRY_SHADER,"GrassNormal.geom"},
+			{GL_FRAGMENT_SHADER,"GBufferGrass.frag"}
+		}); 
 
-		GrassProgram = glCreateProgram();
-		for (int i = 0; shadersGrass[i].mode != GL_NONE; i++) {
-			GLuint shader = LoadShader(shadersGrass[i]);
-			glAttachShader(GrassProgram, shader);
-		}
-		glLinkProgram(GrassProgram);
+		updateProgram = GenerateProgram({
+			{GL_VERTEX_SHADER,"FitUpdate.vert"} ,
+			{GL_FRAGMENT_SHADER,"FitUpdate.frag"},
+		});
 
-		ShaderInfo shadersUpdateFit[] = {
-{GL_VERTEX_SHADER,"FitUpdate.vert"} ,
-{GL_FRAGMENT_SHADER,"FitUpdate.frag"},
-{GL_NONE,""} };
-		updateProgram = glCreateProgram();
-		for (int i = 0; shadersUpdateFit[i].mode != GL_NONE; i++) {
-			GLuint shader = LoadShader(shadersUpdateFit[i]);
-			glAttachShader(updateProgram, shader);
-		}
-		glLinkProgram(updateProgram);
 	}
 
 	void UpdateHeight(GLfloat radius, GLuint rst, glm::mat4 uniV) {
@@ -240,9 +221,9 @@ public:
 		location = glGetUniformLocation(updateProgram, "uniFar");
 		glUniform1f(location, uniFar);
 
-		glActiveTexture(GL_TEXTURE3);
+		glActiveTexture(GL_TEXTURE0 + FitHeightTexture);
 		glBindTexture(GL_TEXTURE_2D, this->Textures[FitHeightTexture]);
-
+		
 		glBindVertexArray(this->VAOs[FitTextureVAO]);
 		//glPatchParameteri(GL_PATCH_VERTICES, 3);
 		//glBindVertexArray(fitVAO);

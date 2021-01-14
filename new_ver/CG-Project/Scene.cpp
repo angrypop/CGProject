@@ -368,7 +368,7 @@ void Scene::InitOIT() {
 
 	glBindImageTexture(0, OITTextures[HeadPointerTexture], 0, GL_TRUE, 0, GL_READ_WRITE, GL_R32UI);
 
-	constexpr int MemorySize = 32;
+	constexpr int MemorySize = 16;
 	glBindBuffer(GL_PIXEL_UNPACK_BUFFER, OITBuffers[HeadPointerInit]);
 	glBufferData(GL_PIXEL_UNPACK_BUFFER, width * height * sizeof(GLuint), NULL, GL_STATIC_DRAW);
 	data = (GLuint*)glMapBuffer(GL_PIXEL_UNPACK_BUFFER, GL_WRITE_ONLY);

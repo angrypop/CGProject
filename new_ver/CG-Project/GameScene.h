@@ -9,7 +9,7 @@ public:
 
 	std::shared_ptr<TransparentPlane> _startDoor;
 	std::shared_ptr<TexturedPlane> _roadGround;
-	//std::shared_ptr<TexturedPlane> _areaGround;
+	
 	bool _successFlag = false;
 	bool _startFlag = false;
 	GLfloat _distance;
@@ -31,4 +31,5 @@ public:
 	{
 
 	}
+	std::shared_ptr<FitTexturedPlane> _areaGround;
 };

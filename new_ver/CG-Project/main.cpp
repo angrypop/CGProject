@@ -51,7 +51,9 @@ void UpdateAirplane() {
 			airplane->changeYaw(-deltaYaw);
 		}
 		if (Interaction::key_space_pressed) {
-			// airplane->reset();
+			airplane->setPower(0);
+			airplane->setVelocity({ 0, 0, 0 });
+			airplane->setPosition({ 0, 100, 0 });
 		}
 		airplane->simulate();
 	}

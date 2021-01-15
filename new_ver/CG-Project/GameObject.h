@@ -11,26 +11,26 @@ typedef std::array<vertex, 3> face;
 class GameObject {
 // member variabels
 protected:
-	bool		fixed;
 	GLfloat		mass;
 	glm::vec3	velocity;
 	GLfloat		hitRadius;
 	std::vector<face> faces;
 	std::shared_ptr<ViewPolygon> viewObj;
-	std::vector<glm::vec3> hitBox;
+	glm::vec3	maxVertexCoord;
+	glm::vec3	minVertexCoord;
 
 // public functions
 public:
+	bool		fixed;
 	glm::vec3	localFront;
 	glm::vec3	localUp;
 	void		loadFromObj(std::string filename);
-	bool		collisionPossible(GameObject& obj);
-	bool		collision(GameObject& obj);
 	void		scale(const glm::vec3& vec);
-	void		translate(const glm::vec3& vec);
+	void		translate(const glm::vec3& vec, bool detectCollision = false);
 	void		rotate(const GLfloat& angle, const glm::vec3& vec);
 	void		setDir(const glm::vec3& currentDir, const glm::vec3& dir);
-	void		setVelocity(glm::vec3 in_v);
+	void		setVelocity(const glm::vec3 in_v);
+	void		setPosition(const glm::vec3 in_pos);
 	glm::vec3	getPosition();
 	glm::vec3	getFrontDir();
 	glm::vec3	getUpDir();
@@ -38,10 +38,11 @@ public:
 	std::shared_ptr<ViewPolygon> getRenderData();
 	GameObject(glm::vec3 _Front = { 0, 0, 1 }, glm::vec3 _Up = { 0, 1, 0 });
 	static std::vector<std::shared_ptr<GameObject>> allObjs;
-	// static void	bindGameObjVector(std::vector<std::shared_ptr<GameObject>>& inVector);
 
 // helper functions
 private:
+	bool		collisionPossible(GameObject& obj);
+	bool		collision(GameObject& obj);
 	bool		checkMoveConstraints();
 	void		error(std::string msg, bool fatal = true);
 };
@@ -54,8 +55,8 @@ public:
 	void		changeRoll(GLfloat angle);
 	void		changePitch(GLfloat angle);
 	void		changeYaw(GLfloat angle);
+	void		setPower(GLfloat _power);
 	void		simulate(GLfloat delta_time = 0.016); // asuming 60 ticks per second
-	void		reset();
 	static bool	enableGravity;
 	Airplane(glm::vec3 _Front = { 0, 0, 1 }, glm::vec3 _Up = { 0, 1, 0 });
 };

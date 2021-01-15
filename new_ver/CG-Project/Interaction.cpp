@@ -3,7 +3,7 @@
 
 
 bool Interaction::mouseReverseFlag = true;
-float Interaction::mouse_sensitivity = 0.0225f;
+float Interaction::mouse_sensitivity = 0.05f;
 bool Interaction::screenShotFlag = false;
 
 constexpr GLfloat groundSize = 15.0f;
@@ -35,8 +35,8 @@ void Interaction::UpdateData()
 {
 	GlobalDataPool::SetData<glm::vec3>("uniObjPos", ObjPos);
 	GlobalDataPool::SetData<glm::vec3>("uniObjVel", ObjVel);
-	std::cout << "obj pos = " << ObjPos.x << " " << ObjPos.y << " " << ObjPos.z << std::endl;
-	std::cout << "obj vel = " << ObjVel.x << " " << ObjVel.y << " " << ObjVel.z << std::endl;
+	// std::cout << "obj pos = " << ObjPos.x << " " << ObjPos.y << " " << ObjPos.z << std::endl;
+	// std::cout << "obj vel = " << ObjVel.x << " " << ObjVel.y << " " << ObjVel.z << std::endl;
 }
 
 void Interaction::MouseCallback(GLFWwindow* window, double xpos, double ypos)

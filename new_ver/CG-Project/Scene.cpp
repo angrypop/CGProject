@@ -272,8 +272,10 @@ void Scene::InitGameObject()
 	for (int i = 1; i <= 5; i++) {
 		GameObject::allObjs.push_back(std::shared_ptr<GameObject>(new GameObject()));
 		GameObject::allObjs[i]->loadFromObj("../resources/wolf.obj");
-		//GameObject::allObjs[i]->scale({ RandomReal(100.0, 200.0), RandomReal(100.0, 200.0), RandomReal(100.0, 200.0) });
-		GameObject::allObjs[i]->translate({ RandomReal(-1000.0, 1000.0), RandomReal(-1000.0, 1000.0), RandomReal(0.0, 200.0) });
+		GameObject::allObjs[i]->rotate(RandomReal(0.0, 180.0), {0, 1, 0});
+		GameObject::allObjs[i]->scale({ RandomReal(50.0, 200.0), RandomReal(50.0, 200.0), RandomReal(50.0, 200.0) });
+		GameObject::allObjs[i]->setPosition({ RandomReal(-200.0, 200.0), RandomReal(100.0, 200.0), RandomReal(-200.0, 200.0) });
+		GameObject::allObjs[i]->fixed = false;
 	}
 	for (const auto& i : GameObject::allObjs) {
 		AddGameObject(ViewObjectEnum::TextureObject, i->getRenderData());

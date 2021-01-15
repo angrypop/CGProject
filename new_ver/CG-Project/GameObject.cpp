@@ -16,11 +16,16 @@ void GameObject::loadFromObj(std::string filename) {
 		cnt++;
 		// std::cout << " line: " << cnt << std::endl;
 		if (op == "v") {
+			// read 1 vertex
 			vertex v = {0, 0, 0, 0, 0};
 			fin >> v[0] >> v[1] >> v[2];
 			vertices.push_back(v);
 			if (v[0] * v[0] + v[1] * v[1] + v[2] * v[2] > hitRadius * hitRadius)
 				hitRadius = sqrt(v[0] * v[0] + v[1] * v[1] + v[2] * v[2]);
+			for (int i = 0; i < 3; i++) {
+				if (v[i] > maxVertexCoord[i]) maxVertexCoord[i] = v[i];
+				if (v[i] < minVertexCoord[i]) minVertexCoord[i] = v[i];
+			}
 		}
 		else if (op == "f") {
 			std::vector<std::string> vertex_info;
@@ -53,12 +58,6 @@ void GameObject::loadFromObj(std::string filename) {
 			{
 				faces.push_back(face({ vertices[coord_index[0]], vertices[coord_index[1]], vertices[coord_index[2]] }));
 			}
-			//for (int i = 2; i < coord_index.size(); i++) {
-			//	// create view triangle
-			//	std::cout << "coord_index.size() = " << coord_index.size() << std::endl;
-			//	face f = { vertices[coord_index[0]], vertices[coord_index[1]], vertices[coord_index[i]] };
-			//	faces.push_back(f);
-			//}
 		}
 		else {
 			// ignore the line
@@ -80,19 +79,32 @@ void GameObject::loadFromObj(std::string filename) {
 }
 
 bool GameObject::collisionPossible(GameObject& obj) {
-	// fast 
+	// fast collision dectection
 	// treat all objects as balls
 	glm::vec3 coord = this->getPosition();
 	glm::vec3 coord2 = obj.getPosition();
 	GLfloat dist_sq = (coord[0] - coord2[0]) * (coord[0] - coord2[0])
 		+ (coord[1] - coord2[1]) * (coord[1] - coord2[1])
 		+ (coord[2] - coord2[2]) * (coord[2] - coord2[2]);
-	printf("thisR: %.1f    thatR: %.1f    dist: %.1f", hitRadius, hitRadius, sqrt(dist_sq));
+	// printf("thisR: %.1f    thatR: %.1f    dist: %.1f", hitRadius, hitRadius, sqrt(dist_sq));
 	return sqrt(dist_sq) <= (hitRadius + obj.hitRadius);
 }
 
 bool GameObject::collision(GameObject& obj) {
-	return false;
+	if(!collisionPossible(obj)) return false;// fast detection
+	// determine if this is in obj
+	glm::vec4 coord = glm::vec4(getPosition(), 1);
+	coord = glm::inverse(obj.viewObj->GetM()) * coord;
+	coord /= coord[3];
+	/*std::cout << "coord ";  printVec(coord);
+	std::cout << "min ";  printVec(minVertexCoord);
+	std::cout << "max ";  printVec(maxVertexCoord);*/
+	for (int i = 0; i < 3; i++)
+		if (!(coord[i] > obj.minVertexCoord[i] && coord[i] < obj.maxVertexCoord[i]))
+			return false;
+	// determine if obj is in this
+	// not implemented
+	return true;
 }
 
 void GameObject::scale(const glm::vec3& vec) {
@@ -100,12 +112,43 @@ void GameObject::scale(const glm::vec3& vec) {
 	this->viewObj->Scale(vec);
 }
 
-void GameObject::translate(const glm::vec3& vec) {
-	// prevent the translation if collision detected
+void GameObject::translate(const glm::vec3& vec, bool detectCollision) {
 	this->viewObj->Translate(vec);
-	//if (!checkMoveConstraints()) {
-	//	this->viewObj->Translate(-vec);
-	//}
+	if (detectCollision) {
+		for (auto ptr : allObjs) {
+			if (this->viewObj->GetHandle() == ptr->viewObj->GetHandle()) continue;
+			if (collision(*ptr)) { // fast dectection
+				if (ptr->fixed) {
+					// undo translation
+					this->viewObj->Translate(-vec);
+					return;
+				}
+				else {
+					static const GLfloat delta = 1e-3;
+					int minStepNeeded = 500;
+					glm::vec3 optimizedDir = { 0, 0, delta };
+					for(GLfloat x = -delta; x <= delta; x+= delta / 2)
+						for (GLfloat y = -delta; y <= delta; y += delta / 2)
+							for (GLfloat z = -delta; z <= delta; z += delta / 2) {
+								glm::vec3 deltaDir = { x, y, z };
+								int steps = 1;
+								ptr->translate(deltaDir * GLfloat(1));
+								while (collision(*ptr) && steps < minStepNeeded) {// ±¶Ôö
+									ptr->translate(deltaDir * GLfloat(steps));
+									steps *= 2;
+								}
+								ptr->translate(-deltaDir * GLfloat(steps));
+								if (steps < minStepNeeded) {
+									minStepNeeded = steps;
+									optimizedDir = deltaDir;
+								}
+							}
+					ptr->translate(optimizedDir * GLfloat(minStepNeeded));
+					std::cout << "minsteps = " << minStepNeeded << "\n";
+				}
+			}
+		}
+	}
 }
 
 void GameObject::rotate(const GLfloat& angle, const glm::vec3& vec) {
@@ -124,15 +167,23 @@ void GameObject::setDir(const glm::vec3& currentDir, const glm::vec3& dir)
 	this->viewObj->Rotate(rotateAngle, rotateAxis);
 }
 
-void GameObject::setVelocity(glm::vec3 in_v)
+void GameObject::setVelocity(const glm::vec3 in_v)
 {
 	velocity = in_v;
+}
+
+void GameObject::setPosition(const glm::vec3 in_pos)
+{
+   	glm::vec4 tagPos = glm::inverse(viewObj->GetM()) * glm::vec4(in_pos, 1);
+	tagPos /= tagPos[3];
+	glm::vec3 delta = glm::vec3(tagPos) - glm::vec3(0, 0, 0);
+	translate(delta);
 }
 
 glm::vec3 GameObject::getPosition()
 {
 	glm::vec4 coord = this->viewObj->GetM() * glm::vec4({ 0, 0, 0, 1 });
-	return glm::vec3(coord);
+	return glm::vec3(coord) / coord[3];
 }
 
 glm::vec3 GameObject::getFrontDir()
@@ -167,15 +218,13 @@ GameObject::GameObject(glm::vec3 _Front, glm::vec3 _Up) {
 	localFront = _Front;
 	localUp = _Up;
 	hitRadius = 0;
+	maxVertexCoord = { 0, 0, 0 };
+	minVertexCoord = { 0, 0, 0 };
 }
 
 bool GameObject::checkMoveConstraints()
 {
-	if (this->getPosition().y < 0) return false;
-	for (auto ptr : allObjs) {
-		if (this->viewObj->GetHandle() == ptr->viewObj->GetHandle()) continue;
-		if (collisionPossible(*ptr)) return false;
-	}
+	// if (this->getPosition().y < 0) return false;
 	return true;
 }
 
@@ -208,13 +257,18 @@ void Airplane::changeYaw(GLfloat angle)
 	rotate(angle, localUp);
 }
 
+void Airplane::setPower(GLfloat _power)
+{
+	power = _power;
+}
+
 void Airplane::simulate(GLfloat delta_time)
 {
 	// constants
 	static const GLfloat liftFactor = 1e-2f;
-	static const GLfloat resisFactor = 1e-3f;
+	static const GLfloat resisFactor = 2e-3f;
 	static const GLfloat vFollowFactor = 0.1f;
-	static const GLfloat maxPower = 1e5f;
+	static const GLfloat maxPower = 5e4f;
 	// static const GLfloat maxSpeed = 1e2;
 	// let velocity follow front dir
 	velocity = vFollowFactor * localFront * glm::length(velocity) + (1 - vFollowFactor) * velocity;
@@ -247,12 +301,12 @@ void Airplane::simulate(GLfloat delta_time)
 	glm::vec3 acceleration = (thrust + lift + gravity + resistance) / mass;
 	velocity += acceleration * delta_time;
 	// move
-	translate(velocity * delta_time);
+	translate(velocity * delta_time, true);
 	// debug info
 	static int cnt = 0; // print every 100 calls
 	if (cnt++ % 100) return;
 	printf("%-10s ", "pos"); printVec(getPosition());
-	printf("%-10s ", "front"); printVec(getFrontDir());
+	//printf("%-10s ", "front"); printVec(getFrontDir());
 	printf("%-10s ", "acceleration"); printVec(acceleration);
 	printf("%-10s %f\n", "velocity", v);
 	printf("%-10s %f\n", "power", power);
@@ -261,10 +315,6 @@ void Airplane::simulate(GLfloat delta_time)
 	printf("%-10s %f\n", "lift", glm::length(lift));
 	printf("%-10s %f\n", "v_front", v_front);
 	std::cout << std::endl;
-}
-
-void Airplane::reset()
-{
 }
 
 Airplane::Airplane(glm::vec3 _Front, glm::vec3 _Up): GameObject(_Front, _Up)

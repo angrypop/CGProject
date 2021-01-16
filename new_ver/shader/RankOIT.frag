@@ -12,6 +12,9 @@ uniform sampler2D gAlbedoSpec;
 uniform sampler2D gDepthID;
 uniform sampler2D gTransColor;
 
+//uniform vec3 uniViewFront;
+uniform vec3 uniViewPosition;
+
 layout(binding = 0, r32ui) uniform uimage2D head_pointer_image;
 layout(binding = 1, rgba32ui) uniform uimageBuffer list_buffer;
 layout(binding = 2, rgba32f) uniform imageBuffer list_buffer_worldPos;
@@ -68,27 +71,34 @@ void sort_fragment_list(int frag_count) {
 }
 
 vec4 calculate_final_color(int frag_count, vec3 base_color) {
+	if (frag_count == 0) // no transparent object
+		return vec4(0.0f);
 	vec3 final_color = base_color;
-	float blender = 1;
-	//for (int i = 0; i < frag_count; i++) {
-	//	vec4 color = unpackUnorm4x8(fragments[i].y);
-	//	final_color = mix(final_color, color.xyz, blender * color.a);
-	//	blender *= color.a;
-	//}
+
+	float blender = 1; // transparent rate, not non-transparent rate
 	for (int i = frag_count - 1; i >= 0; i--) {
 		vec4 color = unpackUnorm4x8(fragments[i].y);
-		final_color = mix(final_color, color.xyz, /*blender * */color.a);
-		blender *= color.a;
+		vec3 viewDirection = worldPos[i].xyz - uniViewPosition;
+		float cos_theta = dot(normal[i].xyz, viewDirection) / (length(normal[i].xyz) * length(viewDirection));
+		float sin_theta = sqrt(1 - cos_theta * cos_theta);
+		sin_theta = 0.0f;
+		float a_reformed = color.a + (1.0f - color.a) * sin_theta;
+
+		final_color = mix(color.xyz, final_color,  /*blender * */1 - a_reformed);
+		blender *= 1.0f - a_reformed;
 	}
-	return vec4(final_color, blender);
+
+	//blender = 0.9f;
+	return vec4(final_color, 1.0f - blender);
 }
 
 void main() {
 	int frag_count;
 	frag_count = build_local_fragment_list(texture(gDepthID, textureCoord).r);
 	sort_fragment_list(frag_count);
-	_gTransColor = calculate_final_color(frag_count, texture(gAlbedoSpec, textureCoord).rgb);
-	vec3 color = _gTransColor.rgb;
+//	_gTransColor = calculate_final_color(frag_count, texture(gAlbedoSpec, textureCoord).rgb);
+	_gTransColor = calculate_final_color(frag_count, vec3(0.0f));
+	//vec3 color = _gTransColor.rgb;
 	//_gAlbedoSpec = vec4(color, 1.0f);
 	//_gAlbedoSpec = vec4(frag_count * 1.0f / MAX_FRAGMENTS);
 	//if (frag_count != 0) {

@@ -197,6 +197,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="Shadow.cpp" />
+    <ClCompile Include="SkyBox.cpp" />
     <ClCompile Include="TexturedPlane.cpp" />
     <ClCompile Include="toolkit.cpp" />
     <ClCompile Include="TransparentPlane.cpp" />

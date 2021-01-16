@@ -59,6 +59,9 @@ public:
 	glm::vec3 GetViewPosition() {
 		return Position;
 	}
+	glm::vec3 GetViewFront() {
+		return Front;
+	}
 
 	// processes input received from any keyboard-like input system. Accepts input parameter in the form of camera defined ENUM (to abstract it from windowing systems)
 	void ProcessKeyboard(CameraMovement direction, float deltaTime)

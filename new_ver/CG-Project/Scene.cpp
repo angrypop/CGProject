@@ -102,7 +102,7 @@ void Scene::AddGameObject(const ViewObjectEnum& type, const std::shared_ptr<View
 }
 
 void Scene::InitScene() {
-	//desertScene.reset(new DesertScene);
+
 	//plane set
 	GLfloat planePoints1[] = {
 		-groundSize , 0.0f , -groundSize , 0.0f , 0.0f ,
@@ -185,8 +185,10 @@ void Scene::InitScene() {
 
 	auto fitPlane = std::shared_ptr<FitTexturedPlane>(new FitTexturedPlane(
 		glm::vec3(0, 0, 0), planePoints5, sizeof(planePoints5), planeIndices3, sizeof(planeIndices3), planeShaders, sandTextures));
-	fitPlane->UpdateHeight(0, 1, camera.GetViewMatrix());
+	fitPlane->UpdateHeight(0, 1);
 	fitPlaneGroup.AddObject(fitPlane);
+
+
 
 	GLfloat planePoints6[] = {
 		-groundSize , groundSize * 3 , groundSize  , 0.0f , 1.0f , 0.0f,
@@ -253,11 +255,13 @@ void Scene::InitScene() {
 		2,3,6,  3,6,7,
 		0,2,4,  2,4,6 };
 	//water 
-	constexpr GLfloat waterPlaneSizeRatio = 1000.0;
+	constexpr GLfloat waterPlaneSizeRatio = 100.0;
 	waterPlaneGroup.AddObject(std::shared_ptr<WaterPlane>(new WaterPlane(
 		-groundSize * waterPlaneSizeRatio, -groundSize * waterPlaneSizeRatio, groundSize * waterPlaneSizeRatio,
-		groundSize * waterPlaneSizeRatio, groundSize, 100, 100)));
+		groundSize * waterPlaneSizeRatio, groundSize, 2000, 2000)));
 	
+	desertScene.reset(new DesertScene);
+
 }
 
 void Scene::InitGameObject()
@@ -272,9 +276,9 @@ void Scene::InitGameObject()
 	for (int i = 1; i <= 5; i++) {
 		GameObject::allObjs.push_back(std::shared_ptr<GameObject>(new GameObject()));
 		GameObject::allObjs[i]->loadFromObj("../resources/wolf.obj");
-		GameObject::allObjs[i]->rotate(RandomReal(0.0, 180.0), {0, 1, 0});
-		GameObject::allObjs[i]->scale({ RandomReal(50.0, 200.0), RandomReal(50.0, 200.0), RandomReal(50.0, 200.0) });
-		GameObject::allObjs[i]->setPosition({ RandomReal(-200.0, 200.0), RandomReal(100.0, 200.0), RandomReal(-200.0, 200.0) });
+		GameObject::allObjs[i]->rotate(RandomReal(0.0f, 180.0f), {0.0f, 1.0f, 0.0f});
+		GameObject::allObjs[i]->scale({ RandomReal(50.0f, 200.0f), RandomReal(50.0f, 200.0f), RandomReal(50.0f, 200.0f) });
+		GameObject::allObjs[i]->setPosition({ RandomReal(-200.0f, 200.0f), RandomReal(100.0f, 200.0f), RandomReal(-200.0f, 200.0f) });
 		GameObject::allObjs[i]->fixed = false;
 	}
 	for (const auto& i : GameObject::allObjs) {
@@ -289,6 +293,7 @@ void Scene::InitGlobalData()
 	GlobalDataPool::Add<glm::mat4>("cameraView", camera.GetViewMatrix());
 	GlobalDataPool::Add<glm::mat4>("cameraProjection", glm::perspective(glm::radians(45.0f), (float)width / (float)height, 0.1f, 5000.0f));
 	GlobalDataPool::Add<glm::vec3>("cameraPosition", camera.GetViewPosition());
+	GlobalDataPool::Add<glm::vec3>("cameraFront", camera.GetViewFront());
 	GlobalDataPool::Add<glm::mat4>("lightProjection",
 		glm::ortho(Shadow::SHADOW_WIDTH * -0.5f * e, Shadow::SHADOW_WIDTH * 0.5f * e,
 			Shadow::SHADOW_HEIGHT * -0.5f * e, Shadow::SHADOW_HEIGHT * 0.5f * e, 0.1f, 2000.0f));

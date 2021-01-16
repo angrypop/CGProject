@@ -17,6 +17,8 @@ public:
 	// render this object in given pass
 	virtual void Render(const ViewPassEnum& pass);
 
+	ViewObject(const ViewObjectEnum& type);
+
 public:
 	virtual void RenderShadowBuffer() {}
 	virtual void RenderGBuffer() {}
@@ -24,5 +26,7 @@ public:
 	virtual void RenderBlendOIT() {}
 	virtual void RenderGBufferIlluminate() {}
 
+protected:
 	glm::mat4 modelMat = glm::mat4(1.0f);
+	ViewObjectEnum _type;
 };

@@ -320,12 +320,18 @@ void main() {
 
 	//part7 transparent mix
 	vec4 colorTrans = texture(gTransColor, textureCoord);
-	vec4 colorTransMixed = mix(color, vec4(colorTrans.rgb, 1.0f), 1 - colorTrans.a);
+	vec4 colorTransMixed;
+	if (colorTrans != vec4(0.0f, 0.0f, 0.0f, 0.0f))
+		colorTransMixed = mix(color, vec4(colorTrans.rgb, 1.0f), colorTrans.a);
+	else
+		colorTransMixed = color;
 	//final
 
+//	fColor = vec4(reflectEffect(color.rgb, normal, textureCoord, fragPos, texture(gDepthID, textureCoord).a), 1.0f);
 	fColor = vec4(reflectEffect(colorTransMixed.rgb, normal, textureCoord, fragPos, texture(gDepthID, textureCoord).a), 1.0f);
 	fColor.rgb = vec3(1.0) - exp(-fColor.rgb * 2.5);
 
+//	fColor = colorTrans.aaaa;
 	//fColor.rgb = pow(fColor.rgb, vec3(1.0 / 2.2));
 
 	//fColor = vec4(aces_tonemap(fColor.rgb), 1.0f);

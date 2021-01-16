@@ -124,7 +124,7 @@ void GameObject::translate(const glm::vec3& vec, bool detectCollision) {
 					return;
 				}
 				else {
-					static const GLfloat delta = 1e-3;
+					static const GLfloat delta = 1e-3f;
 					int minStepNeeded = 500;
 					glm::vec3 optimizedDir = { 0, 0, delta };
 					for(GLfloat x = -delta; x <= delta; x+= delta / 2)

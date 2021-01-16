@@ -19,6 +19,7 @@ in vec4 color;
 uniform float uniNear;
 uniform float uniFar;
 
+
 float LinearizeDepth(float depth)
 {
 	float z = depth * 2.0 - 1.0; // back to NDC 

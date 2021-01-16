@@ -46,3 +46,8 @@ void ViewObject::Render(const ViewPassEnum& pass)
 		break;
 	}
 }
+
+ViewObject::ViewObject(const ViewObjectEnum& type)
+	:_type(type)
+{
+}

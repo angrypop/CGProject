@@ -156,6 +156,9 @@
       <Filter>头文件</Filter>
     </ClCompile>
     <ClCompile Include="GameScene.cpp">
+      <Filter>GameScene</Filter>
+    </ClCompile>
+    <ClCompile Include="SkyBox.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

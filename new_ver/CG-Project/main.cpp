@@ -64,9 +64,10 @@ void UpdateData()
 	UpdateAirplane();
 	UpdateCamera();
 	GlobalDataPool::SetData<GLfloat>("systemTime", (GLfloat)glfwGetTime());
+	GlobalDataPool::SetData<glm::vec3>("cameraFront", camera.GetViewFront());
 	for (const auto& plane : fitPlaneGroup.GetObjectList())
 	{
-		plane->UpdateHeight(radius, 0, camera.GetViewMatrix());
+		plane->UpdateHeight(radius, 0);
 	}
 	if (Interaction::screenShotFlag)
 	{
@@ -224,6 +225,12 @@ void RenderBlendOIT() {
 	GLfloat uniFar = GlobalDataPool::GetData<GLfloat>("uniFar");
 	location = glGetUniformLocation(OITPrograms[RankOIT], "uniFar");
 	glUniform1f(location, uniFar);
+	glm::vec3 uniViewPosition = GlobalDataPool::GetData<glm::vec3>("cameraPosition");
+	location = glGetUniformLocation(OITPrograms[RankOIT], "uniViewPosition");
+	glUniform3fv(location, 1, glm::value_ptr(uniViewPosition));
+	//glm::vec3 uniViewFront = GlobalDataPool::GetData<glm::vec3>("cameraFront");
+	//location = glGetUniformLocation(OITPrograms[RankOIT], "uniViewFront");
+	//glUniform3fv(location, 1, glm::value_ptr(uniViewFront));
 
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, GTextures[GPositionTexture]);

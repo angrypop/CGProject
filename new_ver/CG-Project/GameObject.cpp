@@ -78,6 +78,22 @@ void GameObject::loadFromObj(std::string filename) {
 	viewObj = std::shared_ptr<ViewPolygon>(new ViewPolygon(polydata));
 }
 
+void GameObject::setHitbox(const std::vector<GLfloat>& vertex_data)
+{
+	std::vector<vertex> vertices;
+	for (int i = 0; i < vertex_data.size() / 3; i++) {
+		vertices.push_back({ vertex_data[3 * i + 0], vertex_data[3 * i + 1], vertex_data[3 * i + 2], 0,0 });
+	}
+	for (auto v : vertices) {
+		if (v[0] * v[0] + v[1] * v[1] + v[2] * v[2] > hitRadius * hitRadius)
+			hitRadius = sqrt(v[0] * v[0] + v[1] * v[1] + v[2] * v[2]);
+		for (int i = 0; i < 3; i++) {
+			if (v[i] > maxVertexCoord[i]) maxVertexCoord[i] = v[i];
+			if (v[i] < minVertexCoord[i]) minVertexCoord[i] = v[i];
+		}
+	}
+}
+
 bool GameObject::collisionPossible(GameObject& obj) {
 	// fast collision dectection
 	// treat all objects as balls

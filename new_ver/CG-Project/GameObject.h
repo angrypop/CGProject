@@ -25,6 +25,7 @@ public:
 	glm::vec3	localFront;
 	glm::vec3	localUp;
 	void		loadFromObj(std::string filename);
+	void		setHitbox(const std::vector<GLfloat>& vertex_data);
 	void		scale(const glm::vec3& vec);
 	void		translate(const glm::vec3& vec, bool detectCollision = false);
 	void		rotate(const GLfloat& angle, const glm::vec3& vec);

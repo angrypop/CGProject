@@ -16,6 +16,14 @@ public:
 	void SetM(const glm::mat4& M);
 	// render this object in given pass
 	virtual void Render(const ViewPassEnum& pass);
+	// get object type
+	ViewObjectEnum GetType() const;
+	// show this object
+	void Show();
+	// hide this object
+	void Hide();
+	// get show flag
+	bool GetShow() const;
 
 	ViewObject(const ViewObjectEnum& type);
 
@@ -29,4 +37,5 @@ public:
 protected:
 	glm::mat4 modelMat = glm::mat4(1.0f);
 	ViewObjectEnum _type;
+	bool _showFlag = true;
 };

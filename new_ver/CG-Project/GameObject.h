@@ -15,17 +15,18 @@ protected:
 	glm::vec3	velocity;
 	GLfloat		hitRadius;
 	std::vector<face> faces;
-	std::shared_ptr<ViewPolygon> viewObj;
+	std::shared_ptr<ViewObject> viewObj;
 	glm::vec3	maxVertexCoord;
 	glm::vec3	minVertexCoord;
 
 // public functions
 public:
+
 	bool		fixed;
 	glm::vec3	localFront;
 	glm::vec3	localUp;
 	void		loadFromObj(std::string filename);
-	void		setHitbox(const std::vector<GLfloat>& vertex_data);
+	void		setHitbox(const std::vector<GLfloat>& vertex_data, const ViewObjectEnum & type);
 	void		scale(const glm::vec3& vec);
 	void		translate(const glm::vec3& vec, bool detectCollision = false);
 	void		rotate(const GLfloat& angle, const glm::vec3& vec);
@@ -36,9 +37,16 @@ public:
 	glm::vec3	getFrontDir();
 	glm::vec3	getUpDir();
 	glm::vec3	getLeftDir();
-	std::shared_ptr<ViewPolygon> getRenderData();
+
 	GameObject(glm::vec3 _Front = { 0, 0, 1 }, glm::vec3 _Up = { 0, 1, 0 });
+	GameObject(const std::shared_ptr<ViewObject> viewObject, const std::vector<GLfloat>& vertex_data,
+		const bool& withHitBox = true, glm::vec3 _Front = { 0, 0, 1 }, glm::vec3 _Up = { 0, 1, 0 });
+
+	std::shared_ptr<ViewObject> getRenderData();
+
 	static std::vector<std::shared_ptr<GameObject>> allObjs;
+	static void AddGameObject(const std::shared_ptr <GameObject>& object);
+	static std::vector<std::shared_ptr<GameObject>> GetGameObjects();
 
 // helper functions
 private:

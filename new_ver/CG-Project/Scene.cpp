@@ -15,8 +15,6 @@ namespace Scene
 	std::shared_ptr<DesertScene> desertScene;
 	std::vector<std::shared_ptr<GameObject>> GameObjects;
 
-	void AddGameObject(const ViewObjectEnum & type, const std::shared_ptr<ViewObject>& ptr);
-
 	int width = 1280;
 	int height = 768;
 	GLfloat groundSize = 15.0f;
@@ -79,8 +77,9 @@ void SendAllLightUniformsToShader(GLuint program, Light light)
 	 glUniform3fv(location, 1, glm::value_ptr(light.LightPos));
 }
 
-void Scene::AddGameObject(const ViewObjectEnum& type, const std::shared_ptr<ViewObject>& ptr)
+void Scene::AddGroupObject(const std::shared_ptr<ViewObject>& ptr)
 {
+	ViewObjectEnum type = ptr->GetType();
 	switch (type)
 	{
 	case ViewObjectEnum::TextureObject:
@@ -260,7 +259,7 @@ void Scene::InitScene() {
 		-groundSize * waterPlaneSizeRatio, -groundSize * waterPlaneSizeRatio, groundSize * waterPlaneSizeRatio,
 		groundSize * waterPlaneSizeRatio, groundSize, 2000, 2000)));
 	
-	desertScene.reset(new DesertScene);
+
 
 }
 
@@ -270,10 +269,10 @@ void Scene::InitGameObject()
 	GameObject::allObjs.push_back(std::static_pointer_cast<GameObject>(airplane));
 	GameObject::allObjs[0]->loadFromObj("../resources/jet.obj");
 	GameObject::allObjs[0]->scale({ 0.2, 0.2, 0.2 });
-	GameObject::allObjs[0]->translate({ 0, 100, 0 });
+	GameObject::allObjs[0]->translate({ 0, 200, 0 });
 	GameObject::allObjs[0]->rotate(-90, { 1, 0, 0 });
 	//GameObject::allObjs[0]->getRenderData()->renderGrassFlag = true;
-	for (int i = 1; i <= 5; i++) {
+	for (int i = 1; i <= 0; i++) {
 		GameObject::allObjs.push_back(std::shared_ptr<GameObject>(new GameObject()));
 		GameObject::allObjs[i]->loadFromObj("../resources/wolf.obj");
 		GameObject::allObjs[i]->rotate(RandomReal(0.0f, 180.0f), {0.0f, 1.0f, 0.0f});
@@ -282,8 +281,9 @@ void Scene::InitGameObject()
 		GameObject::allObjs[i]->fixed = false;
 	}
 	for (const auto& i : GameObject::allObjs) {
-		AddGameObject(ViewObjectEnum::TextureObject, i->getRenderData());
+		AddGroupObject(i->getRenderData());
 	}
+	desertScene.reset(new DesertScene);
 }
 
 void Scene::InitGlobalData()
@@ -375,7 +375,7 @@ void Scene::InitOIT() {
 
 	glBindImageTexture(0, OITTextures[HeadPointerTexture], 0, GL_TRUE, 0, GL_READ_WRITE, GL_R32UI);
 
-	constexpr int MemorySize = 16;
+	constexpr int MemorySize = 12;
 	glBindBuffer(GL_PIXEL_UNPACK_BUFFER, OITBuffers[HeadPointerInit]);
 	glBufferData(GL_PIXEL_UNPACK_BUFFER, width * height * sizeof(GLuint), NULL, GL_STATIC_DRAW);
 	data = (GLuint*)glMapBuffer(GL_PIXEL_UNPACK_BUFFER, GL_WRITE_ONLY);

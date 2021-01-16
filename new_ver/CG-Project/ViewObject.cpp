@@ -27,6 +27,9 @@ void ViewObject::SetM(const glm::mat4& M)
 
 void ViewObject::Render(const ViewPassEnum& pass)
 {
+	if (!this->_showFlag) // hidden object
+		return;
+
 	switch (pass)
 	{
 	case ViewPassEnum::GBuffer:
@@ -46,6 +49,28 @@ void ViewObject::Render(const ViewPassEnum& pass)
 		break;
 	}
 }
+
+ViewObjectEnum ViewObject::GetType() const
+{
+	return this->_type;
+}
+
+void ViewObject::Show()
+{
+	this->_showFlag = true;
+}
+
+void ViewObject::Hide()
+{
+	this->_showFlag = false;
+}
+
+bool ViewObject::GetShow() const
+{
+	return this->_showFlag;
+}
+
+
 
 ViewObject::ViewObject(const ViewObjectEnum& type)
 	:_type(type)

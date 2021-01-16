@@ -30,7 +30,7 @@ namespace Scene
 	void InitGBuffer();
 	void InitOIT();
 
-	void AddGameObject(const ViewObjectEnum& type, const std::shared_ptr<ViewObject>& ptr);
+	void AddGroupObject(const std::shared_ptr<ViewObject>& ptr);
 
 	extern DirectionalLight directionalLight;
 	extern ViewCamera camera;

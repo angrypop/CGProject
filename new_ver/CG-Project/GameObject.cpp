@@ -78,11 +78,22 @@ void GameObject::loadFromObj(std::string filename) {
 	viewObj = std::shared_ptr<ViewPolygon>(new ViewPolygon(polydata));
 }
 
-void GameObject::setHitbox(const std::vector<GLfloat>& vertex_data)
+void GameObject::setHitbox(const std::vector<GLfloat>& vertex_data, const ViewObjectEnum& type)
 {
 	std::vector<vertex> vertices;
-	for (int i = 0; i < vertex_data.size() / 3; i++) {
-		vertices.push_back({ vertex_data[3 * i + 0], vertex_data[3 * i + 1], vertex_data[3 * i + 2], 0,0 });
+	int VerSize = 5;
+	switch (type)
+	{
+	case ViewObjectEnum::TextureObject:
+		VerSize = 5;
+		break;
+	case ViewObjectEnum::TransparentObject:
+		VerSize = 6;
+		break;
+	}
+
+	for (int i = 0; i < vertex_data.size() / VerSize; i++) {
+		vertices.push_back({ vertex_data[VerSize * i + 0], vertex_data[VerSize * i + 1], vertex_data[VerSize * i + 2], 0,0 });
 	}
 	for (auto v : vertices) {
 		if (v[0] * v[0] + v[1] * v[1] + v[2] * v[2] > hitRadius * hitRadius)
@@ -92,6 +103,22 @@ void GameObject::setHitbox(const std::vector<GLfloat>& vertex_data)
 			if (v[i] < minVertexCoord[i]) minVertexCoord[i] = v[i];
 		}
 	}
+
+}
+
+std::shared_ptr<ViewObject> GameObject::getRenderData()
+{
+	return this->viewObj;
+}
+
+void GameObject::AddGameObject(const std::shared_ptr<GameObject>& object)
+{
+	allObjs.push_back(object);
+}
+
+std::vector<std::shared_ptr<GameObject>> GameObject::GetGameObjects()
+{
+	return allObjs;
 }
 
 bool GameObject::collisionPossible(GameObject& obj) {
@@ -137,6 +164,8 @@ void GameObject::translate(const glm::vec3& vec, bool detectCollision) {
 				if (ptr->fixed) {
 					// undo translation
 					this->viewObj->Translate(-vec);
+					// set the plane velocity to zero
+					this->setVelocity(glm::vec3(0.0f));
 					return;
 				}
 				else {
@@ -223,10 +252,6 @@ glm::vec3 GameObject::getLeftDir()
 	return glm::cross(getUpDir(), getFrontDir());
 }
 
-std::shared_ptr<ViewPolygon> GameObject::getRenderData() {
-	return this->viewObj;
-}
-
 GameObject::GameObject(glm::vec3 _Front, glm::vec3 _Up) {
 	fixed = true;
 	mass = 1;
@@ -236,6 +261,15 @@ GameObject::GameObject(glm::vec3 _Front, glm::vec3 _Up) {
 	hitRadius = 0;
 	maxVertexCoord = { 0, 0, 0 };
 	minVertexCoord = { 0, 0, 0 };
+}
+
+GameObject::GameObject(const std::shared_ptr<ViewObject> viewObject, const std::vector<GLfloat>& vertex_data,
+	const bool& withHitBox, glm::vec3 _Front, glm::vec3 _Up)
+	:GameObject(_Front, _Up)
+{
+	this->viewObj = viewObject;
+	if (withHitBox)
+		this->setHitbox(vertex_data, viewObject->GetType());
 }
 
 bool GameObject::checkMoveConstraints()

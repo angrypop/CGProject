@@ -143,24 +143,26 @@ void FitTexturedPlane::UpdateHeight(GLfloat radius, GLuint rst)
 	//std::cout << "Update Height" << std::endl;
 	//std::cout << "\tobj pos = " << uniObjPos.x << " " << uniObjPos.y << " " << uniObjPos.z << " " << std::endl;
 	//std::cout << "\tobj vel = " << uniObjVel.x << " " << uniObjVel.y << " " << uniObjVel.z << " " << std::endl;
+	glBindFramebuffer(GL_FRAMEBUFFER, this->FrameBuffers[FitFrameBuffer]);
 	glViewport(0, 0, FitTextureW, FitTextureH);
 	//glDisable(GL_DEPTH_TEST);
 	glEnable(GL_DEPTH_TEST);
-	glBindFramebuffer(GL_FRAMEBUFFER, this->FrameBuffers[FitFrameBuffer]);
+
 	glClear(GL_DEPTH_BUFFER_BIT);
 	GLint location;
 	glUseProgram(updateProgram);
 
 	glPointSize(10);
 
-	location = glGetUniformLocation(GrassProgram, "uniM");
+	location = glGetUniformLocation(updateProgram, "uniM");
 	glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(this->modelMat));
-	location = glGetUniformLocation(GrassProgram, "uniV");
+	location = glGetUniformLocation(updateProgram, "uniV");
 	glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(uniV));
-	location = glGetUniformLocation(GrassProgram, "uniP");
+	location = glGetUniformLocation(updateProgram, "uniP");
 	glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(uniP));
 	location = glGetUniformLocation(updateProgram, "rst");
 	glUniform1i(location, rst);
+	//glUniform1i(location, 1);
 	location = glGetUniformLocation(updateProgram, "uniObjPos");
 	glUniform3fv(location, 1, glm::value_ptr(uniObjPos));
 	location = glGetUniformLocation(updateProgram, "uniObjVel");

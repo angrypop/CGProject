@@ -28,6 +28,7 @@ void main() {
 	if (rst == 1) {
 		//gl_FragDepth = min((sqrt(textureCoord.x * coe) * sqrt(textureCoord.y * coe) * sqrt((1 - textureCoord.x) * coe) * sqrt((1 - textureCoord.y) * coe)) * 16, 1);
 		heightMapNew = baseLine;
+//		heightMapNew = 50.0;
 		//heightMapNew = min(radius - sqrt(pow(radius, 2) - pow(fragPos.x - uniObjPos.x, 2) - pow(fragPos.z - uniObjPos.z, 2)), heightMapNew);
 	}
 	else {

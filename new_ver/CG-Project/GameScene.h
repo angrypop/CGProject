@@ -5,6 +5,7 @@ constexpr GLfloat GroundY = 10.0f;
 constexpr GLfloat DoorY = GroundY + 30.0f;
 constexpr GLfloat DoorThick = 5.0f;
 constexpr GLfloat BaseY = -10.0f;
+constexpr GLfloat AirWallHeight = 30.0f;
 class GameSceneBase
 {
 public:
@@ -12,6 +13,7 @@ public:
 	std::vector<std::shared_ptr<GameObject>> _objects;
 
 	std::shared_ptr<TransparentPlane> _startDoor;
+	bool _startDoorFlag = true;
 	std::shared_ptr<TexturedPlane> _roadGround;
 	
 	GameState _state = GameState::IdleState;
@@ -25,6 +27,9 @@ public:
 	virtual void Hint() = 0;
 	virtual void Play() = 0;
 protected:
+	// generate air wall, vertices should be (x1, z1, x2, z2, ...) in anticlockwise order 
+	void SetDoorShowFlag(const bool& showFlag);
+	void GenerateAirWall(const std::vector<GLfloat>& vertices);
 	GLfloat _roadWidth;
 	GLfloat _distance;
 	float _lastTime;
@@ -39,6 +44,7 @@ public:
 	{
 		this->_state = GameState::IdleState;
 		GenerateRandomList(0);
+		this->SetDoorShowFlag(true);
 	}
 	virtual void Hint()
 	{
@@ -46,10 +52,12 @@ public:
 		GenerateRandomList(5);
 		_lastTime = (float)glfwGetTime();
 		_startShowIndex = 0;
+		this->SetDoorShowFlag(true);
 	}
 	virtual void Play()
 	{
 		this->_state = GameState::PlayState;
+		this->SetDoorShowFlag(false);
 	}
 	virtual void Update()
 	{

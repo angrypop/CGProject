@@ -260,7 +260,7 @@ void Scene::InitScene() {
 	constexpr GLfloat waterPlaneSizeRatio = 100.0;
 	waterPlaneGroup.AddObject(std::shared_ptr<WaterPlane>(new WaterPlane(
 		-groundSize * waterPlaneSizeRatio, -groundSize * waterPlaneSizeRatio, groundSize * waterPlaneSizeRatio,
-		groundSize * waterPlaneSizeRatio, groundSize, 2000, 2000)));
+		groundSize * waterPlaneSizeRatio, 0.0f, 2000, 2000)));
 	
 
 

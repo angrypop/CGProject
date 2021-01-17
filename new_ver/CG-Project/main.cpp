@@ -1,7 +1,7 @@
 #include "Scene.h"
 #include "Interaction.h"
 
-constexpr bool UseOITFlag = false;
+constexpr bool UseOITFlag = true;
 
 GLFWwindow* Init();
 void RenderShadow();

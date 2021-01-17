@@ -12,7 +12,10 @@ void RenderAllObject(const ViewPassEnum & pass);
 
 void UpdateCamera() {
 	if (Interaction::key_y_flag) {
-		// follow ground object
+		// follow ground player
+		Interaction::camera.SetPosition(player->getPosition());
+		Interaction::camera.SetFrontDir(player->getViewDir(), true);
+		Interaction::camera.SetWorldUpDir({0, 1, 0});
 	}
 	else {
 		// follow airplane
@@ -31,7 +34,23 @@ void UpdateCamera() {
 
 void UpdateAirplane() {
 	if (Interaction::key_y_flag) {
-		// control ground object
+		// control ground player
+		player->rotate(-Interaction::ReadXoffset(), { 0, 1, 0 });
+		player->changePitch(-Interaction::ReadYoffset());
+		glm::vec3 front = {0, 0, 1};
+		glm::vec3 left = {1, 0, 0};
+		if (Interaction::key_w_pressed) {
+			player->move(front);
+		}
+		if (Interaction::key_s_pressed) {
+			player->move(-front);
+		}
+		if (Interaction::key_a_pressed) {
+			player->move(left);
+		}
+		if (Interaction::key_d_pressed) {
+			player->move(-left);
+		}
 	}
 	else {
 		GLfloat deltaPower = 0.01f;

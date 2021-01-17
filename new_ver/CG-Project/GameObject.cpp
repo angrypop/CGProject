@@ -378,7 +378,7 @@ void Airplane::simulate(GLfloat delta_time)
 {
 	// constants
 	static const GLfloat liftFactor = 1e-2f;
-	static const GLfloat resisFactor = 2e-3f;
+	static const GLfloat resisFactor = 1e-3f;
 	static const GLfloat vFollowFactor = 0.1f;
 	static const GLfloat maxPower = 5e4f;
 	// static const GLfloat maxSpeed = 1e2;
@@ -393,9 +393,9 @@ void Airplane::simulate(GLfloat delta_time)
 	GLfloat v = glm::length(velocity);
 	GLfloat v_front = glm::length(velocity * dir_front);
 	// forces
-	glm::vec3 gravity = { 0, -9.8 * mass, 0 };
+	glm::vec3 gravity = - dir_up * 9.8f * mass;
 	if (!enableGravity) gravity = { 0, 0, 0 };
-	glm::vec3 lift = glm::vec3({ 0, 1, 0 }) * liftFactor * (v_front * v_front) * glm::dot(dir_up, glm::vec3(0, 1, 0));
+	glm::vec3 lift = dir_up * liftFactor * (v_front * v_front);
 	glm::vec3 thrust = dir_front * maxPower * power;
 	if (glm::length(thrust) * v > maxPower) { // P = FV
 		thrust = dir_front * maxPower * power / v;
@@ -403,11 +403,11 @@ void Airplane::simulate(GLfloat delta_time)
 	glm::vec3 resistance = -dir_v * resisFactor * (v * v);
 	// check lift vs gravity
 	if (glm::length(lift) > glm::length(gravity)) {
-		lift = gravity;
+		lift = -gravity;
 	}
 	else {
 		// rotate
-		changePitch(glm::length(lift - gravity) * (1 + dir_front.y));
+		changePitch((glm::length(lift) - glm::length(gravity)));
 	}
 	// apply acceleration
 	glm::vec3 acceleration = (thrust + lift + gravity + resistance) / mass;

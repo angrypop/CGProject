@@ -133,6 +133,12 @@ bool GameObject::collisionPossible(GameObject& obj) {
 	return sqrt(dist_sq) <= (hitRadius + obj.hitRadius);
 }
 
+GLfloat GameObject::getDist(const GameObject& obj)
+{
+	glm::vec3 delta = this->center - obj.center;
+	return sqrt(delta.x * delta.x + delta.y * delta.y + delta.z * delta.z);
+}
+
 bool GameObject::collision(GameObject& obj) {
 	if(!collisionPossible(obj)) return false;// fast detection
 	// determine if this is in obj
@@ -189,7 +195,7 @@ void GameObject::translate(const glm::vec3& vec, bool detectCollision) {
 								}
 							}
 					ptr->translate(optimizedDir * GLfloat(minStepNeeded));
-					std::cout << "minsteps = " << minStepNeeded << "\n";
+					// std::cout << "minsteps = " << minStepNeeded << "\n";
 				}
 			}
 		}
@@ -258,6 +264,7 @@ GameObject::GameObject(glm::vec3 _Front, glm::vec3 _Up) {
 	hitRadius = 0;
 	maxVertexCoord = { -1e9, -1e9, -1e9 };
 	minVertexCoord = { 1e9, 1e9, 1e9 };
+	center = { 0, 0, 0 };
 }
 
 GameObject::GameObject(const std::shared_ptr<ViewObject> viewObject, const std::vector<GLfloat>& vertex_data,

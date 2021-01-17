@@ -3,7 +3,7 @@
 
 
 bool Interaction::mouseReverseFlag = true;
-float Interaction::mouse_sensitivity = 0.10f;
+float Interaction::mouse_sensitivity = 0.25f;
 bool Interaction::screenShotFlag = false;
 
 constexpr GLfloat groundSize = 15.0f;
@@ -15,6 +15,7 @@ bool Interaction::key_w_pressed = false;
 bool Interaction::key_s_pressed = false;
 bool Interaction::key_a_pressed = false;
 bool Interaction::key_d_pressed = false;
+bool Interaction::key_o_pressed = false;
 bool Interaction::key_y_flag = false;
 bool Interaction::key_p_flag = false;
 GLfloat Interaction::yaw = 0;
@@ -156,6 +157,12 @@ void Interaction::KeyCallback(GLFWwindow* window, int key, int scancode, int act
 	}
 	if (key == GLFW_KEY_D && action == GLFW_RELEASE) {
 		key_d_pressed = false;
+	}
+	if (key == GLFW_KEY_O && action == GLFW_PRESS) {
+		key_o_pressed = true;
+	}
+	if (key == GLFW_KEY_O && action == GLFW_RELEASE) {
+		key_o_pressed = false;
 	}
 	if (key == GLFW_KEY_Y && action == GLFW_PRESS)
 	{

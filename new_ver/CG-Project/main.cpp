@@ -55,6 +55,9 @@ void UpdateAirplane() {
 		if (Interaction::key_d_pressed) {
 			player->move(-left);
 		}
+		if (Interaction::key_o_pressed) {
+			player->saveToObj("../resources/out.obj");
+		}
 	}
 	else {
 		GLfloat deltaPower = 0.01f;
@@ -74,10 +77,12 @@ void UpdateAirplane() {
 			airplane->changeYaw(-deltaYaw);
 		}
 		if (Interaction::key_space_pressed) {
-			// airplane->saveToObj("../resources/out.obj");
 			airplane->setPower(0);
 			airplane->setVelocity({ 0, 0, 0 });
 			airplane->setPosition({ 0, 40, 0 });
+		}
+		if (Interaction::key_o_pressed) {
+			airplane->saveToObj("../resources/out.obj");
 		}
 		airplane->simulate();
 	}

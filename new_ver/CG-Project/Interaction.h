@@ -25,6 +25,7 @@ public:
 	static bool key_a_pressed;
 	static bool key_d_pressed;
 	static bool key_y_flag;
+	static bool key_p_flag;
 	static bool key_r_pressed;
 	static bool left_button_pressed;
 	static bool right_button_pressed;

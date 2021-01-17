@@ -6,11 +6,14 @@ std::vector<std::shared_ptr<GameObject>> GameObject::allObjs;
 bool Airplane::enableGravity = false;
 
 void GameObject::loadFromObj(std::string filename) {
+	if (!vertices.empty()) {
+		error("This game object has already been loaded from another .obj file");
+	}
 	// WARNING: IGNORING MATERIALS (.mtl FILES)!
 	std::ifstream fin(filename);
 	if (!fin) error("Error opening file " + filename);
+	std::vector<face> faces;
 	std::string op;
-	std::vector<vertex> vertices;
 	int cnt = 0;
 	while (fin >> op) {
 		cnt++;
@@ -58,6 +61,7 @@ void GameObject::loadFromObj(std::string filename) {
 			{
 				faces.push_back(face({ vertices[coord_index[0]], vertices[coord_index[1]], vertices[coord_index[2]] }));
 			}
+			faceIndices.push_back(coord_index);
 		}
 		else {
 			// ignore the line
@@ -76,6 +80,38 @@ void GameObject::loadFromObj(std::string filename) {
 		}
 	}
 	viewObj = std::shared_ptr<ViewPolygon>(new ViewPolygon(polydata));
+}
+
+void GameObject::saveToObj(std::string filename)
+{
+	static bool working = false;
+	if (working) return;
+	working = true;
+	auto task = [=]() {
+		std::cout << "Writing obj begin" << std::endl;
+		std::ofstream fout(filename);
+		if (!fout) error("Error opening file " + filename);
+		fout << "# Auto generated obj\n";
+		for (const vertex& v : vertices) {
+			glm::vec4 coord = { v[0], v[1], v[2], 1 };
+			coord = viewObj->GetM()* glm::vec4(coord) ;
+			coord /= coord.w;
+			glm::vec3 delta = glm::vec3(coord) - getPosition();
+			fout << "v " << delta[0] << " " << delta[1] << " " << delta[2] << "\n";
+		}
+		for (auto f : faceIndices) {
+			fout << "f";
+			for (int i = 0; i < f.size(); i++) {
+				fout << " " << std::to_string(f[i]) << "/0/0";
+			}
+			fout << "\n";
+		}
+		fout.close();
+		std::cout << "Writing obj finished" << std::endl;
+		working = false;
+	};
+	std::thread write(task);
+	write.detach();
 }
 
 void GameObject::setHitbox(const std::vector<GLfloat>& vertex_data, const ViewObjectEnum& type)
@@ -131,6 +167,12 @@ bool GameObject::collisionPossible(GameObject& obj) {
 		+ (coord[2] - coord2[2]) * (coord[2] - coord2[2]);
 	// printf("thisR: %.1f    thatR: %.1f    dist: %.1f", hitRadius, hitRadius, sqrt(dist_sq));
 	return sqrt(dist_sq) <= (hitRadius + obj.hitRadius);
+}
+
+GLfloat GameObject::getDist(const GameObject& obj)
+{
+	glm::vec3 delta = this->center - obj.center;
+	return sqrt(delta.x * delta.x + delta.y * delta.y + delta.z * delta.z);
 }
 
 bool GameObject::collision(GameObject& obj) {
@@ -189,7 +231,7 @@ void GameObject::translate(const glm::vec3& vec, bool detectCollision) {
 								}
 							}
 					ptr->translate(optimizedDir * GLfloat(minStepNeeded));
-					std::cout << "minsteps = " << minStepNeeded << "\n";
+					// std::cout << "minsteps = " << minStepNeeded << "\n";
 				}
 			}
 		}
@@ -258,6 +300,7 @@ GameObject::GameObject(glm::vec3 _Front, glm::vec3 _Up) {
 	hitRadius = 0;
 	maxVertexCoord = { -1e9, -1e9, -1e9 };
 	minVertexCoord = { 1e9, 1e9, 1e9 };
+	center = { 0, 0, 0 };
 }
 
 GameObject::GameObject(const std::shared_ptr<ViewObject> viewObject, const std::vector<GLfloat>& vertex_data,

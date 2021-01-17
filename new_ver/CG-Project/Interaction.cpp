@@ -16,6 +16,7 @@ bool Interaction::key_s_pressed = false;
 bool Interaction::key_a_pressed = false;
 bool Interaction::key_d_pressed = false;
 bool Interaction::key_y_flag = false;
+bool Interaction::key_p_flag = false;
 GLfloat Interaction::yaw = 0;
 GLfloat Interaction::pitch = 0;
 GLfloat Interaction::xoffset = 0;
@@ -160,6 +161,11 @@ void Interaction::KeyCallback(GLFWwindow* window, int key, int scancode, int act
 	{
 		camera.SetWorldUpDir({ 0, 1, 0 });
 		key_y_flag = !key_y_flag;
+	}
+	if (key == GLFW_KEY_P && action == GLFW_PRESS)
+	{
+		camera.SetWorldUpDir({ 0, 1, 0 });
+		key_p_flag = !key_p_flag;
 	}
 	if (key == GLFW_KEY_W && action == GLFW_REPEAT) {
 		//camera.ProcessKeyboard(CameraMovement::FORWARD, 1);

@@ -14,18 +14,20 @@ protected:
 	GLfloat		mass;
 	glm::vec3	velocity;
 	GLfloat		hitRadius;
-	std::vector<face> faces;
+	std::vector<vertex> vertices;
+	std::vector<std::vector<int>> faceIndices;
 	std::shared_ptr<ViewObject> viewObj;
 	glm::vec3	maxVertexCoord;
 	glm::vec3	minVertexCoord;
 
 // public functions
 public:
-
 	bool		fixed;
 	glm::vec3	localFront;
 	glm::vec3	localUp;
+	glm::vec3	center;
 	void		loadFromObj(std::string filename);
+	void		saveToObj(std::string filename);
 	void		setHitbox(const std::vector<GLfloat>& vertex_data, const ViewObjectEnum & type);
 	void		scale(const glm::vec3& vec);
 	void		translate(const glm::vec3& vec, bool detectCollision = false);
@@ -37,6 +39,8 @@ public:
 	glm::vec3	getFrontDir();
 	glm::vec3	getUpDir();
 	glm::vec3	getLeftDir();
+	bool		collisionPossible(GameObject& obj);
+	GLfloat		getDist(const GameObject& obj);
 
 	GameObject(glm::vec3 _Front = { 0, 0, 1 }, glm::vec3 _Up = { 0, 1, 0 });
 	GameObject(const std::shared_ptr<ViewObject> viewObject, const std::vector<GLfloat>& vertex_data,
@@ -50,7 +54,6 @@ public:
 
 // helper functions
 private:
-	bool		collisionPossible(GameObject& obj);
 	bool		collision(GameObject& obj);
 	bool		checkMoveConstraints();
 	void		error(std::string msg, bool fatal = true);

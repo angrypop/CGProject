@@ -32,7 +32,7 @@ public:
 	void		scale(const glm::vec3& vec);
 	void		translate(const glm::vec3& vec, bool detectCollision = false);
 	void		rotate(const GLfloat& angle, const glm::vec3& vec);
-	// void		setDir(const glm::vec3& currentDir, const glm::vec3& dir);
+	void		resetDir();
 	void		setVelocity(const glm::vec3 in_v);
 	void		setPosition(const glm::vec3 in_pos);
 	glm::vec3	getPosition();

@@ -20,11 +20,6 @@ void main() {
 	float base = 1;
 	float baseLine = min((sqrt(textureCoord.x * coe) * sqrt(textureCoord.y * coe) * sqrt((1 - textureCoord.x) * coe) * sqrt((1 - textureCoord.y) * coe)) * 16, base);
 	//heightMapNew = vec3(0.5f);
-	//fragColor = vec4(1.0f);
-
-	//heightMapNew = min((sqrt(textureCoord.x * coe) * sqrt(textureCoord.y * coe) * sqrt((1 - textureCoord.x) * coe) * sqrt((1 - textureCoord.y) * coe)) * 16, 1);
-	//heightMapNew = min(radius - sqrt(pow(radius, 2) - pow(fragPos.x - uniObjPos.x, 2) - pow(fragPos.z - uniObjPos.z, 2)), heightMapNew);
-
 	if (rst == 1) {
 		//gl_FragDepth = min((sqrt(textureCoord.x * coe) * sqrt(textureCoord.y * coe) * sqrt((1 - textureCoord.x) * coe) * sqrt((1 - textureCoord.y) * coe)) * 16, 1);
 		heightMapNew = baseLine;

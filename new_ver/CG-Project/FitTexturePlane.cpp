@@ -74,9 +74,11 @@ FitTexturedPlane::FitTexturedPlane(glm::vec3 position, GLfloat points[], GLint s
 		this->hasTextures[textures[i].mode] = 1;
 		this->Textures[textures[i].mode] = LoadTexture(textures[i]);
 	}
+
 	glGenFramebuffers(NumFitFrameBuffer, FrameBuffers);
 	glBindFramebuffer(GL_FRAMEBUFFER, FrameBuffers[FitFrameBuffer]);
 
+	glGenTextures(1, &Textures[FitHeightTexture]);
 	glBindTexture(GL_TEXTURE_2D, Textures[FitHeightTexture]);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB32F, FitTextureW, FitTextureH, 0, GL_RGB, GL_FLOAT, NULL);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
@@ -134,10 +136,8 @@ FitTexturedPlane::FitTexturedPlane(glm::vec3 position, GLfloat points[], GLint s
 
 }
 
-void FitTexturedPlane::UpdateHeight(GLfloat radius, GLuint rst)
+void FitTexturedPlane::UpdateHeight(const GLfloat& radius, const GLuint& rst, const glm::vec3& uniObjPos, const glm::vec3& uniObjVel)
 {
-	glm::vec3 uniObjPos = GlobalDataPool::GetData<glm::vec3>("uniObjPos");
-	glm::vec3 uniObjVel = GlobalDataPool::GetData<glm::vec3>("uniObjVel");
 	glm::mat4 uniP = GlobalDataPool::GetData<glm::mat4>("cameraProjection");
 	glm::mat4 uniV = GlobalDataPool::GetData<glm::mat4>("cameraView");
 	//std::cout << "Update Height" << std::endl;

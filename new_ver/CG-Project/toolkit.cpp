@@ -48,7 +48,8 @@ GLuint loadCubemap(const std::vector<std::string> &faces)
 	int width, height, nrChannels;
 	for (unsigned int i = 0; i < faces.size(); i++)
 	{
-		unsigned char* data = stbi_load(faces[i].c_str(), &width, &height, &nrChannels, 0);
+		std::string filename = std::string(TexturePath) + faces[i];
+		unsigned char* data = stbi_load(filename.c_str(), &width, &height, &nrChannels, 0);
 		if (data)
 		{
 			glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i,
@@ -58,7 +59,7 @@ GLuint loadCubemap(const std::vector<std::string> &faces)
 		}
 		else
 		{
-			std::cout << "Cubemap texture failed to load at path: " << faces[i] << std::endl;
+			std::cout << "Cubemap texture failed to load at path: " << filename << std::endl;
 			stbi_image_free(data);
 		}
 	}
@@ -196,8 +197,9 @@ bool ShaderObject::operator<(const ShaderObject& rhs) const
 
 std::map<std::string, GLuint> TexturePool::_nameTBOMap;
 
-GLuint TexturePool::Load(const std::string& filename)
+GLuint TexturePool::Load(const std::string& filenameNoPath)
 {
+	std::string filename = std::string(TexturePath) + filenameNoPath;
 	std::cout << "TexturePool Size = " << _nameTBOMap.size() << std::endl;
 	if (_nameTBOMap.find(filename) != _nameTBOMap.end()) // found
 		return _nameTBOMap.find(filename)->second;

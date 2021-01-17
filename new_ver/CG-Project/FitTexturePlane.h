@@ -35,7 +35,7 @@ public:
 	//FitTexturedPlane() {};
 	FitTexturedPlane(glm::vec3 position, GLfloat points[], GLint sizeofPoints, GLuint indices[], GLint sizeofIndices, ShaderInfo shaders[], TextureInfo textures[]);
 
-	void UpdateHeight(GLfloat radius, GLuint rst);
+	void UpdateHeight(const GLfloat& radius, const GLuint& rst, const glm::vec3& uniObjPos, const glm::vec3& uniObjVel = glm::vec3(0.0f));
 
 	virtual void RenderGrassGBuffer(glm::mat4 uniV, glm::mat4 uniP, float uniTime, glm::vec3 uniObjPos);
 

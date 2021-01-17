@@ -32,7 +32,7 @@ namespace Scene
 	DirectionalLight directionalLight = DirectionalLight(glm::vec3(-1.0, 1.0, -1.0));
 
 
-	ViewCamera camera(glm::vec3(40.0f, 40.0f, 40.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+	ViewCamera camera(glm::vec3(40.0f, 100.0f, 40.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 
 
 	//glm::mat4 lightProjection = glm::ortho(SHADOW_WIDTH * -0.5f * e, SHADOW_WIDTH * 0.5f * e,
@@ -182,10 +182,12 @@ void Scene::InitScene() {
 	int data;
 	glGetIntegerv(GL_MAX_TESS_GEN_LEVEL, &data); printf("%d\n", data);
 
-	auto fitPlane = std::shared_ptr<FitTexturedPlane>(new FitTexturedPlane(
-		glm::vec3(0, 0, 0), planePoints5, sizeof(planePoints5), planeIndices3, sizeof(planeIndices3), planeShaders, sandTextures));
-	fitPlane->UpdateHeight(0, 1);
-	fitPlaneGroup.AddObject(fitPlane);
+	//auto fitPlane = std::shared_ptr<FitTexturedPlane>(new FitTexturedPlane(
+	//	glm::vec3(0, 0, 0), planePoints5, sizeof(planePoints5), planeIndices3, sizeof(planeIndices3), planeShaders, sandTextures));
+	//glm::vec3 uniObjPos = GlobalDataPool::GetData<glm::vec3>("uniObjPos");
+	//glm::vec3 uniObjVel = GlobalDataPool::GetData<glm::vec3>("uniObjVel");
+	//fitPlane->UpdateHeight(0, 1, uniObjPos, uniObjVel);
+	//fitPlaneGroup.AddObject(fitPlane);
 
 
 

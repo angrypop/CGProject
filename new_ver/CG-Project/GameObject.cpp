@@ -259,8 +259,8 @@ GameObject::GameObject(glm::vec3 _Front, glm::vec3 _Up) {
 	localFront = _Front;
 	localUp = _Up;
 	hitRadius = 0;
-	maxVertexCoord = { 0, 0, 0 };
-	minVertexCoord = { 0, 0, 0 };
+	maxVertexCoord = { -1e9, -1e9, -1e9 };
+	minVertexCoord = { 1e9, 1e9, 1e9 };
 }
 
 GameObject::GameObject(const std::shared_ptr<ViewObject> viewObject, const std::vector<GLfloat>& vertex_data,

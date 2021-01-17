@@ -3,8 +3,6 @@
 #include "ViewHeader.h"
 //---------------------------------------------------------------------------------SHADER
 
-constexpr std::string_view ShaderPath = "..\\shader\\";
-
 struct ShaderInfo {
 	int mode;
 	std::string filename;

@@ -1,6 +1,8 @@
 #include "Scene.h"
 #include "Interaction.h"
 
+constexpr bool UseOITFlag = false;
+
 GLFWwindow* Init();
 void RenderShadow();
 void RenderGBuffer();
@@ -67,7 +69,10 @@ void UpdateData()
 	GlobalDataPool::SetData<glm::vec3>("cameraFront", camera.GetViewFront());
 	for (const auto& plane : fitPlaneGroup.GetObjectList())
 	{
-		plane->UpdateHeight(radius, 0);
+		//glm::vec3 uniObjPos = GlobalDataPool::GetData<glm::vec3>("uniObjPos");
+		//glm::vec3 uniObjVel = GlobalDataPool::GetData<glm::vec3>("uniObjVel");
+		//plane->UpdateHeight(radius, 0, uniObjPos, uniObjVel);
+		plane->UpdateHeight(radius, 0, GlobalDataPool::GetData<glm::vec3>("cameraPosition"));
 	}
 	if (Interaction::screenShotFlag)
 	{
@@ -99,8 +104,11 @@ int main(int argc, char** argv) {
 		
 		RenderShadow();
 		RenderGBuffer();
-		RenderOITBufferTM();
-		RenderBlendOIT();
+		if (UseOITFlag)
+		{
+			RenderOITBufferTM();
+			RenderBlendOIT();
+		}
 		RenderGBufferLight();
 
 		glfwSwapBuffers(window);
@@ -122,7 +130,10 @@ GLFWwindow* Init() {
 	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
 
 	InitGlobalData();
-	InitOIT(); 
+	if (UseOITFlag)
+	{
+		InitOIT();
+	}
 	InitShadow();
 	InitGBuffer();
 	InitScene();

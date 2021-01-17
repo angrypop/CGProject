@@ -8,5 +8,4 @@ new_ver/x64
 *.suo
 *.log
 *.tlog
-*.obj
 *.pdb

@@ -8,13 +8,13 @@ constexpr GLfloat BaseY = -10.0f;
 class GameSceneBase
 {
 public:
-	enum GameState { IdleState = 0, HintState, PlayState, SuccessState };
+	enum class GameState { IdleState = 0, HintState, PlayState, SuccessState };
 	std::vector<std::shared_ptr<GameObject>> _objects;
 
 	std::shared_ptr<TransparentPlane> _startDoor;
 	std::shared_ptr<TexturedPlane> _roadGround;
 	
-	GameState _state = IdleState;
+	GameState _state = GameState::IdleState;
 
 	GameSceneBase(const GLfloat& roadWidth = 30.0f, const GLfloat& distance = 400.0f);
 	void Rotate(const GLfloat& angle, const glm::vec3& axis);
@@ -34,7 +34,7 @@ constexpr float DesertShowDuration = 1.0f;
 class DesertScene final : public GameSceneBase 
 {
 public:
-	DesertScene(const GLfloat& width = 100.0f, const GLfloat& height = 100.0f);
+	DesertScene(const GLfloat& width = 300.0f, const GLfloat& height = 300.0f);
 	virtual void Idle()
 	{
 		this->_state = GameState::IdleState;
@@ -73,20 +73,24 @@ public:
 			}
 			break;
 		case GameState::PlayState:
+			// TODO check player distance with bars
 			break;
 		case GameState::IdleState:
 			break;
 		case GameState::SuccessState:
 			break;
 		}
-
-
-
 	}
+	enum class BarState { IdleBar, ActiveBar, WrongBar };
+
+
 private:
+
+
 	void GenerateRandomList(const int& num);
 	std::shared_ptr<FitTexturedPlane> _areaGround;
-	std::vector<GameObject> _puzzleBars;
+	std::vector<std::shared_ptr<GameObject>> _puzzleBars;
+	void ChangeBarState(const int& index, const BarState& state);
 	std::vector<int> _targetList;
 	int _startShowIndex = 0;
 };

@@ -30,6 +30,7 @@ enum class ViewPassEnum { ShadowBuffer, GBuffer, OITBuffer, BlendOIT, GBufferIll
 enum class ViewObjectEnum { TextureObject, FitTextureObject, TransparentObject, WaterObject, SkyBoxObject};
 constexpr std::string_view TexturePath = "..\\texture\\";
 constexpr std::string_view ScreenShotPath = "..\\screenshot\\";
+constexpr std::string_view ShaderPath = "..\\shader\\";
 
 
 // get a random real number in [min, max]

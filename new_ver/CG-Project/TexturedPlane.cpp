@@ -1,6 +1,15 @@
 #include "TexturedPlane.h"
 #include "Shadow.h"
 
+void TexturedPlane::ChangeTexture(std::vector<TextureInfo> infos)
+{
+	for (const auto & info : infos) 
+	{
+		this->hasTextures[info.mode] = 1;
+		this->Textures[info.mode] = LoadTexture(info);
+	}
+}
+
 void TexturedPlane::RenderGrassGBuffer()
 {
 	glm::mat4 cameraView = GlobalDataPool::GetData<glm::mat4>("cameraView");

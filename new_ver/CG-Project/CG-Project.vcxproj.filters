@@ -159,7 +159,7 @@
       <Filter>GameScene</Filter>
     </ClCompile>
     <ClCompile Include="SkyBox.cpp">
-      <Filter>源文件</Filter>
+      <Filter>ViewObject</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

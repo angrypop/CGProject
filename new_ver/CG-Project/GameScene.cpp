@@ -123,7 +123,10 @@ DesertScene::DesertScene(const GLfloat& width, const GLfloat& height)
 	auto fitPlane = std::shared_ptr<FitTexturedPlane>(new FitTexturedPlane(
 		glm::vec3(0, 0, 0), planePoints.data(), planePoints.size() * sizeof(GLfloat),
 		planeIndices, sizeof(planeIndices), planeShaders, sandTextures));
-	fitPlane->UpdateHeight(0, 1);
+
+	glm::vec3 uniObjPos = GlobalDataPool::GetData<glm::vec3>("uniObjPos");
+	glm::vec3 uniObjVel = GlobalDataPool::GetData<glm::vec3>("uniObjVel");
+	fitPlane->UpdateHeight(0, 1, uniObjPos, uniObjVel);
 	auto gameObj = std::make_shared<GameObject>(GameObject(fitPlane, planePoints, false));
 	this->_objects.push_back(gameObj);
 	GameObject::AddGameObject(gameObj);
@@ -146,4 +149,27 @@ void DesertScene::GenerateRandomList(const int& num)
 		if (flag)
 			_targetList.push_back(res);
 	}
+}
+
+
+void DesertScene::ChangeBarState(const int& index, const BarState& state)
+{
+	if (index >= _puzzleBars.size())
+		throw("Bar Index Out of Range");
+	auto bar = std::dynamic_pointer_cast<TexturedPlane>(_puzzleBars[index]->getRenderData());
+	switch (state)
+	{
+	case BarState::IdleBar:
+		bar->ChangeTexture(std::vector<TextureInfo>({
+			{AmbientTexture,"Bricks036_2K-JPG/Bricks036_2K_Color.jpg"},
+			{NormalTexture,"Bricks036_2K-JPG/Bricks036_2K_Normal.jpg"},
+			{RoughnessTexture,"Bricks036_2K-JPG/Bricks036_2K_Roughness.jpg"},
+		}));
+		break;
+	case BarState::ActiveBar:
+		break;
+	case BarState::WrongBar:
+		break;
+	}
+
 }

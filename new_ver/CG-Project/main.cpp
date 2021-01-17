@@ -12,7 +12,8 @@ void RenderGBufferLight();
 
 void RenderAllObject(const ViewPassEnum & pass);
 
-static bool display_cg_flag = false;
+static bool displayCrashCGFlag = false;
+static bool displayTakeOffCGFlag = false;
 
 void UpdateTakeoffCG() {
 	static int tick = 0;
@@ -21,7 +22,8 @@ void UpdateTakeoffCG() {
 	// begin = 0.0, finished = 1.0
 	GLfloat progress = GLfloat(tick) / (10.0f * tickPerSec);
 	if (progress > 1.0) {
-		display_cg_flag = false;
+		tick = 0;
+		displayTakeOffCGFlag = false;
 		airplane->setPower(1.0);
 		airplane->setVelocity(airplane->localFront * 10.0f);
 		return;
@@ -74,7 +76,8 @@ void UpdateCrashCG(glm::vec3 targetPos) {
 	// begin = 0.0, finished = 1.0
 	GLfloat progress = GLfloat(tick) / (20.0f * tickPerSec);
 	if (progress > 1.0) {
-		display_cg_flag = false;
+		tick = 0;
+		displayCrashCGFlag = false;
 		return;
 	}
 	tick++;
@@ -113,7 +116,7 @@ void UpdateCrashCG(glm::vec3 targetPos) {
 }
 
 void UpdateCamera() {
-	if (Interaction::key_y_flag) {
+	if (!Interaction::key_y_flag) {
 		// follow ground player
 		Interaction::camera.SetPosition(player->getPosition());
 		Interaction::camera.SetFrontDir(player->getViewDir(), true);
@@ -135,7 +138,7 @@ void UpdateCamera() {
 }
 
 void UpdateAirplane() {
-	if (Interaction::key_y_flag) {
+	if (!Interaction::key_y_flag) {
 		// control ground player
 		player->rotate(-Interaction::ReadXoffset(), { 0, 1, 0 });
 		player->changePitch(-Interaction::ReadYoffset());
@@ -181,7 +184,7 @@ void UpdateAirplane() {
 			airplane->setPosition({ 0, 40, 0 });
 		}
 		if (Interaction::key_o_pressed) {
-			display_cg_flag = true;
+			//display_cg_flag = true;
 			airplane->saveToObj("../resources/out.obj");
 		}
 		airplane->simulate();
@@ -192,7 +195,7 @@ void UpdateData()
 {
 	// if the game is not paused
 	if (Interaction::key_p_flag == false) {
-		if (display_cg_flag) UpdateTakeoffCG();
+		if (displayTakeOffCGFlag) UpdateTakeoffCG();
 		else {
 			UpdateAirplane();
 			UpdateCamera();

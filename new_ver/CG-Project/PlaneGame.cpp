@@ -43,7 +43,7 @@ PlaneGameScene::PlaneGameScene(const int& ringNum)
 		}
 
 
-		auto viewObj = std::shared_ptr<TransparentPlane>(new TransparentPlane(ringVertices, ringIndices, glm::vec4(0.0f, 1.0f, 0.0f, 0.5f)));
+		auto viewObj = std::shared_ptr<TransparentPlane>(new TransparentPlane(ringVertices, ringIndices, glm::vec4(1.0f, 0.0f, 0.0f, 0.5f)));
 		
 		//viewObj->Rotate(angle, glm::vec3(0.0f, 1.0f, 0.0f));
 		viewObj->Translate(glm::vec3(RingGameRadius * cos(angleRing), ringY, RingGameRadius * sin(angleRing)));
@@ -67,17 +67,44 @@ void PlaneGameScene::Update()
 	case GameState::IdleState:
 		glm::vec3 viewPos = GlobalDataPool::GetData<glm::vec3>("cameraPosition");
 		//std::shared_ptr<Airplane> plane = Scene::airplane;
-		std::cout << "plang dist = " << Scene::airplane->getDist(viewPos) << " state = " << Scene::desertScene->CheckSuccess() << std::endl;
+		//std::cout << "plang dist = " << Scene::airplane->getDist(viewPos) << " state = " << Scene::desertScene->CheckSuccess() << std::endl;
 		if (Scene::airplane->getDist(viewPos) <= StartDistance && Scene::desertScene->CheckSuccess())
 		{
 			this->Play();
 		}
 		break;
 	case GameState::PlayState:
+		viewPos = Scene::airplane->getPosition();
+		for (int i = 0; i < _rings.size(); i++)
+		{
+			//std::cout << "index = " << i << " dist = " << _rings[i]->getDist(viewPos) << std::endl;
+			if (_rings[i]->getDist(viewPos) <= HitDistance && !_goaledRings[i])
+			{
+				_goaledRings[i] = true;
+				this->_goaledNumber++;
+				std::cout << "goaledNumber = " << _goaledNumber << std::endl;
+			}
+		}
 
+		if (this->_goaledNumber >= this->GetRingNumber()) // success
+		{
+			this->_state = GameState::SuccessState;
+			std::cout << "Plane Game Scene Success!" << std::endl;
+			break;
+		}
+		for (int i = 0; i < _rings.size(); i++)
+		{
+			if (_goaledRings[i])
+				std::dynamic_pointer_cast<TransparentPlane>(_rings[i]->getRenderData())->SetColor(glm::vec4(0.0f, 1.0f, 0.0f, 0.5f));
+			else
+				std::dynamic_pointer_cast<TransparentPlane>(_rings[i]->getRenderData())->SetColor(glm::vec4(1.0f, 0.0f, 0.0f, 0.5f));
+		}
 		break;
 	case GameState::SuccessState:
-
+		for (int i = 0; i < _rings.size(); i++)
+		{
+				std::dynamic_pointer_cast<TransparentPlane>(_rings[i]->getRenderData())->SetColor(glm::vec4(0.0f, 1.0f, 0.0f, 0.5f));
+		}
 		break;
 	}
 }

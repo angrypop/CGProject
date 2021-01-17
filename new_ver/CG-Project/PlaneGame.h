@@ -11,7 +11,8 @@ constexpr GLfloat PlaneStartX = 0.0f;
 constexpr GLfloat PlaneStartY = 50.0f;
 constexpr GLfloat PlaneStartZ = 0.0f;
 
-constexpr GLfloat StartDistance = 40.0f;
+constexpr GLfloat StartDistance = 50.0f;
+constexpr GLfloat HitDistance = 40.0f;
 
 class PlaneGameScene final : public GameSceneBase
 {
@@ -36,6 +37,9 @@ public:
 	{
 		if (this->_state == GameState::SuccessState)
 			return;
+		this->_goaledNumber = 0;
+		for (int i = 0; i < this->GetRingNumber(); i++)
+			_goaledRings[i] = false;
 		this->_state = GameState::PlayState;
 		std::cout << "Plane Game Started" << std::endl;
 	}
@@ -43,4 +47,5 @@ public:
 private:
 	std::vector<std::shared_ptr<GameObject>> _rings;
 	std::array<bool, 256> _goaledRings{ 0 };
+	int _goaledNumber = 0;
 };

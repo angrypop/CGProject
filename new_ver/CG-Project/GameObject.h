@@ -30,7 +30,7 @@ public:
 	void		scale(const glm::vec3& vec);
 	void		translate(const glm::vec3& vec, bool detectCollision = false);
 	void		rotate(const GLfloat& angle, const glm::vec3& vec);
-	void		setDir(const glm::vec3& currentDir, const glm::vec3& dir);
+	// void		setDir(const glm::vec3& currentDir, const glm::vec3& dir);
 	void		setVelocity(const glm::vec3 in_v);
 	void		setPosition(const glm::vec3 in_pos);
 	glm::vec3	getPosition();
@@ -68,6 +68,15 @@ public:
 	void		simulate(GLfloat delta_time = 0.016); // asuming 60 ticks per second
 	static bool	enableGravity;
 	Airplane(glm::vec3 _Front = { 0, 0, 1 }, glm::vec3 _Up = { 0, 1, 0 });
+};
+
+class Player : public GameObject {
+private:
+	GLfloat		viewPitch;
+public:
+	void		changePitch(GLfloat angle);
+	glm::vec3	getViewDir();
+	void		move(const glm::vec3& delta);
 };
 
 void printVec(glm::vec3);

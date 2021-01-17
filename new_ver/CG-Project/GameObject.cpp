@@ -200,17 +200,14 @@ void GameObject::rotate(const GLfloat& angle, const glm::vec3& vec) {
 	this->viewObj->Rotate(angle, vec);
 }
 
-void GameObject::setDir(const glm::vec3& currentDir, const glm::vec3& dir)
+/*void GameObject::setDir(const glm::vec3& currentDir, const glm::vec3& dir)
 {
 	glm::vec3 rotateAxis = glm::normalize(glm::inverse(viewObj->GetM()) * glm::vec4(glm::cross(currentDir, dir), 1));
 	GLfloat rotateAngle = acos(glm::dot(currentDir, dir)) * 180.f / 3.1416f;
-	/*std::cout << "rotateAngle: " << rotateAngle << std::endl;
-	std::cout << "rotateAxks: "; printVec(rotateAxis);
-	std::cout << std::endl;*/
 	if (rotateAngle < 5.0) return;
 	if (rotateAxis == glm::vec3({ 0, 0, 0 })) return;
 	this->viewObj->Rotate(rotateAngle, rotateAxis);
-}
+}*/
 
 void GameObject::setVelocity(const glm::vec3 in_v)
 {
@@ -374,4 +371,23 @@ Airplane::Airplane(glm::vec3 _Front, glm::vec3 _Up): GameObject(_Front, _Up)
 
 void printVec(glm::vec3 vec) {
 	std::cout << vec.x << " " << vec.y << " " << vec.z << "\n";
+}
+
+void Player::changePitch(GLfloat angle)
+{
+	viewPitch += angle;
+	if (viewPitch > 89.0f) viewPitch = 89.0f;
+	if (viewPitch < -89.0f) viewPitch = -89.0f;
+}
+
+glm::vec3 Player::getViewDir()
+{
+	glm::vec3 front = getFrontDir();
+	front.y = tan(glm::length(front) * glm::radians(viewPitch));
+	return front;
+}
+
+void Player::move(const glm::vec3& delta)
+{
+	translate({ delta.x, 0, delta.z }, true);
 }

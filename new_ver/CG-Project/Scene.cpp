@@ -12,6 +12,7 @@ namespace Scene
 	ViewGroup<SkyBox> skyBoxGroup;
 
 	std::shared_ptr<Airplane> airplane;
+	std::shared_ptr<Player> player;
 	std::shared_ptr<DesertScene> desertScene;
 	std::vector<std::shared_ptr<GameObject>> GameObjects;
 
@@ -267,21 +268,25 @@ void Scene::InitScene() {
 
 void Scene::InitGameObject()
 {
+	player = std::shared_ptr<Player>(new Player());
+	player->loadFromObj("../resources/soldier.obj");
+	player->setPosition({0, 20, 0});
+	GameObject::allObjs.push_back(std::static_pointer_cast<GameObject>(player));
 	airplane = std::shared_ptr<Airplane>(new Airplane({ 0, -1, 0 }, { 0, 0, 1 }));
+	airplane->loadFromObj("../resources/jet.obj");
+	airplane->scale({ 0.2, 0.2, 0.2 });
+	airplane->translate({ 0, 200, 0 });
+	airplane->rotate(-90, { 1, 0, 0 });
 	GameObject::allObjs.push_back(std::static_pointer_cast<GameObject>(airplane));
-	GameObject::allObjs[0]->loadFromObj("../resources/jet.obj");
-	GameObject::allObjs[0]->scale({ 0.2, 0.2, 0.2 });
-	GameObject::allObjs[0]->translate({ 0, 200, 0 });
-	GameObject::allObjs[0]->rotate(-90, { 1, 0, 0 });
 	//GameObject::allObjs[0]->getRenderData()->renderGrassFlag = true;
-	for (int i = 1; i <= 0; i++) {
+	/*for (int i = 2; i <= 0; i++) {
 		GameObject::allObjs.push_back(std::shared_ptr<GameObject>(new GameObject()));
 		GameObject::allObjs[i]->loadFromObj("../resources/wolf.obj");
 		GameObject::allObjs[i]->rotate(RandomReal(0.0f, 180.0f), {0.0f, 1.0f, 0.0f});
 		GameObject::allObjs[i]->scale({ RandomReal(50.0f, 200.0f), RandomReal(50.0f, 200.0f), RandomReal(50.0f, 200.0f) });
 		GameObject::allObjs[i]->setPosition({ RandomReal(-200.0f, 200.0f), RandomReal(100.0f, 200.0f), RandomReal(-200.0f, 200.0f) });
 		GameObject::allObjs[i]->fixed = false;
-	}
+	}*/
 	for (const auto& i : GameObject::allObjs) {
 		AddGroupObject(i->getRenderData());
 	}

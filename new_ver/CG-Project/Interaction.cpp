@@ -3,7 +3,7 @@
 
 
 bool Interaction::mouseReverseFlag = true;
-float Interaction::mouse_sensitivity = 0.05f;
+float Interaction::mouse_sensitivity = 0.10f;
 bool Interaction::screenShotFlag = false;
 
 constexpr GLfloat groundSize = 15.0f;

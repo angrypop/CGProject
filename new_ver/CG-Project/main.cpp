@@ -182,6 +182,7 @@ void UpdateAirplane() {
 			airplane->setPower(0);
 			airplane->setVelocity({ 0, 0, 0 });
 			airplane->setPosition({ 0, 40, 0 });
+			airplane->resetDir();
 		}
 		if (Interaction::key_o_pressed) {
 			//display_cg_flag = true;

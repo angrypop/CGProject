@@ -255,14 +255,17 @@ void GameObject::rotate(const GLfloat& angle, const glm::vec3& vec) {
 	this->viewObj->Rotate(angle, vec);
 }
 
-/*void GameObject::setDir(const glm::vec3& currentDir, const glm::vec3& dir)
+void GameObject::resetDir()
 {
-	glm::vec3 rotateAxis = glm::normalize(glm::inverse(viewObj->GetM()) * glm::vec4(glm::cross(currentDir, dir), 1));
-	GLfloat rotateAngle = acos(glm::dot(currentDir, dir)) * 180.f / 3.1416f;
-	if (rotateAngle < 5.0) return;
-	if (rotateAxis == glm::vec3({ 0, 0, 0 })) return;
-	this->viewObj->Rotate(rotateAngle, rotateAxis);
-}*/
+	glm::vec3 front = getFrontDir();
+	GLfloat currentPitch = atan(front.y / sqrt(front.x * front.x + front.z * front.z)) * RADIAN_TO_ANGLE;
+	this->viewObj->Rotate(-currentPitch, glm::cross(localFront, localUp));
+	front = getFrontDir();
+	if (front.x == 0) return;
+	GLfloat currentRoll = atan(front.z / front.x) * RADIAN_TO_ANGLE;
+	if (front.x < 0) currentRoll = (front.z / fabs(front.z)) * 90.0f;
+	this->viewObj->Rotate(-currentRoll, localUp);
+}
 
 void GameObject::setVelocity(const glm::vec3 in_v)
 {
@@ -411,6 +414,10 @@ void Airplane::simulate(GLfloat delta_time)
 	}
 	// apply acceleration
 	glm::vec3 acceleration = (thrust + lift + gravity + resistance) / mass;
+	if (glm::dot(velocity, acceleration) < 0 &&
+		glm::dot(velocity, velocity + acceleration * delta_time) < 0) {
+		acceleration = {0, 0, 0};
+	}
 	velocity += acceleration * delta_time;
 	// move
 	translate(velocity * delta_time, true);

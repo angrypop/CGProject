@@ -17,6 +17,7 @@ public:
 	void Rotate(const GLfloat& angle, const glm::vec3& axis);
 	void Translate(const glm::vec3& displacement);
 	void Scale(const glm::vec3& scaler);
+	bool CheckSuccess() const;
 	virtual void Update() = 0;
 	virtual void Idle() = 0;
 	virtual void Hint() = 0;
@@ -43,6 +44,8 @@ protected:
 	GLfloat _distance;
 };
 
+constexpr bool DebugCheatDesert = true;
+
 constexpr GLfloat DesertShowDuration = 1.0f;
 constexpr GLfloat DesertPuzzleBarHeight = 25.0f;
 constexpr GLfloat PuzzleRadius = 100.0f;
@@ -53,124 +56,10 @@ class DesertScene final : public GroundGameScene
 {
 public:
 	DesertScene(const GLfloat& width = 300.0f, const GLfloat& height = 300.0f);
-	virtual void Idle()
-	{
-		if (this->_state == GameState::SuccessState)
-			return;
-		this->_state = GameState::IdleState;
-		GenerateRandomList(0);
-		this->SetDoorShowFlag(true);
-	}
-	virtual void Hint()
-	{
-		if (this->_state == GameState::SuccessState)
-			return;
-		this->_state = GameState::HintState;
-		GenerateRandomList(5);
-		_lastTime = (float)glfwGetTime();
-		_startShowIndex = 0;
-		this->SetDoorShowFlag(true);
-	}
-	virtual void Play()
-	{
-		if (this->_state == GameState::SuccessState)
-			return;
-		this->_state = GameState::PlayState;
-		this->SetDoorShowFlag(false);
-		_userList.clear();
-		for (int i = 0; i < (int)_targetList.size(); i++)
-		{
-			_activeBarMap[i] = false;
-		}
-	}
-	virtual void Update()
-	{
-		float nowTime = (float)glfwGetTime();
-		float duration = nowTime - _lastTime;
-		switch (this->_state)
-		{
-		case GameState::HintState:
-			if (_startShowIndex >= int(_targetList.size())) // take a break
-			{
-				if (duration >= DesertShowDuration * 3) // long duration
-				{
-					_startShowIndex = 0;
-					_lastTime = nowTime;
-				}
-			}
-			else if (duration >= DesertShowDuration) // show next
-			{
-				_startShowIndex++;
-				_lastTime = nowTime;
-			}
-			for (int i = 0; i < (int)_targetList.size(); i++)
-			{
-				if (_startShowIndex < _targetList.size() && i == _targetList[_startShowIndex]) // hint
-					this->ChangeBarState(i, BarState::ActiveBar);
-				else
-					this->ChangeBarState(i, BarState::IdleBar);
-			}
-			break;
-		case GameState::PlayState:
-			// TODO check player distance with bars
-			glm::vec3 viewPos = GlobalDataPool::GetData<glm::vec3>("cameraPosition");
-			for (int i = 0; i < (int)_puzzleBars.size(); i++)
-			{
-				if (_activeBarMap[i]) // skip actived bar
-					continue;
-				if (_puzzleBars[i]->getDist(viewPos) <= ActiveDistance)
-				{
-					_activeBarMap[i] = true;
-					_userList.push_back(i);
-				}
-			}
-
-			if (this->_userList.size() == this->_targetList.size())
-			{
-				bool success = true;
-				for (int i = 0; i < (int)_targetList.size(); i++)
-					if (_userList[i] != _targetList[i])
-					{
-						success = false;
-						break;
-					}
-				if (success)
-				{
-					this->_state = GameState::SuccessState;
-					break;
-				}
-			}
-
-			for (int i = 0; i < (int)_targetList.size(); i++)
-			{
-				if (this->_userList.size() != this->_targetList.size()) // not finish
-				{
-					if (_activeBarMap[i])
-						this->ChangeBarState(i, BarState::ActiveBar);
-					else
-						this->ChangeBarState(i, BarState::IdleBar);
-				}
-				else // failed
-				{
-					this->ChangeBarState(i, BarState::WrongBar);
-				}
-
-			}
-			break;
-		case GameState::IdleState:
-			for (int i = 0; i < (int)_targetList.size(); i++)
-			{
-				this->ChangeBarState(i, BarState::IdleBar);
-			}
-			break;
-		case GameState::SuccessState:
-			for (int i = 0; i < (int)_targetList.size(); i++)
-			{
-				this->ChangeBarState(i, BarState::SuccessBar);
-			}
-			break;
-		}
-	}
+	virtual void Idle();
+	virtual void Hint();
+	virtual void Play();
+	virtual void Update();
 	enum class BarState { IdleBar, ActiveBar, WrongBar, SuccessBar};
 
 
@@ -184,7 +73,7 @@ private:
 	void ChangeBarState(const int& index, const BarState& state);
 	std::vector<int> _targetList;
 	std::vector<int> _userList;
-	std::array<bool, 256> _activeBarMap;
+	std::array<bool, 256> _activeBarMap{0};
 	GLfloat _groundWidth;
 	GLfloat _groundHeight;
 	int _startShowIndex = 0;

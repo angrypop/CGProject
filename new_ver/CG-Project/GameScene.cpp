@@ -31,6 +31,11 @@ void GameSceneBase::Scale(const glm::vec3& scaler)
 	}
 }
 
+bool GameSceneBase::CheckSuccess() const
+{
+	return this->_state == GameState::SuccessState;
+}
+
 void GameSceneBase::GenerateAirWall(const std::vector<GLfloat>& vertices)
 {
 	//return;
@@ -233,6 +238,131 @@ DesertScene::DesertScene(const GLfloat& width, const GLfloat& height)
 		-width / 2.0f, _distance,
 		-_roadWidth / 2.0f, _distance,
 	});
+
+	if (DebugCheatDesert)
+		this->_state = GameState::SuccessState;
+}
+
+void DesertScene::Idle()
+{
+	if (this->_state == GameState::SuccessState)
+		return;
+	this->_state = GameState::IdleState;
+	GenerateRandomList(0);
+	this->SetDoorShowFlag(true);
+}
+
+void DesertScene::Hint()
+{
+	if (this->_state == GameState::SuccessState)
+		return;
+	this->_state = GameState::HintState;
+	GenerateRandomList(5);
+	_lastTime = (float)glfwGetTime();
+	_startShowIndex = 0;
+	this->SetDoorShowFlag(true);
+}
+
+void DesertScene::Play()
+{
+	if (this->_state == GameState::SuccessState)
+		return;
+	this->_state = GameState::PlayState;
+	this->SetDoorShowFlag(false);
+	_userList.clear();
+	for (int i = 0; i < (int)_targetList.size(); i++)
+	{
+		_activeBarMap[i] = false;
+	}
+}
+
+void DesertScene::Update()
+{
+	float nowTime = (float)glfwGetTime();
+	float duration = nowTime - _lastTime;
+	switch (this->_state)
+	{
+	case GameState::HintState:
+		if (_startShowIndex >= int(_targetList.size())) // take a break
+		{
+			if (duration >= DesertShowDuration * 3) // long duration
+			{
+				_startShowIndex = 0;
+				_lastTime = nowTime;
+			}
+		}
+		else if (duration >= DesertShowDuration) // show next
+		{
+			_startShowIndex++;
+			_lastTime = nowTime;
+		}
+		for (int i = 0; i < (int)_targetList.size(); i++)
+		{
+			if (_startShowIndex < _targetList.size() && i == _targetList[_startShowIndex]) // hint
+				this->ChangeBarState(i, BarState::ActiveBar);
+			else
+				this->ChangeBarState(i, BarState::IdleBar);
+		}
+		break;
+	case GameState::PlayState:
+		// TODO check player distance with bars
+		glm::vec3 viewPos = GlobalDataPool::GetData<glm::vec3>("cameraPosition");
+		for (int i = 0; i < (int)_puzzleBars.size(); i++)
+		{
+			if (_activeBarMap[i]) // skip actived bar
+				continue;
+			if (_puzzleBars[i]->getDist(viewPos) <= ActiveDistance)
+			{
+				_activeBarMap[i] = true;
+				_userList.push_back(i);
+			}
+		}
+
+		if (this->_userList.size() == this->_targetList.size())
+		{
+			bool success = true;
+			for (int i = 0; i < (int)_targetList.size(); i++)
+				if (_userList[i] != _targetList[i])
+				{
+					success = false;
+					break;
+				}
+			if (success)
+			{
+				this->_state = GameState::SuccessState;
+				break;
+			}
+		}
+
+		for (int i = 0; i < (int)_targetList.size(); i++)
+		{
+			if (this->_userList.size() != this->_targetList.size()) // not finish
+			{
+				if (_activeBarMap[i])
+					this->ChangeBarState(i, BarState::ActiveBar);
+				else
+					this->ChangeBarState(i, BarState::IdleBar);
+			}
+			else // failed
+			{
+				this->ChangeBarState(i, BarState::WrongBar);
+			}
+
+		}
+		break;
+	case GameState::IdleState:
+		for (int i = 0; i < (int)_targetList.size(); i++)
+		{
+			this->ChangeBarState(i, BarState::IdleBar);
+		}
+		break;
+	case GameState::SuccessState:
+		for (int i = 0; i < (int)_targetList.size(); i++)
+		{
+			this->ChangeBarState(i, BarState::SuccessBar);
+		}
+		break;
+	}
 }
 
 void DesertScene::GenerateRandomList(const int& num)
@@ -274,7 +404,7 @@ void DesertScene::GenerateBars(const int& num)
 	
 	for (int index = (int)_puzzleBars.size(); index < num; index++)
 	{
-		int edgeNum = 8;
+		int edgeNum = 256;
 		std::vector<GLfloat> barVertices;
 		std::vector<GLuint> barIndices;
 		for (int i = 0; i < edgeNum; i++) // 0 ... n - 1

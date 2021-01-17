@@ -60,11 +60,16 @@ public:
 		this->Init(position, points, sizeofPoints, indices, sizeofIndices, c);
 	}
 
-	TransparentPlane(std::vector<GLfloat> points, std::vector<GLuint> indices, glm::vec4 c, glm::vec3 position = glm::vec3(0.0f))
+	TransparentPlane(std::vector<GLfloat> points, std::vector<GLuint> indices, glm::vec4 color, glm::vec3 position = glm::vec3(0.0f))
 		:ViewObject(ViewObjectEnum::TransparentObject)
 	{
 		this->Init(position, points.data(), (GLint)points.size() * sizeof(GLfloat) ,
-			indices.data(), (GLint)indices.size() * sizeof(GLuint), c);
+			indices.data(), (GLint)indices.size() * sizeof(GLuint), color);
+	}
+
+	void SetColor(const glm::vec4& rgbaColor)
+	{
+		this->color = rgbaColor;
 	}
 
 	virtual void RenderOITBuffer();

@@ -168,7 +168,7 @@ void UpdateData()
 		Interaction::key_q_pressed = false;
 	}
 	desertScene->Update();
-
+	planeGameScene->Update();
 	if (Interaction::screenShotFlag)
 	{
 		try

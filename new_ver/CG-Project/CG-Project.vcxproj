@@ -176,6 +176,7 @@
     <ClInclude Include="GlobalData.h" />
     <ClInclude Include="Interaction.h" />
     <ClInclude Include="Light.h" />
+    <ClInclude Include="PlaneGame.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="Shadow.h" />
     <ClInclude Include="SkyBox.h" />
@@ -195,6 +196,7 @@
     <ClCompile Include="GlobalData.cpp" />
     <ClCompile Include="Interaction.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="PlaneGame.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="Shadow.cpp" />
     <ClCompile Include="SkyBox.cpp" />

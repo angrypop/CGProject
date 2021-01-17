@@ -7,6 +7,7 @@
 #include "ViewGroup.h"
 #include "GameObject.h"
 #include "GameScene.h"
+#include "PlaneGame.h"
 
 
 
@@ -25,6 +26,7 @@ namespace Scene
 	extern std::shared_ptr<Airplane> airplane;
 
 	extern std::shared_ptr<DesertScene> desertScene;
+	extern std::shared_ptr<PlaneGameScene> planeGameScene;
 	// extern std::vector<std::shared_ptr<GameObject>> GameObjects;
 
 	void InitGlobalData();

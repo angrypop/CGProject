@@ -14,6 +14,7 @@ namespace Scene
 	std::shared_ptr<Airplane> airplane;
 	std::shared_ptr<Player> player;
 	std::shared_ptr<DesertScene> desertScene;
+	std::shared_ptr<PlaneGameScene> planeGameScene;
 	std::vector<std::shared_ptr<GameObject>> GameObjects;
 
 	int width = 1280;
@@ -315,6 +316,7 @@ void Scene::InitGameObject()
 		AddGroupObject(i->getRenderData());
 	}
 	desertScene.reset(new DesertScene);
+	planeGameScene.reset(new PlaneGameScene);
 }
 
 void Scene::InitGlobalData()
@@ -406,7 +408,7 @@ void Scene::InitOIT() {
 
 	glBindImageTexture(0, OITTextures[HeadPointerTexture], 0, GL_TRUE, 0, GL_READ_WRITE, GL_R32UI);
 
-	constexpr int MemorySize = 12;
+	constexpr int MemorySize = 18;
 	glBindBuffer(GL_PIXEL_UNPACK_BUFFER, OITBuffers[HeadPointerInit]);
 	glBufferData(GL_PIXEL_UNPACK_BUFFER, width * height * sizeof(GLuint), NULL, GL_STATIC_DRAW);
 	data = (GLuint*)glMapBuffer(GL_PIXEL_UNPACK_BUFFER, GL_WRITE_ONLY);

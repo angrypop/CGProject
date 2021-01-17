@@ -111,6 +111,9 @@
     <ClInclude Include="GameScene.h">
       <Filter>GameScene</Filter>
     </ClInclude>
+    <ClInclude Include="PlaneGame.h">
+      <Filter>GameScene</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -160,6 +163,9 @@
     </ClCompile>
     <ClCompile Include="SkyBox.cpp">
       <Filter>ViewObject</Filter>
+    </ClCompile>
+    <ClCompile Include="PlaneGame.cpp">
+      <Filter>GameScene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -13,6 +13,7 @@ void RenderGBufferLight();
 void RenderAllObject(const ViewPassEnum & pass);
 
 void UpdateCamera() {
+	if (Interaction::key_p_flag) return;
 	if (Interaction::key_y_flag) {
 		// follow ground player
 		Interaction::camera.SetPosition(player->getPosition());
@@ -35,6 +36,7 @@ void UpdateCamera() {
 }
 
 void UpdateAirplane() {
+	if (Interaction::key_p_flag) return;
 	if (Interaction::key_y_flag) {
 		// control ground player
 		player->rotate(-Interaction::ReadXoffset(), { 0, 1, 0 });
@@ -72,6 +74,7 @@ void UpdateAirplane() {
 			airplane->changeYaw(-deltaYaw);
 		}
 		if (Interaction::key_space_pressed) {
+			// airplane->saveToObj("../resources/out.obj");
 			airplane->setPower(0);
 			airplane->setVelocity({ 0, 0, 0 });
 			airplane->setPosition({ 0, 40, 0 });

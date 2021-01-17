@@ -14,7 +14,8 @@ protected:
 	GLfloat		mass;
 	glm::vec3	velocity;
 	GLfloat		hitRadius;
-	std::vector<face> faces;
+	std::vector<vertex> vertices;
+	std::vector<std::vector<int>> faceIndices;
 	std::shared_ptr<ViewObject> viewObj;
 	glm::vec3	maxVertexCoord;
 	glm::vec3	minVertexCoord;
@@ -26,6 +27,7 @@ public:
 	glm::vec3	localUp;
 	glm::vec3	center;
 	void		loadFromObj(std::string filename);
+	void		saveToObj(std::string filename);
 	void		setHitbox(const std::vector<GLfloat>& vertex_data, const ViewObjectEnum & type);
 	void		scale(const glm::vec3& vec);
 	void		translate(const glm::vec3& vec, bool detectCollision = false);

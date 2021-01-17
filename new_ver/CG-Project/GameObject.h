@@ -65,7 +65,7 @@ private:
 public:
 	void		changePower(GLfloat delta_power);
 	void		changeRoll(GLfloat angle);
-	void		changePitch(GLfloat angle);
+	void		changePitch(GLfloat angle, bool constraint = false);
 	void		changeYaw(GLfloat angle);
 	void		setPower(GLfloat _power);
 	void		simulate(GLfloat delta_time = 0.016); // asuming 60 ticks per second

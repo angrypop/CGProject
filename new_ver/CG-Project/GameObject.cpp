@@ -343,9 +343,18 @@ void Airplane::changeRoll(GLfloat angle)
 	rotate(angle, localFront);
 }
 
-void Airplane::changePitch(GLfloat angle)
+void Airplane::changePitch(GLfloat angle, bool constraint)
 {
-	rotate(angle, glm::cross(localUp, localFront));
+	if (constraint) {
+		glm::vec3 front = getFrontDir();
+		GLfloat currentPitch = atan(front.y / sqrt(front.x * front.x + front.z * front.z)) * RADIAN_TO_ANGLE;
+		if (currentPitch + angle > 60.0f) 
+			angle = 0;
+		if (currentPitch + angle < -60.0f) 
+			angle = 0;
+		std::cout << currentPitch << "\n";
+	}
+	rotate(angle, glm::cross(localFront, localUp));
 }
 
 void Airplane::changeYaw(GLfloat angle)

@@ -12,8 +12,49 @@ void RenderGBufferLight();
 
 void RenderAllObject(const ViewPassEnum & pass);
 
+static bool display_cg_flag = false;
+
+void UpdateCG(glm::vec3 targetPos) {
+	static int tick = 0;
+	static const int tickPerSec = 60;
+	static glm::vec3 lookat = targetPos;
+	
+	// percentage of CG displayed
+	// begin = 0.0, finished = 1.0
+	GLfloat progress = GLfloat(tick) / (20.0 * tickPerSec);
+	if (progress > 1) return;
+	tick++;
+	
+	// update airplane
+	if (tick == 1) {
+		airplane->setPosition(targetPos + glm::vec3{ 0, 1000, 1000 });
+	}
+	glm::vec3 currentPos = airplane->getPosition();
+	glm::vec3 delta1 = glm::normalize(targetPos - currentPos) * 5.0f * progress;
+	glm::vec3 delta2 = glm::vec3({sin(tick / 30.0f) , 0, cos(tick / 30.0f)}) * 5.0f * (1 - progress);
+	airplane->changePitch(-5.0f * (0.2 + 0.8 * progress));
+	airplane->changeRoll(5.0f * (0.5 + 0.5 * progress));
+	airplane->setPosition(currentPos + delta1 + delta2);
+	// shake the plane
+	airplane->translate(
+		glm::vec3({ RandomReal(-1.0, 1.0),
+		RandomReal(-1.0, 1.0),
+		RandomReal(-0.1, 0.1)
+			}) * 5.0f * progress);
+	// update camera
+	if (tick % (2 * tickPerSec) == 0) {
+		glm::vec3 cameraPos = airplane->getPosition();
+		cameraPos += glm::vec3(RandomReal(-1.0, 1.0), RandomReal(-0.1, 0.1), RandomReal(-1.0, 1.0)) * 500.0f * (1 - progress);
+		Interaction::camera.SetPosition(cameraPos);
+		Interaction::camera.SetWorldUpDir({ 0, 1, 0 });
+		lookat = airplane->getPosition();
+	}
+	lookat += delta1 + delta2 * progress; // soft follow
+	Interaction::camera.SetFrontDir(lookat - Interaction::camera.GetViewPosition());
+	
+}
+
 void UpdateCamera() {
-	if (Interaction::key_p_flag) return;
 	if (Interaction::key_y_flag) {
 		// follow ground player
 		Interaction::camera.SetPosition(player->getPosition());
@@ -36,11 +77,10 @@ void UpdateCamera() {
 }
 
 void UpdateAirplane() {
-	if (Interaction::key_p_flag) return;
 	if (Interaction::key_y_flag) {
 		// control ground player
-		player->rotate(-Interaction::ReadXoffset(), { 0, 1, 0 });
-		player->changePitch(-Interaction::ReadYoffset());
+		player->rotate(Interaction::ReadXoffset(), { 0, 1, 0 });
+		player->changePitch(Interaction::ReadYoffset());
 		glm::vec3 front = {0, 0, 1};
 		glm::vec3 left = {1, 0, 0};
 		if (Interaction::key_w_pressed) {
@@ -60,9 +100,10 @@ void UpdateAirplane() {
 		}
 	}
 	else {
+		// control airplane
 		GLfloat deltaPower = 0.01f;
 		GLfloat deltaYaw = 0.5f;
-		airplane->changePitch(-Interaction::ReadYoffset());
+		airplane->changePitch(Interaction::ReadYoffset());
 		airplane->changeRoll(Interaction::ReadXoffset());
 		if (Interaction::key_w_pressed) {
 			airplane->changePower(deltaPower);
@@ -82,6 +123,7 @@ void UpdateAirplane() {
 			airplane->setPosition({ 0, 40, 0 });
 		}
 		if (Interaction::key_o_pressed) {
+			display_cg_flag = true;
 			airplane->saveToObj("../resources/out.obj");
 		}
 		airplane->simulate();
@@ -90,8 +132,14 @@ void UpdateAirplane() {
 
 void UpdateData()
 {
-	UpdateAirplane();
-	UpdateCamera();
+	// if the game is not paused
+	if (Interaction::key_p_flag == false) {
+		if (display_cg_flag) UpdateCG({0, 0, 0});
+		else {
+			UpdateAirplane();
+			UpdateCamera();
+		}
+	}
 	GlobalDataPool::SetData<GLfloat>("systemTime", (GLfloat)glfwGetTime());
 	GlobalDataPool::SetData<glm::vec3>("cameraFront", camera.GetViewFront());
 	for (const auto& plane : fitPlaneGroup.GetObjectList())

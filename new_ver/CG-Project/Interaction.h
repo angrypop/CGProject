@@ -24,6 +24,7 @@ public:
 	static bool key_s_pressed;
 	static bool key_a_pressed;
 	static bool key_d_pressed;
+	static bool key_o_pressed;
 	static bool key_y_flag;
 	static bool key_p_flag;
 	static bool key_r_pressed;	// start gamescene

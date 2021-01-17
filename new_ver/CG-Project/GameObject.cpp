@@ -99,10 +99,16 @@ void GameObject::saveToObj(std::string filename)
 			glm::vec3 delta = glm::vec3(coord) - getPosition();
 			fout << "v " << delta[0] << " " << delta[1] << " " << delta[2] << "\n";
 		}
+		for (int i = 0; i < vertices.size(); i++) {
+			fout << "vt 0.0 0.0\n";
+		}
+		for (int i = 0; i < vertices.size(); i++) {
+			fout << "vn 0.0 1.0 0.0\n";
+		}
 		for (auto f : faceIndices) {
 			fout << "f";
 			for (int i = 0; i < f.size(); i++) {
-				fout << " " << std::to_string(f[i]) << "/0/0";
+				fout << " " << std::to_string(f[i] + 1) << "/1/1";
 			}
 			fout << "\n";
 		}

@@ -6,13 +6,14 @@ constexpr GLfloat DoorY = GroundY + 30.0f;
 constexpr GLfloat DoorThick = 5.0f;
 constexpr GLfloat BaseY = -10.0f;
 constexpr GLfloat AirWallHeight = 30.0f;
+constexpr bool DisplayAirWall = false;
 class GameSceneBase
 {
 public:
 	enum class GameState { IdleState = 0, HintState, PlayState, SuccessState };
 	std::vector<std::shared_ptr<GameObject>> _objects;
 
-	std::shared_ptr<TransparentPlane> _startDoor;
+	std::shared_ptr<GameObject> _startDoor;
 	bool _startDoorFlag = true;
 	std::shared_ptr<TexturedPlane> _roadGround;
 	

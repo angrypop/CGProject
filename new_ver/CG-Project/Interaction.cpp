@@ -15,6 +15,9 @@ bool Interaction::key_w_pressed = false;
 bool Interaction::key_s_pressed = false;
 bool Interaction::key_a_pressed = false;
 bool Interaction::key_d_pressed = false;
+bool Interaction::key_r_pressed = false;
+bool Interaction::key_q_pressed = false;
+bool Interaction::key_h_pressed = false;
 bool Interaction::key_y_flag = false;
 bool Interaction::key_p_flag = false;
 GLfloat Interaction::yaw = 0;
@@ -127,6 +130,19 @@ void Interaction::KeyCallback(GLFWwindow* window, int key, int scancode, int act
 	if (key == GLFW_KEY_SPACE && action == GLFW_RELEASE)
 	{
 		key_space_pressed = false;
+	}
+
+	if (key == GLFW_KEY_R && action == GLFW_PRESS) {
+		key_r_pressed = true;
+		printf("Key R\n");
+	}
+	if (key == GLFW_KEY_Q && action == GLFW_PRESS) {
+		key_q_pressed = true;
+		printf("Key Q\n");
+	}
+	if (key == GLFW_KEY_H && action == GLFW_PRESS) {
+		key_h_pressed = true;
+		printf("Key H\n");
 	}
 
 	if (key == GLFW_KEY_W && action == GLFW_PRESS) {

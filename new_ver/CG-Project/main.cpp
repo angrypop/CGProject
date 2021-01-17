@@ -96,6 +96,22 @@ void UpdateData()
 		//plane->UpdateHeight(radius, 0, uniObjPos, uniObjVel);
 		plane->UpdateHeight(radius, 0, GlobalDataPool::GetData<glm::vec3>("cameraPosition"));
 	}
+	if (Interaction::key_r_pressed)
+	{
+		Scene::desertScene->Play();
+		Interaction::key_r_pressed = false;
+	}
+	if (Interaction::key_h_pressed)
+	{
+		Scene::desertScene->Hint();
+		Interaction::key_h_pressed = false;
+	}
+	if (Interaction::key_q_pressed)
+	{
+		Scene::desertScene->Idle();
+		Interaction::key_q_pressed = false;
+	}
+
 	if (Interaction::screenShotFlag)
 	{
 		try

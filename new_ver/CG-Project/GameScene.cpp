@@ -75,11 +75,11 @@ GameSceneBase::GameSceneBase(const GLfloat& roadWidth, const GLfloat& distance)
 		-roadWidth / 2.0f,  distance,
 	});
 
-	this->_startDoor.reset(new TransparentPlane(doorPoints, doorIndices, glm::vec4(1.0f, 0.3f, 0.0f, 0.7f)));
-	gameObj = std::make_shared<GameObject>(GameObject(this->_startDoor, doorPoints));
-	this->_objects.push_back(gameObj);
-	GameObject::AddGameObject(gameObj);
-	Scene::AddGroupObject(_startDoor);
+	auto viewDoor = std::shared_ptr<TransparentPlane>(new TransparentPlane(doorPoints, doorIndices, glm::vec4(1.0f, 0.3f, 0.0f, 0.7f)));
+	Scene::AddGroupObject(viewDoor);
+	this->_startDoor.reset(new GameObject(viewDoor, doorPoints, true));
+	this->_objects.push_back(_startDoor);
+	GameObject::AddGameObject(_startDoor);
 
 }
 
@@ -111,12 +111,12 @@ void GameSceneBase::SetDoorShowFlag(const bool& showFlag)
 {
 	if (_startDoorFlag == true && showFlag == false)
 	{
-		this->_startDoor->Translate(glm::vec3(0.0f, -10000.0f, 0.0f));
+		this->_startDoor->translate(glm::vec3(0.0f, -10000.0f, 0.0f));
 		this->_startDoorFlag = false;
 	}
 	if (_startDoorFlag == false && showFlag == true)
 	{
-		this->_startDoor->Translate(glm::vec3(0.0f, 10000.0f, 0.0f));
+		this->_startDoor->translate(glm::vec3(0.0f, 10000.0f, 0.0f));
 		this->_startDoorFlag = true;
 	}
 }
@@ -124,8 +124,8 @@ void GameSceneBase::SetDoorShowFlag(const bool& showFlag)
 void GameSceneBase::GenerateAirWall(const std::vector<GLfloat>& vertices)
 {
 	constexpr int verSize = 2;
-	int num = vertices.size() / verSize;
-	for (int i = 0; i < num; i++)
+	int num = (int)vertices.size() / verSize;
+	for (int i = 0; i < num - 1; i++)
 	{
 		GLfloat x1 = vertices[i * verSize + 0];
 		GLfloat z1 = vertices[i * verSize + 1];
@@ -172,7 +172,8 @@ void GameSceneBase::GenerateAirWall(const std::vector<GLfloat>& vertices)
 		auto wall = std::shared_ptr<TexturedPlane>(new TexturedPlane(
 			airWallVertices, airWallIndices, planeTextures));
 		Scene::AddGroupObject(wall);
-		wall->Hide(); // hide this object
+		if (!DisplayAirWall)
+			wall->Hide(); // hide this object
 		auto gameObj = std::make_shared<GameObject>(GameObject(wall, airWallVertices));
 		this->_objects.push_back(gameObj);
 		GameObject::AddGameObject(gameObj);
@@ -214,10 +215,12 @@ DesertScene::DesertScene(const GLfloat& width, const GLfloat& height)
 	GameObject::AddGameObject(gameObj);
 	Scene::AddGroupObject(fitPlane);
 	this->GenerateAirWall({
-		-width / 2.0f, _distance + height,
-		-width / 2.0f, _distance,
+		_roadWidth / 2.0f, _distance,
 		width / 2.0f, _distance,
 		width / 2.0f, _distance + height,
+		-width / 2.0f, _distance + height,
+		-width / 2.0f, _distance,
+		-_roadWidth / 2.0f, _distance,
 	});
 }
 

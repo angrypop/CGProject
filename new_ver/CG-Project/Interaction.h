@@ -26,7 +26,9 @@ public:
 	static bool key_d_pressed;
 	static bool key_y_flag;
 	static bool key_p_flag;
-	static bool key_r_pressed;
+	static bool key_r_pressed;	// start gamescene
+	static bool key_h_pressed;	// hint gamescene
+	static bool key_q_pressed;	// idle gamescene
 	static bool left_button_pressed;
 	static bool right_button_pressed;
 	static GLfloat yaw;

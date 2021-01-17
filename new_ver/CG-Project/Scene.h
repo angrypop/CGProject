@@ -23,6 +23,8 @@ namespace Scene
 
 	extern std::shared_ptr<Player> player;
 	extern std::shared_ptr<Airplane> airplane;
+
+	extern std::shared_ptr<DesertScene> desertScene;
 	// extern std::vector<std::shared_ptr<GameObject>> GameObjects;
 
 	void InitGlobalData();

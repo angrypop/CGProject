@@ -148,7 +148,7 @@ void GameObject::setHitbox(const std::vector<GLfloat>& vertex_data, const ViewOb
 
 }
 
-std::shared_ptr<ViewObject> GameObject::getRenderData()
+std::shared_ptr<ViewObject> GameObject::getRenderData() const
 {
 	return this->viewObj;
 }
@@ -175,9 +175,16 @@ bool GameObject::collisionPossible(GameObject& obj) {
 	return sqrt(dist_sq) <= (hitRadius + obj.hitRadius);
 }
 
-GLfloat GameObject::getDist(const GameObject& obj)
+GLfloat GameObject::getDist(const GameObject& obj) const
 {
+	throw("no implement");
 	glm::vec3 delta = this->center - obj.center;
+	return sqrt(delta.x * delta.x + delta.y * delta.y + delta.z * delta.z);
+}
+
+GLfloat GameObject::getDist(const glm::vec3& pos) const
+{
+	glm::vec4 delta = (this->getRenderData()->GetM() *  glm::vec4(this->center, 1.0f)) - glm::vec4(pos, 1.0f);
 	return sqrt(delta.x * delta.x + delta.y * delta.y + delta.z * delta.z);
 }
 

@@ -1,12 +1,15 @@
 #include "TexturedPlane.h"
 #include "Shadow.h"
 
-void TexturedPlane::ChangeTexture(std::vector<TextureInfo> infos)
+void TexturedPlane::ChangeTexture(const std::vector<TextureInfo>& infos)
 {
 	for (const auto & info : infos) 
 	{
-		this->hasTextures[info.mode] = 1;
-		this->Textures[info.mode] = LoadTexture(info);
+		if (info.mode != Texture_NONE)
+		{
+			this->hasTextures[info.mode] = 1;
+			this->Textures[info.mode] = LoadTexture(info);
+		}
 	}
 }
 

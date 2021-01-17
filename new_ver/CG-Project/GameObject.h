@@ -40,13 +40,14 @@ public:
 	glm::vec3	getUpDir();
 	glm::vec3	getLeftDir();
 	bool		collisionPossible(GameObject& obj);
-	GLfloat		getDist(const GameObject& obj);
+	GLfloat		getDist(const GameObject& obj) const;
+	GLfloat		getDist(const glm::vec3& pos) const;
 
 	GameObject(glm::vec3 _Front = { 0, 0, 1 }, glm::vec3 _Up = { 0, 1, 0 });
 	GameObject(const std::shared_ptr<ViewObject> viewObject, const std::vector<GLfloat>& vertex_data,
 		const bool& withHitBox = true, glm::vec3 _Front = { 0, 0, 1 }, glm::vec3 _Up = { 0, 1, 0 });
 
-	std::shared_ptr<ViewObject> getRenderData();
+	std::shared_ptr<ViewObject> getRenderData()  const;
 
 	static std::vector<std::shared_ptr<GameObject>> allObjs;
 	static void AddGameObject(const std::shared_ptr <GameObject>& object);

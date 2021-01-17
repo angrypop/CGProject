@@ -26,6 +26,8 @@ GLuint GenerateProgram(const std::vector<ShaderInfo>& shaderInfos)
 
 GLuint LoadTexture(const TextureInfo& info)
 {
+	if (info.mode == Texture_NONE)
+		return GL_NONE;
 	return TexturePool::Load(info.fileName);
 }
 
@@ -200,7 +202,7 @@ std::map<std::string, GLuint> TexturePool::_nameTBOMap;
 GLuint TexturePool::Load(const std::string& filenameNoPath)
 {
 	std::string filename = std::string(TexturePath) + filenameNoPath;
-	std::cout << "TexturePool Size = " << _nameTBOMap.size() << std::endl;
+
 	if (_nameTBOMap.find(filename) != _nameTBOMap.end()) // found
 		return _nameTBOMap.find(filename)->second;
 	GLuint texture;
@@ -232,7 +234,7 @@ GLuint TexturePool::Load(const std::string& filenameNoPath)
 	else {
 		printf("fail to load image");
 	}
-
+	std::cout << "TexturePool Size = " << _nameTBOMap.size() << ", filename = " << filename << std::endl;
 	_nameTBOMap[filename] = texture;
 	return texture;
 }

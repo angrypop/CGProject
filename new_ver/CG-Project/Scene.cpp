@@ -132,6 +132,26 @@ void Scene::InitScene() {
 		{NormalTexture,"Ground033_4K-JPG/Ground033_4K_Normal.jpg"},
 		{RoughnessTexture,"Ground033_4K-JPG/Ground033_4K_Roughness.jpg"},
 		{Texture_NONE,""} };
+	TextureInfo redTextures[] = {
+		{AmbientTexture,"Bricks036_2K-JPG/Bricks036_2K_Red.jpg"},
+		{NormalTexture,"Bricks036_2K-JPG/Bricks036_2K_Normal.jpg"},
+		{RoughnessTexture,"Bricks036_2K-JPG/Bricks036_2K_Roughness.jpg"},
+		{Texture_NONE,""} };
+	TextureInfo yellowTextures[] = {
+			{AmbientTexture,"Bricks036_2K-JPG/Bricks036_2K_Yellow.jpg"},
+			{NormalTexture,"Bricks036_2K-JPG/Bricks036_2K_Normal.jpg"},
+			{RoughnessTexture,"Bricks036_2K-JPG/Bricks036_2K_Roughness.jpg"},
+			{Texture_NONE,""} };
+	TextureInfo greenTextures[] = {
+		{AmbientTexture,"Bricks036_2K-JPG/Bricks036_2K_Green.jpg"},
+		{NormalTexture,"Bricks036_2K-JPG/Bricks036_2K_Normal.jpg"},
+		{RoughnessTexture,"Bricks036_2K-JPG/Bricks036_2K_Roughness.jpg"},
+		{Texture_NONE,""} };
+	TextureInfo grayTextures[] = {
+		{AmbientTexture,"Bricks036_2K-JPG/Bricks036_2K_Gray.jpg"},
+		{NormalTexture,"Bricks036_2K-JPG/Bricks036_2K_Normal.jpg"},
+		{RoughnessTexture,"Bricks036_2K-JPG/Bricks036_2K_Roughness.jpg"},
+		{Texture_NONE,""} };
 	GLfloat planePoints2[] = {
 	-groundSize , groundSize * 2 , -groundSize , 0.0f , 0.0f ,
 	 groundSize , groundSize * 2 , -groundSize , 1.0f , 0.0f ,
@@ -166,29 +186,33 @@ void Scene::InitScene() {
 	planeGroup.AddObject(std::shared_ptr<TexturedPlane>(new TexturedPlane(glm::vec3(0, 0, 0), planePoints1, sizeof(planePoints1),
 		planeIndices1, sizeof(planeIndices1), planeShaders, planeTextures)));
 	planeGroup.AddObject(std::shared_ptr<TexturedPlane>(new TexturedPlane(glm::vec3(0, 0, 0), planePoints2, sizeof(planePoints2),
-		planeIndices2, sizeof(planeIndices2), planeShaders, planeTextures)));
+		planeIndices2, sizeof(planeIndices2), planeShaders, redTextures)));
 	planeGroup.AddObject(std::shared_ptr<TexturedPlane>(new TexturedPlane(glm::vec3(0, 0, 0), planePoints3, sizeof(planePoints3),
-		planeIndices3, sizeof(planeIndices3), planeShaders, planeTextures)));
+		planeIndices3, sizeof(planeIndices3), planeShaders, yellowTextures)));
 	planeGroup.AddObject(std::shared_ptr<TexturedPlane>(new TexturedPlane(glm::vec3(0, 0, 0), planePoints4, sizeof(planePoints4),
 		planeIndices3, sizeof(planeIndices3), planeShaders, grassTextures)));
 	planeGroup.GetObjectList()[3]->renderGrassFlag = true;
-	std::vector<GLfloat> planeVertice;
-	for (int i = 0; i < 3 * 10; i++)
-	{
-		for (int j = 0; j < 5; j++)
-			planeVertice.push_back(::RandomReal<GLfloat>(-groundSize, groundSize));
-	}
+	planeGroup.AddObject(std::shared_ptr<TexturedPlane>(new TexturedPlane(glm::vec3(0, 0, 0), planePoints3, sizeof(planePoints3),
+		planeIndices3, sizeof(planeIndices3), planeShaders, greenTextures)));
+	planeGroup.AddObject(std::shared_ptr<TexturedPlane>(new TexturedPlane(glm::vec3(0, 0, 0), planePoints3, sizeof(planePoints3),
+		planeIndices3, sizeof(planeIndices3), planeShaders, grayTextures)));
+	//std::vector<GLfloat> planeVertice;
+	//for (int i = 0; i < 3 * 10; i++)
+	//{
+	//	for (int j = 0; j < 5; j++)
+	//		planeVertice.push_back(::RandomReal<GLfloat>(-groundSize, groundSize));
+	//}
 	//planeGroup.AddObject(std::shared_ptr<TexturedPlane>(new TexturedPlane(planeVertice)));
 
 	int data;
 	glGetIntegerv(GL_MAX_TESS_GEN_LEVEL, &data); printf("%d\n", data);
 
-	//auto fitPlane = std::shared_ptr<FitTexturedPlane>(new FitTexturedPlane(
-	//	glm::vec3(0, 0, 0), planePoints5, sizeof(planePoints5), planeIndices3, sizeof(planeIndices3), planeShaders, sandTextures));
-	//glm::vec3 uniObjPos = GlobalDataPool::GetData<glm::vec3>("uniObjPos");
-	//glm::vec3 uniObjVel = GlobalDataPool::GetData<glm::vec3>("uniObjVel");
-	//fitPlane->UpdateHeight(0, 1, uniObjPos, uniObjVel);
-	//fitPlaneGroup.AddObject(fitPlane);
+	auto fitPlane = std::shared_ptr<FitTexturedPlane>(new FitTexturedPlane(
+		glm::vec3(0, 0, 0), planePoints5, sizeof(planePoints5), planeIndices3, sizeof(planeIndices3), planeShaders, sandTextures));
+	glm::vec3 uniObjPos = GlobalDataPool::GetData<glm::vec3>("uniObjPos");
+	glm::vec3 uniObjVel = GlobalDataPool::GetData<glm::vec3>("uniObjVel");
+	fitPlane->UpdateHeight(0, 1, uniObjPos, uniObjVel);
+	fitPlaneGroup.AddObject(fitPlane);
 
 
 

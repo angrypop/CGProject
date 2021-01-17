@@ -99,8 +99,11 @@ void UpdateData()
 		//glm::vec3 uniObjPos = GlobalDataPool::GetData<glm::vec3>("uniObjPos");
 		//glm::vec3 uniObjVel = GlobalDataPool::GetData<glm::vec3>("uniObjVel");
 		//plane->UpdateHeight(radius, 0, uniObjPos, uniObjVel);
-		plane->UpdateHeight(radius, 0, GlobalDataPool::GetData<glm::vec3>("cameraPosition"));
+		glm::vec3 pos = GlobalDataPool::GetData<glm::vec3>("cameraPosition");
+		//pos.y -= 5.0f;
+		plane->UpdateHeight(radius, 0, pos);
 	}
+
 	if (Interaction::key_r_pressed)
 	{
 		Scene::desertScene->Play();
@@ -116,6 +119,7 @@ void UpdateData()
 		Scene::desertScene->Idle();
 		Interaction::key_q_pressed = false;
 	}
+	desertScene->Update();
 
 	if (Interaction::screenShotFlag)
 	{

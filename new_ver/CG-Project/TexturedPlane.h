@@ -127,7 +127,7 @@ public:
 			indices.data(), (int)indices.size() * sizeof(GLfloat), planeShaders, planeTextures.data());
 	}
 
-	void ChangeTexture(std::vector<TextureInfo> infos);
+	void ChangeTexture(const std::vector<TextureInfo> &infos);
 
 	virtual void RenderGrassGBuffer();
 

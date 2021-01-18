@@ -81,6 +81,12 @@ void UpdateCrashCG(glm::vec3 targetPos) {
 		Interaction::displayCrashCGFlag = false;
 		Scene::desertScene->Idle();
 		Scene::planeGameScene->Idle();
+		Scene::player->setPosition(glm::vec3(0.0f, 20.0f, 0.0f));
+		Scene::player->setVelocity(glm::vec3(0.0f, 0.0f, 0.0f));
+		airplane->setPower(0);
+		airplane->setVelocity({ 0, 0, 0 });
+		airplane->setPosition({ 0, 40, 0 });
+		airplane->resetDir();
 		return;
 	}
 	tick++;

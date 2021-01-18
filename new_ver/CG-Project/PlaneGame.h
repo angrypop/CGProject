@@ -10,9 +10,12 @@ constexpr GLfloat RingInnerRadius = 15.0f;
 constexpr GLfloat PlaneStartX = 0.0f;
 constexpr GLfloat PlaneStartY = 100.0f;
 constexpr GLfloat PlaneStartZ = 0.0f;
+constexpr GLfloat WellInnerRadius = 20.0f;
+constexpr GLfloat WellOuterRadius = 25.0f;
 
 constexpr GLfloat StartDistance = 50.0f;
 constexpr GLfloat HitDistance = 40.0f;
+
 
 class PlaneGameScene final : public GameSceneBase
 {
@@ -28,6 +31,7 @@ public:
 private:
 	void GenerateRings(const int& ringNum = 16);
 	std::vector<std::shared_ptr<GameObject>> _rings;
+	std::shared_ptr<GameObject> _well;
 	std::array<bool, 256> _goaledRings{ 0 };
 	int _goaledNumber = 0;
 };

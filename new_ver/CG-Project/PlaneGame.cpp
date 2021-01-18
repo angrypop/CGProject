@@ -4,8 +4,101 @@
 
 PlaneGameScene::PlaneGameScene(const int& ringNum)
 {
+	// initial well
+	int edgeNum = 128;
+	std::vector<GLfloat> ringVertices;
+	std::vector<GLuint> ringIndices;
+	for (int i = 0; i < edgeNum; i++) // 0 ... n - 1
+	{
+		GLfloat angle = (float)i / edgeNum * 2 * PI;
+		GLfloat x = cos(angle) * WellInnerRadius;
+		GLfloat y = 10.0f;
+		GLfloat z = sin(angle) * WellInnerRadius;
+		ringVertices.push_back(x); ringVertices.push_back(y); ringVertices.push_back(z);
+		ringVertices.push_back(0.0f); ringVertices.push_back(0.0f); ringVertices.push_back(1.0f);
+	}
+	for (int i = 0; i < edgeNum; i++) // n ... 2 * n - 1
+	{
+		GLfloat angle = (float)i / edgeNum * 2 * PI;
+		GLfloat x = cos(angle) * WellOuterRadius;
+		GLfloat y = 10.0f;
+		GLfloat z = sin(angle) * WellOuterRadius;
+		ringVertices.push_back(x); ringVertices.push_back(y); ringVertices.push_back(z);
+		ringVertices.push_back(0.0f); ringVertices.push_back(0.0f); ringVertices.push_back(1.0f);
+	}
+	for (int i = 0; i < edgeNum; i++) // 2 * n ... 3 * n - 1
+	{
+		GLfloat angle = (float)i / edgeNum * 2 * PI;
+		GLfloat x = cos(angle) * WellInnerRadius;
+		GLfloat y = -100.0f;
+		GLfloat z = sin(angle) * WellInnerRadius;
+		ringVertices.push_back(x); ringVertices.push_back(y); ringVertices.push_back(z);
+		ringVertices.push_back(0.0f); ringVertices.push_back(0.0f); ringVertices.push_back(1.0f);
+	}
+	for (int i = 0; i < edgeNum; i++) // 3 * n ... 4 * n - 1
+	{
+		GLfloat angle = (float)i / edgeNum * 2 * PI;
+		GLfloat x = cos(angle) * WellOuterRadius;
+		GLfloat y = -100.0f;
+		GLfloat z = sin(angle) * WellOuterRadius;
+		ringVertices.push_back(x); ringVertices.push_back(y); ringVertices.push_back(z);
+		ringVertices.push_back(0.0f); ringVertices.push_back(0.0f); ringVertices.push_back(1.0f);
+	}
+
+	// indices
+	for (int i = 0; i < edgeNum; i++)
+	{
+		ringIndices.push_back((i) % edgeNum);
+		ringIndices.push_back((i + 1) % edgeNum);
+		ringIndices.push_back((i) % edgeNum + edgeNum);
+		ringIndices.push_back((i) % edgeNum + edgeNum);
+		ringIndices.push_back((i + 1) % edgeNum + edgeNum);
+		ringIndices.push_back((i + 1) % edgeNum);
+
+		ringIndices.push_back((i) % edgeNum + edgeNum * 2);
+		ringIndices.push_back((i + 1) % edgeNum + edgeNum * 2);
+		ringIndices.push_back((i) % edgeNum + edgeNum * 3);
+		ringIndices.push_back((i) % edgeNum + edgeNum * 3);
+		ringIndices.push_back((i + 1) % edgeNum + edgeNum * 3);
+		ringIndices.push_back((i + 1) % edgeNum + edgeNum * 2);
+	}
+	for (int i = 0; i < edgeNum; i++)
+	{
+		ringIndices.push_back((i) % edgeNum);
+		ringIndices.push_back((i + 1) % edgeNum);
+		ringIndices.push_back((i) % edgeNum + edgeNum * 2);
+		ringIndices.push_back((i) % edgeNum + edgeNum * 2);
+		ringIndices.push_back((i + 1) % edgeNum + edgeNum * 2);
+		ringIndices.push_back((i + 1) % edgeNum);
+		ringIndices.push_back((i) % edgeNum + edgeNum);
+		ringIndices.push_back((i + 1) % edgeNum + edgeNum);
+		ringIndices.push_back((i) % edgeNum + edgeNum * 3);
+		ringIndices.push_back((i) % edgeNum + edgeNum * 3);
+		ringIndices.push_back((i + 1) % edgeNum + edgeNum * 3);
+		ringIndices.push_back((i + 1) % edgeNum + edgeNum);
+	}
+	//for (int i = 0; i < edgeNum * 3; i++)
+	//{
+	//	ringIndices.push_back((i) % edgeNum);
+	//	ringIndices.push_back((i + 1) % edgeNum);
+	//	ringIndices.push_back((i) % edgeNum + edgeNum);
+	//	ringIndices.push_back((i) % edgeNum + edgeNum);
+	//	ringIndices.push_back((i + 1) % edgeNum + edgeNum);
+	//	ringIndices.push_back((i + 1) % edgeNum);
+	//}
 
 
+	auto viewObj = std::shared_ptr<TransparentPlane>(new TransparentPlane(ringVertices, ringIndices, glm::vec4(0.0f, 0.0f, 0.25f, 0.8f)));
+
+	//viewObj->Rotate(angle, glm::vec3(0.0f, 1.0f, 0.0f));
+	viewObj->Translate(glm::vec3(0.0f, 0.0f, -75.0f));
+
+
+	Scene::AddGroupObject(viewObj);
+	//auto gameObj = std::shared_ptr<GameObject>(new GameObject(viewObj, ringVertices, false));
+	//this->_objects.push_back(gameObj);
+	//GameObject::AddGameObject(gameObj);
+	//this->_well = gameObj;
 }
 
 int PlaneGameScene::GetRingNumber() const

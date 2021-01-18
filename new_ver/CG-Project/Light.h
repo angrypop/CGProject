@@ -24,10 +24,14 @@ public:
 	float linear = 0.0f;
 	float quadratic = 0.0f;
 
-	void translate(glm::mat4 translate) { this->modelMat = translate * modelMat; }
+	void translate(const glm::mat4& translate) { this->modelMat = translate * modelMat; }
 	void setAmbient(glm::vec3 ambient) { this->ambient = ambient; }
 	void setDiffuse(glm::vec3 diffuse) { this->diffuse = diffuse; }
 	void setSpecular(glm::vec3 specular) { this->specular = specular; }
+	void setColor(const glm::vec3& color = glm::vec3(1.0f, 1.0f, 1.0f)) { this->LightColor = color; }
+	glm::vec3 getColor() const { return this->LightColor; };
+	void setPosition(const glm::vec3& pos = glm::vec3(-1.0f, 1.0f, -1.0f)) { this->LightPos = pos; }
+	glm::vec3 getPosition() const { return this->LightPos; };
 
 	virtual void prepare() {}
 	virtual void render(glm::mat4 uniV, glm::mat4 uniP, glm::mat4 translate = glm::mat4(1)) {}
@@ -88,7 +92,7 @@ public:
 
 class DirectionalLight: public Light{
 public:
-	DirectionalLight() {}
+	//DirectionalLight() {}
 	DirectionalLight(glm::vec3 direction) {
 		LightColor = glm::vec3(1.0f, 1.0f, 1.0f);
 		LightPos = normalize(direction) * 800.f;

@@ -25,6 +25,7 @@ bool Interaction::key_o_pressed = false;
 bool Interaction::key_y_flag = false;
 bool Interaction::key_p_flag = false;
 bool Interaction::key_F2_pressed = false;
+bool Interaction::key_F3_pressed = false;
 bool Interaction::key_F5_pressed = false;
 bool Interaction::key_F6_pressed = false;
 
@@ -135,6 +136,11 @@ void Interaction::KeyCallback(GLFWwindow* window, int key, int scancode, int act
 	{
 		std::cout << "F5 Pressed" << std::endl;
 		key_F2_pressed = true;
+	}
+	if (key == GLFW_KEY_F3 && action == GLFW_PRESS)	// screen shot
+	{
+		std::cout << "F5 Pressed" << std::endl;
+		key_F3_pressed = !key_F3_pressed;
 	}
 	if (key == GLFW_KEY_F5 && action == GLFW_PRESS)	// screen shot
 	{

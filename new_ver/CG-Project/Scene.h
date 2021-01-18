@@ -44,10 +44,10 @@ namespace Scene
 	extern int height;
 	extern GLfloat groundSize;
 
-	extern GLfloat ambientStrength;
-	extern glm::vec3 lightColor;
-	extern glm::vec3 lightPosition;
-	extern GLfloat lightSize;
+	//extern GLfloat ambientStrength;
+	//extern glm::vec3 lightColor;
+	//extern glm::vec3 lightPosition;
+	//extern GLfloat lightSize;
 
 	//obj scene
 	extern GLfloat radius;

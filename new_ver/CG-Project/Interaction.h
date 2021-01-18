@@ -33,6 +33,7 @@ public:
 	static bool key_h_pressed;	// hint gamescene
 	static bool key_q_pressed;	// idle gamescene
 	static bool key_F2_pressed;	// save obj
+	static bool key_F3_pressed; // change Light
 	static bool key_F5_pressed;	// take off CG
 	static bool key_F6_pressed; // crash CG
 	static bool left_button_pressed;

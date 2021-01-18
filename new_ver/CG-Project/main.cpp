@@ -206,8 +206,61 @@ void UpdateAirplane() {
 	}
 }
 
+void UpdateLight()
+{
+	if (!Interaction::key_F3_pressed)
+		return;
+	constexpr GLfloat posStep = 0.01f;
+	constexpr GLfloat colorStep = 0.01f;
+	constexpr float e = 0.03f;
+	static bool posDir = false;
+	static glm::vec3 pos = glm::vec3(-1.0f, 1.0f, -1.0f);
+	static bool colorRDir = false;
+	static bool colorGDir = false;
+	static bool colorBDir = false;
+	static glm::vec3 color = glm::vec3(1.0f, 1.0f, 1.0f);
+
+	if ((posDir == false && pos.x + posStep >= 1.00f) || (posDir == true && pos.x - posStep <= -1.00f))
+		posDir = !posDir;
+	if (posDir)
+		pos = pos - glm::vec3(posStep, 0.0f, posStep);
+	else
+		pos = pos + glm::vec3(posStep, 0.0f, posStep);
+
+
+	if ((colorRDir == false && color.r + colorStep >= 1.00f) || (colorRDir == true && color.r - colorStep <= -1.00f))
+		colorRDir = !colorRDir;
+	if ((colorGDir == false && color.g + colorStep * 2 >= 1.00f) || (colorGDir == true && color.g - colorStep * 2<= -1.00f))
+		colorGDir = !colorGDir;
+	if ((colorBDir == false && color.r + colorStep * 3 >= 1.00f) || (colorBDir == true && color.b - colorStep * 3<= -1.00f))
+		colorBDir = !colorBDir;
+	if (colorRDir)
+		color.r -= colorStep;
+	else
+		color.r += colorStep;
+	if (colorGDir)
+		color.g -= colorStep * 2;
+	else
+		color.g += colorStep * 2;
+	if (colorBDir)
+		color.b -= colorStep * 3;
+	else
+		color.b += colorStep * 3;
+
+	Scene::directionalLight.setPosition(normalize(pos) * 800.0f);
+	Scene::directionalLight.setColor(color);
+	//std::cout << "light pos = " << pos.x << " " << pos.y << " " << pos.z << std::endl;
+	std::cout << "light color = " << color.r << " " << color.g << " " << color.b << std::endl;
+
+	GlobalDataPool::SetData<glm::mat4>("lightProjection",
+		glm::ortho(Shadow::SHADOW_WIDTH * -0.5f * e, Shadow::SHADOW_WIDTH * 0.5f * e,
+			Shadow::SHADOW_HEIGHT * -0.5f * e, Shadow::SHADOW_HEIGHT * 0.5f * e, 0.1f, 2000.0f));
+	GlobalDataPool::SetData<glm::mat4>("lightView", glm::lookAt(directionalLight.LightPos, glm::vec3(0, 0, 0), glm::vec3(0, 1, 0)));
+}
+
 void UpdateData()
 {
+	UpdateLight();
 	// if the game is not paused
 	if (Interaction::key_p_flag == false) {
 		if (Interaction::displayTakeOffCGFlag)

@@ -13,6 +13,7 @@ glm::vec3 Interaction::ObjVel = glm::vec3(0.0f);
 bool Interaction::operationMode = false;
 bool Interaction::displayCrashCGFlag = false;
 bool Interaction::displayTakeOffCGFlag = false;
+bool Interaction::displayRestartCGFlag = false;
 bool Interaction::key_space_pressed = false;
 bool Interaction::key_w_pressed = false;
 bool Interaction::key_s_pressed = false;

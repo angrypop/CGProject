@@ -16,6 +16,7 @@ public:
 	static bool operationMode;
 	static bool displayCrashCGFlag;
 	static bool displayTakeOffCGFlag;
+	static bool displayRestartCGFlag;
 	static bool screenShotFlag;
 	static bool mouseReverseFlag;
 	static ViewCamera camera;

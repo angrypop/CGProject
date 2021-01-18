@@ -12,8 +12,6 @@ void RenderGBufferLight();
 
 void RenderAllObject(const ViewPassEnum & pass);
 
-
-
 void UpdateTakeoffCG() {
 	static int tick = 0;
 	static const int tickPerSec = 60;
@@ -78,7 +76,10 @@ void UpdateCrashCG(glm::vec3 targetPos) {
 	if (progress > 1.0) {
 		// game end
 		tick = 0;
+		airplane->setPower(0.0f);
+		airplane->setVelocity({ 0, 0, 0 });
 		Interaction::displayCrashCGFlag = false;
+		Interaction::displayRestartCGFlag = true;
 		Scene::desertScene->Idle();
 		Scene::planeGameScene->Idle();
 		return;
@@ -92,7 +93,7 @@ void UpdateCrashCG(glm::vec3 targetPos) {
 
 	// update airplane
 	glm::vec3 currentPos = airplane->getPosition();
-	glm::vec3 delta1 = glm::normalize(targetPos - currentPos) * 5.0f * progress;
+	glm::vec3 delta1 = glm::normalize(targetPos - currentPos) * 2.7f * progress;
 	glm::vec3 delta2 = glm::vec3({sin(tick / 30.0f) , 0, cos(tick / 30.0f)}) * 5.0f * (1 - progress);
 	airplane->changePitch(-5.0f * (0.2f + 0.8f * progress));
 	airplane->changeRoll(5.0f * (0.5f + 0.5f * progress));
@@ -115,7 +116,53 @@ void UpdateCrashCG(glm::vec3 targetPos) {
 	}
 	lookat += delta1 + delta2 * progress; // soft follow
 	Interaction::camera.SetFrontDir(lookat - Interaction::camera.GetViewPosition());
-	
+}
+
+void UpdateRestartCG() {
+	static int tick = 0;
+	static const int tickPerSec = 60;
+	static const glm::vec3 targetPos = { 0, 10, 0 };
+	// percentage of CG displayed
+	// begin = 0.0, finished = 1.0
+	GLfloat progress = GLfloat(tick) / (10.0f * tickPerSec);
+	if (progress > 1.0) {
+		tick = 0;
+		Interaction::displayRestartCGFlag = false;
+		return;
+	}
+	tick++;
+	// initialize
+	if (tick == 1) {
+		Interaction::camera.SetPosition(airplane->getPosition() + glm::vec3{ 20, -5, 20 });
+	}
+	// update airplane
+	glm::vec3 airplanePos = airplane->getPosition();
+	glm::vec3 delta = { 0, 20.0f, 0 };
+	if (progress < 0.05f) /*do nothing*/;
+	else if (progress < 0.2f) airplane->setPosition(airplanePos + delta);
+	else airplane->setPosition(targetPos + glm::vec3(10, 0, 10));
+
+	// update camera
+	glm::vec3 cameraPos = Interaction::camera.GetViewPosition();
+	if (progress < 0.2f) {
+		Interaction::camera.SetFrontDir(airplanePos - cameraPos, true);
+	}
+	else if (progress < 0.6f) {
+		Interaction::camera.SetFrontDir(targetPos - cameraPos);
+		glm::vec3 cameraDelta = { 
+			(targetPos.x - cameraPos.x) * 0.01f,
+			(0.6f - progress) * 50.0f,
+			(targetPos.z - cameraPos.z) * 0.01f};
+		Interaction::camera.SetPosition(cameraPos + cameraDelta);
+	}
+	else{
+		Interaction::camera.SetFrontDir(targetPos - cameraPos);
+		glm::vec3 cameraDelta = {
+			(targetPos.x - cameraPos.x) * 0.01f,
+			(0.6f - progress) * 50.0f,
+			(targetPos.z - cameraPos.z) * 0.01f };
+		Interaction::camera.SetPosition(cameraPos + cameraDelta);
+	}
 }
 
 void UpdateCamera() {
@@ -137,8 +184,8 @@ void UpdateCamera() {
 			Interaction::camera.SetFrontDir(objFront);
 			Interaction::camera.SetWorldUpDir(airplane->getUpDir());
 		}
-		std::cout << "camera front"; printVec(objFront);
-		std::cout << "camera pos"; printVec(camera.GetViewPosition());
+		//std::cout << "camera front"; printVec(objFront);
+		//std::cout << "camera pos"; printVec(camera.GetViewPosition());
 	}
 }
 
@@ -213,7 +260,9 @@ void UpdateData()
 		if (Interaction::displayTakeOffCGFlag)
 			UpdateTakeoffCG();
 		else if (Interaction::displayCrashCGFlag)
-			UpdateCrashCG(glm::vec3(0.0f, 20.0f, 0.0f));
+			UpdateCrashCG(glm::vec3(0.0f, 10.0f, -75.0f));
+		else if (Interaction::displayRestartCGFlag)
+			UpdateRestartCG();
 		else {
 			UpdateAirplane();
 			UpdateCamera();

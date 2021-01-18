@@ -12,8 +12,7 @@ void RenderGBufferLight();
 
 void RenderAllObject(const ViewPassEnum & pass);
 
-static bool displayCrashCGFlag = false;
-static bool displayTakeOffCGFlag = false;
+
 
 void UpdateTakeoffCG() {
 	static int tick = 0;
@@ -23,7 +22,7 @@ void UpdateTakeoffCG() {
 	GLfloat progress = GLfloat(tick) / (10.0f * tickPerSec);
 	if (progress > 1.0) {
 		tick = 0;
-		displayTakeOffCGFlag = false;
+		Interaction::displayTakeOffCGFlag = false;
 		airplane->setPower(1.0);
 		airplane->setVelocity(airplane->localFront * 10.0f);
 		return;
@@ -37,6 +36,7 @@ void UpdateTakeoffCG() {
 			airplane->getPosition() +
 			airplane->getFrontDir() * 200.0f
 			- airplane->getLeftDir() * 100.0f;
+		if (cameraPos.y < 10.0f + 1.0f) cameraPos.y = 10.0f + 1.0f;
 		Interaction::camera.SetPosition(cameraPos);
 	}
 
@@ -76,8 +76,11 @@ void UpdateCrashCG(glm::vec3 targetPos) {
 	// begin = 0.0, finished = 1.0
 	GLfloat progress = GLfloat(tick) / (20.0f * tickPerSec);
 	if (progress > 1.0) {
+		// game end
 		tick = 0;
-		displayCrashCGFlag = false;
+		Interaction::displayCrashCGFlag = false;
+		Scene::desertScene->Idle();
+		Scene::planeGameScene->Idle();
 		return;
 	}
 	tick++;
@@ -116,7 +119,7 @@ void UpdateCrashCG(glm::vec3 targetPos) {
 }
 
 void UpdateCamera() {
-	if (!Interaction::key_y_flag) {
+	if (!Interaction::operationMode) {
 		// follow ground player
 		Interaction::camera.SetPosition(player->getPosition());
 		Interaction::camera.SetFrontDir(player->getViewDir(), true);
@@ -129,19 +132,21 @@ void UpdateCamera() {
 		glm::vec3 objPos = airplane->getPosition();
 		glm::vec3 cameraDelta = objFront * (-100.0f) + glm::vec3({ 0, 1, 0 });
 		Interaction::camera.SetPosition(objPos + cameraDelta);
-		if (!(Interaction::left_button_pressed || Interaction::key_y_flag)) {
+		if (!(Interaction::left_button_pressed)) {
 			// force camera to look at the airplane
 			Interaction::camera.SetFrontDir(objFront);
 			Interaction::camera.SetWorldUpDir(airplane->getUpDir());
 		}
+		std::cout << "camera front"; printVec(objFront);
+		std::cout << "camera pos"; printVec(camera.GetViewPosition());
 	}
 }
 
 void UpdateAirplane() {
-	if (!Interaction::key_y_flag) {
+	if (!Interaction::operationMode) {
 		// control ground player
-		player->rotate(-Interaction::ReadXoffset(), { 0, 1, 0 });
-		player->changePitch(-Interaction::ReadYoffset());
+		player->rotate(-Interaction::ReadXoffset() * 2.25f, { 0, 1, 0 });
+		player->changePitch(-Interaction::ReadYoffset() * 2.25f);
 		glm::vec3 front = {0, 0, 1};
 		glm::vec3 left = {1, 0, 0};
 		if (Interaction::key_w_pressed) {
@@ -184,9 +189,18 @@ void UpdateAirplane() {
 			airplane->setPosition({ 0, 40, 0 });
 			airplane->resetDir();
 		}
-		if (Interaction::key_o_pressed) {
-			//display_cg_flag = true;
+
+		if (Interaction::key_F2_pressed) {
 			airplane->saveToObj("../resources/out.obj");
+			Interaction::key_F2_pressed = false;
+		}
+		if (Interaction::key_F5_pressed) {
+			Interaction::displayTakeOffCGFlag = !Interaction::displayTakeOffCGFlag;
+			Interaction::key_F5_pressed = false;
+		}
+		if (Interaction::key_F6_pressed) {
+			Interaction::displayCrashCGFlag = !Interaction::displayCrashCGFlag;
+			Interaction::key_F6_pressed = false;
 		}
 		airplane->simulate();
 	}
@@ -196,7 +210,10 @@ void UpdateData()
 {
 	// if the game is not paused
 	if (Interaction::key_p_flag == false) {
-		if (displayTakeOffCGFlag) UpdateTakeoffCG();
+		if (Interaction::displayTakeOffCGFlag)
+			UpdateTakeoffCG();
+		else if (Interaction::displayCrashCGFlag)
+			UpdateCrashCG(glm::vec3(0.0f, 20.0f, 0.0f));
 		else {
 			UpdateAirplane();
 			UpdateCamera();

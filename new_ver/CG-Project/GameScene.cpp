@@ -1,5 +1,6 @@
 #include "GameScene.h"
 #include "Scene.h"
+#include "Interaction.h"
 
 GameSceneBase::GameSceneBase()
 	:_lastTime((float)glfwGetTime())
@@ -34,6 +35,11 @@ void GameSceneBase::Scale(const glm::vec3& scaler)
 bool GameSceneBase::CheckSuccess() const
 {
 	return this->_state == GameState::SuccessState;
+}
+
+GameSceneBase::GameState GameSceneBase::GetState() const
+{
+	return this->_state;
 }
 
 void GameSceneBase::GenerateAirWall(const std::vector<GLfloat>& vertices)
@@ -105,12 +111,12 @@ GroundGameScene::GroundGameScene(const GLfloat& roadWidth, const GLfloat& distan
 		{RoughnessTexture,"Bricks036_2K-JPG/Bricks036_2K_Roughness.jpg"},
 		{Texture_NONE,""} };
 	std::vector<GLfloat> roadPoints{
-		-roadWidth / 2.0f, GroundY, 0.0f, 0.0f, 0.0f,
-		roadWidth / 2.0f, GroundY, 0.0f, 1.0f, 0.0f,
+		-roadWidth / 2.0f, GroundY, GroundX / 2.0f, 0.0f, 0.0f,
+		roadWidth / 2.0f, GroundY, GroundX / 2.0f, 1.0f, 0.0f,
 		-roadWidth / 2.0f, GroundY, _distance, 0.0f, 1.0f,
 		roadWidth / 2.0f, GroundY, _distance, 1.0f, 1.0f,
-		-roadWidth / 2.0f, BaseY, 0.0f, 0.0f, 0.0f,
-		roadWidth / 2.0f, BaseY, 0.0f, 1.0f, 0.0f,
+		-roadWidth / 2.0f, BaseY, GroundX / 2.0f, 0.0f, 0.0f,
+		roadWidth / 2.0f, BaseY, GroundX / 2.0f, 1.0f, 0.0f,
 		-roadWidth / 2.0f, BaseY, _distance, 0.0f, 1.0f,
 		roadWidth / 2.0f, BaseY, _distance, 1.0f, 1.0f
 	};
@@ -162,14 +168,15 @@ GroundGameScene::GroundGameScene(const GLfloat& roadWidth, const GLfloat& distan
 	GameObject::AddGameObject(gameObj);
 	Scene::AddGroupObject(_roadGround);
 	this->GenerateAirWall({
-		roadWidth / 2.0f, 0.0f,
-		roadWidth / 2.0f, distance,
-		});
-	this->GenerateAirWall({
-		-roadWidth / 2.0f, 0.0f,
 		-roadWidth / 2.0f,  distance,
-		});
-
+		-roadWidth / 2.0f, GroundX / 2.0f,
+		-GroundX / 2.0f, GroundX / 2.0f,
+		-GroundX / 2.0f, -GroundX / 2.0f,
+		GroundX / 2.0f, -GroundX / 2.0f,
+		GroundX / 2.0f, GroundX / 2.0f,
+		roadWidth / 2.0f, GroundX / 2.0f,
+		roadWidth / 2.0f, distance,
+	});
 	auto viewDoor = std::shared_ptr<TransparentPlane>(new TransparentPlane(doorPoints, doorIndices, glm::vec4(1.0f, 0.3f, 0.0f, 0.3f)));
 	Scene::AddGroupObject(viewDoor);
 	this->_startDoor.reset(new GameObject(viewDoor, doorPoints, true));
@@ -245,8 +252,6 @@ DesertScene::DesertScene(const GLfloat& width, const GLfloat& height)
 
 void DesertScene::Idle()
 {
-	if (this->_state == GameState::SuccessState)
-		return;
 	this->_state = GameState::IdleState;
 	GenerateRandomList(0);
 	this->SetDoorShowFlag(true);
@@ -261,6 +266,9 @@ void DesertScene::Hint()
 	_lastTime = (float)glfwGetTime();
 	_startShowIndex = 0;
 	this->SetDoorShowFlag(true);
+
+	//Scene::player->getRenderData()->SetM(glm::mat4(1.0f));
+	Scene::player->setPosition({ 0, 20, _distance - 80.0f });
 }
 
 void DesertScene::Play()
@@ -274,6 +282,12 @@ void DesertScene::Play()
 	{
 		_activeBarMap[i] = false;
 	}
+}
+
+void DesertScene::Success()
+{
+	this->_state = GameState::SuccessState;
+	std::cout << "Desert Game Clear!" << std::endl;
 }
 
 void DesertScene::Update()
@@ -329,7 +343,7 @@ void DesertScene::Update()
 				}
 			if (success)
 			{
-				this->_state = GameState::SuccessState;
+				this->Success();
 				break;
 			}
 		}
@@ -363,6 +377,8 @@ void DesertScene::Update()
 		}
 		break;
 	}
+
+
 }
 
 void DesertScene::GenerateRandomList(const int& num)
@@ -372,6 +388,11 @@ void DesertScene::GenerateRandomList(const int& num)
 
 	_targetList.clear();
 	int index = 0;
+	for (int i = 0; i < (int)_puzzleBars.size(); i++)
+	{
+		_puzzleBars[i]->getRenderData()->SetM(glm::mat4(1.0f));
+		_puzzleBars[i]->getRenderData()->Translate(glm::vec3(0.0f, -10000.0f, 0.0f));
+	}
 	while (_targetList.size() < num)
 	{
 		int res = ::RandomInt(0, num - 1);
@@ -404,7 +425,7 @@ void DesertScene::GenerateBars(const int& num)
 	
 	for (int index = (int)_puzzleBars.size(); index < num; index++)
 	{
-		int edgeNum = 256;
+		int edgeNum = 8;
 		std::vector<GLfloat> barVertices;
 		std::vector<GLuint> barIndices;
 		for (int i = 0; i < edgeNum; i++) // 0 ... n - 1
@@ -483,6 +504,7 @@ void DesertScene::GenerateBars(const int& num)
 		_puzzleBars.push_back(gameObj);
 
 	}
+
 }
 
 

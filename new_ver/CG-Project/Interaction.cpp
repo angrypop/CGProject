@@ -3,13 +3,16 @@
 
 
 bool Interaction::mouseReverseFlag = true;
-float Interaction::mouse_sensitivity = 0.25f;
+float Interaction::mouse_sensitivity = 0.30f;
 bool Interaction::screenShotFlag = false;
 
 constexpr GLfloat groundSize = 15.0f;
 ViewCamera Interaction::camera = ViewCamera(glm::vec3(40.0f, 40.0f, 40.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 glm::vec3 Interaction::ObjPos = glm::vec3(0.0f, groundSize * 3 / 2, groundSize * 2);
 glm::vec3 Interaction::ObjVel = glm::vec3(0.0f);
+bool Interaction::operationMode = false;
+bool Interaction::displayCrashCGFlag = false;
+bool Interaction::displayTakeOffCGFlag = false;
 bool Interaction::key_space_pressed = false;
 bool Interaction::key_w_pressed = false;
 bool Interaction::key_s_pressed = false;
@@ -21,6 +24,10 @@ bool Interaction::key_h_pressed = false;
 bool Interaction::key_o_pressed = false;
 bool Interaction::key_y_flag = false;
 bool Interaction::key_p_flag = false;
+bool Interaction::key_F2_pressed = false;
+bool Interaction::key_F5_pressed = false;
+bool Interaction::key_F6_pressed = false;
+
 GLfloat Interaction::yaw = 0;
 GLfloat Interaction::pitch = 0;
 GLfloat Interaction::xoffset = 0;
@@ -124,6 +131,21 @@ void Interaction::KeyCallback(GLFWwindow* window, int key, int scancode, int act
 		std::cout << "F1 Pressed" << std::endl;
 		screenShotFlag = true;
 	}
+	if (key == GLFW_KEY_F2 && action == GLFW_PRESS)	// screen shot
+	{
+		std::cout << "F5 Pressed" << std::endl;
+		key_F2_pressed = true;
+	}
+	if (key == GLFW_KEY_F5 && action == GLFW_PRESS)	// screen shot
+	{
+		std::cout << "F5 Pressed" << std::endl;
+		key_F5_pressed = true;
+	}
+	if (key == GLFW_KEY_F6 && action == GLFW_PRESS)	// screen shot
+	{
+		std::cout << "F6 Pressed" << std::endl;
+		key_F6_pressed = true;
+	}
 	if (key == GLFW_KEY_SPACE && action == GLFW_PRESS)
 	{
 		key_space_pressed = true;
@@ -184,6 +206,7 @@ void Interaction::KeyCallback(GLFWwindow* window, int key, int scancode, int act
 	{
 		camera.SetWorldUpDir({ 0, 1, 0 });
 		key_y_flag = !key_y_flag;
+		operationMode = !operationMode;
 	}
 	if (key == GLFW_KEY_P && action == GLFW_PRESS)
 	{

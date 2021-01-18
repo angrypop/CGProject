@@ -171,11 +171,15 @@ void Scene::InitScene() {
 		 0, 1, 2, // first triangle
 		 1, 2, 3  // second triangle
 	};
+	constexpr GLfloat BaseX = 100.0f;
+	constexpr GLfloat BaseY = 10.0f;
+	constexpr GLfloat BaseZ = 100.0f;
+
 	GLfloat planePoints4[] = {
-	groundSize , groundSize * 3 / 2 , groundSize , 0.0f , 0.0f ,
-	groundSize , groundSize * 3 / 2 , groundSize * 3 , 0.0f , 1.0f ,
-	groundSize * 3, groundSize * 3 / 2 , groundSize , 1.0f, 0.0f ,
-	groundSize * 3 , groundSize * 3 / 2 ,  groundSize * 3 , 1.0f , 1.0f 
+	-BaseX / 2.0f, BaseY , -BaseZ / 2.0f , 0.0f , 0.0f ,
+	-BaseX / 2.0f, BaseY , BaseZ / 2.0f, 0.0f , 1.0f ,
+	BaseX / 2.0f, BaseY, -BaseZ / 2.0f , 1.0f, 0.0f ,
+	BaseX / 2.0f, BaseY,  BaseZ / 2.0f, 1.0f , 1.0f
 	};
 
 	GLfloat planePoints5[] = {
@@ -184,19 +188,23 @@ void Scene::InitScene() {
 		groundSize , groundSize * 3 / 2, groundSize , 1.0f, 0.0f ,
 		groundSize , groundSize * 3 / 2,  groundSize * 3, 1.0f , 1.0f 
 	};
+	// initialize textures
 	planeGroup.AddObject(std::shared_ptr<TexturedPlane>(new TexturedPlane(glm::vec3(0, 0, 0), planePoints1, sizeof(planePoints1),
 		planeIndices1, sizeof(planeIndices1), planeShaders, planeTextures)));
 	planeGroup.AddObject(std::shared_ptr<TexturedPlane>(new TexturedPlane(glm::vec3(0, 0, 0), planePoints2, sizeof(planePoints2),
 		planeIndices2, sizeof(planeIndices2), planeShaders, redTextures)));
 	planeGroup.AddObject(std::shared_ptr<TexturedPlane>(new TexturedPlane(glm::vec3(0, 0, 0), planePoints3, sizeof(planePoints3),
 		planeIndices3, sizeof(planeIndices3), planeShaders, yellowTextures)));
-	planeGroup.AddObject(std::shared_ptr<TexturedPlane>(new TexturedPlane(glm::vec3(0, 0, 0), planePoints4, sizeof(planePoints4),
-		planeIndices3, sizeof(planeIndices3), planeShaders, grassTextures)));
-	planeGroup.GetObjectList()[3]->renderGrassFlag = true;
 	planeGroup.AddObject(std::shared_ptr<TexturedPlane>(new TexturedPlane(glm::vec3(0, 0, 0), planePoints3, sizeof(planePoints3),
 		planeIndices3, sizeof(planeIndices3), planeShaders, greenTextures)));
 	planeGroup.AddObject(std::shared_ptr<TexturedPlane>(new TexturedPlane(glm::vec3(0, 0, 0), planePoints3, sizeof(planePoints3),
 		planeIndices3, sizeof(planeIndices3), planeShaders, grayTextures)));
+	// initialize grass
+	planeGroup.AddObject(std::shared_ptr<TexturedPlane>(new TexturedPlane(glm::vec3(0, 0, 0), planePoints4, sizeof(planePoints4),
+		planeIndices3, sizeof(planeIndices3), planeShaders, grassTextures)));
+	planeGroup.GetObjectList()[5]->renderGrassFlag = true;
+	for (int i = 0; i < 5; i++)
+		planeGroup.GetObjectList()[i]->Hide();
 	//std::vector<GLfloat> planeVertice;
 	//for (int i = 0; i < 3 * 10; i++)
 	//{
@@ -208,12 +216,12 @@ void Scene::InitScene() {
 	int data;
 	glGetIntegerv(GL_MAX_TESS_GEN_LEVEL, &data); printf("%d\n", data);
 
-	auto fitPlane = std::shared_ptr<FitTexturedPlane>(new FitTexturedPlane(
-		glm::vec3(0, 0, 0), planePoints5, sizeof(planePoints5), planeIndices3, sizeof(planeIndices3), planeShaders, sandTextures));
-	glm::vec3 uniObjPos = GlobalDataPool::GetData<glm::vec3>("uniObjPos");
-	glm::vec3 uniObjVel = GlobalDataPool::GetData<glm::vec3>("uniObjVel");
-	fitPlane->UpdateHeight(0, 1, uniObjPos, uniObjVel);
-	fitPlaneGroup.AddObject(fitPlane);
+	//auto fitPlane = std::shared_ptr<FitTexturedPlane>(new FitTexturedPlane(
+	//	glm::vec3(0, 0, 0), planePoints5, sizeof(planePoints5), planeIndices3, sizeof(planeIndices3), planeShaders, sandTextures));
+	//glm::vec3 uniObjPos = GlobalDataPool::GetData<glm::vec3>("uniObjPos");
+	//glm::vec3 uniObjVel = GlobalDataPool::GetData<glm::vec3>("uniObjVel");
+	//fitPlane->UpdateHeight(0, 1, uniObjPos, uniObjVel);
+	//fitPlaneGroup.AddObject(fitPlane);
 
 
 
@@ -300,7 +308,7 @@ void Scene::InitGameObject()
 	airplane = std::shared_ptr<Airplane>(new Airplane({ 0, -1, 0 }, { 0, 0, 1 }));
 	airplane->loadFromObj("../resources/jet.obj");
 	airplane->scale({ 0.2, 0.2, 0.2 });
-	airplane->translate({ 0, 200, 0 });
+	airplane->translate({ -100, 50, 0 });
 	airplane->rotate(-90, { 1, 0, 0 });
 	GameObject::allObjs.push_back(std::static_pointer_cast<GameObject>(airplane));
 	//GameObject::allObjs[0]->getRenderData()->renderGrassFlag = true;

@@ -13,7 +13,9 @@ public:
 	static GLfloat ReadXoffset();
 	static GLfloat ReadYoffset();
 
-
+	static bool operationMode;
+	static bool displayCrashCGFlag;
+	static bool displayTakeOffCGFlag;
 	static bool screenShotFlag;
 	static bool mouseReverseFlag;
 	static ViewCamera camera;
@@ -30,6 +32,9 @@ public:
 	static bool key_r_pressed;	// start gamescene
 	static bool key_h_pressed;	// hint gamescene
 	static bool key_q_pressed;	// idle gamescene
+	static bool key_F2_pressed;	// save obj
+	static bool key_F5_pressed;	// take off CG
+	static bool key_F6_pressed; // crash CG
 	static bool left_button_pressed;
 	static bool right_button_pressed;
 	static GLfloat yaw;

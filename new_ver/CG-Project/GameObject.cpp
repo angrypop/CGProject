@@ -257,6 +257,7 @@ void GameObject::rotate(const GLfloat& angle, const glm::vec3& vec) {
 
 void GameObject::resetDir()
 {
+	return;
 	glm::vec3 front = getFrontDir();
 	GLfloat currentPitch = atan(front.y / sqrt(front.x * front.x + front.z * front.z)) * RADIAN_TO_ANGLE;
 	this->viewObj->Rotate(-currentPitch, glm::cross(localFront, localUp));

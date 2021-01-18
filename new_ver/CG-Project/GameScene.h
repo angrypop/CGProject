@@ -5,7 +5,8 @@ constexpr GLfloat GroundY = 10.0f;
 constexpr GLfloat DoorY = GroundY + 30.0f;
 constexpr GLfloat DoorThick = 5.0f;
 constexpr GLfloat BaseY = -10.0f;
-constexpr GLfloat AirWallHeight = 30.0f;
+constexpr GLfloat GroundX = 100.0f;
+constexpr GLfloat AirWallHeight = 20.0f;
 constexpr bool DisplayAirWall = false;
 class GameSceneBase
 {
@@ -18,10 +19,12 @@ public:
 	void Translate(const glm::vec3& displacement);
 	void Scale(const glm::vec3& scaler);
 	bool CheckSuccess() const;
+	GameSceneBase::GameState GetState() const;
 	virtual void Update() = 0;
 	virtual void Idle() = 0;
 	virtual void Hint() = 0;
 	virtual void Play() = 0;
+	virtual void Success() = 0;
 protected:
 	// generate air wall, vertices should be (x1, z1, x2, z2, ...) in anticlockwise order 
 	std::vector<std::shared_ptr<GameObject>> _objects;
@@ -37,14 +40,14 @@ public:
 	std::shared_ptr<GameObject> _startDoor;
 	bool _startDoorFlag = true;
 	std::shared_ptr<TexturedPlane> _roadGround;
-	GroundGameScene(const GLfloat& roadWidth = 30.0f, const GLfloat& distance = 400.0f);
+	GroundGameScene(const GLfloat& roadWidth = 30.0f, const GLfloat& distance = 150.0f);
 protected:
 	void SetDoorShowFlag(const bool& showFlag);
 	GLfloat _roadWidth;
 	GLfloat _distance;
 };
 
-constexpr bool DebugCheatDesert = true;
+constexpr bool DebugCheatDesert = false;
 
 constexpr GLfloat DesertShowDuration = 1.0f;
 constexpr GLfloat DesertPuzzleBarHeight = 25.0f;
@@ -59,7 +62,9 @@ public:
 	virtual void Idle();
 	virtual void Hint();
 	virtual void Play();
+	virtual void Success();
 	virtual void Update();
+
 	enum class BarState { IdleBar, ActiveBar, WrongBar, SuccessBar};
 
 

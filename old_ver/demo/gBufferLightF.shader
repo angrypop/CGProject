@@ -325,7 +325,7 @@ void main() {
 
 	fColor = vec4(reflectEffect(color.rgb, normal, textureCoord, fragPos, texture(gDepthID, textureCoord).a), 1.0f);
 	fColor.rgb = vec3(1.0) - exp(-fColor.rgb * 2.5);
-
+	fColor = vec4(normal, 1.0f);
 	//fColor.rgb = pow(fColor.rgb, vec3(1.0 / 2.2));
 
 	//fColor = vec4(aces_tonemap(fColor.rgb), 1.0f);

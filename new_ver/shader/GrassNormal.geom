@@ -198,7 +198,7 @@ void deal_with_wind_grass() {
 	vec4 pointC = (point1 + point2) / 2;
 	float temp = rand(point1.xz);
 	int layers_num = 20;
-	float grass_height = temp * 3;
+	float grass_height = temp * 6.0f;
 	float layers_height = grass_height / layers_num / 2;
 	float coe = 50 * temp;
 	float test = 1;

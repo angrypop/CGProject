@@ -88,7 +88,7 @@ PlaneGameScene::PlaneGameScene(const int& ringNum)
 	//}
 
 
-	auto viewObj = std::shared_ptr<TransparentPlane>(new TransparentPlane(ringVertices, ringIndices, glm::vec4(0.0f, 0.0f, 0.25f, 0.8f)));
+	auto viewObj = std::shared_ptr<TransparentPlane>(new TransparentPlane(ringVertices, ringIndices, glm::vec4(0.0f, 0.0f, 0.25f, 0.5f)));
 
 	//viewObj->Rotate(angle, glm::vec3(0.0f, 1.0f, 0.0f));
 	viewObj->Translate(glm::vec3(0.0f, 0.0f, -75.0f));

@@ -80,14 +80,7 @@ void UpdateCrashCG(glm::vec3 targetPos) {
 		airplane->setVelocity({ 0, 0, 0 });
 		Interaction::displayCrashCGFlag = false;
 		Interaction::displayRestartCGFlag = true;
-		Scene::desertScene->Idle();
-		Scene::planeGameScene->Idle();
-		Scene::player->setPosition(glm::vec3(0.0f, 20.0f, 0.0f));
-		Scene::player->setVelocity(glm::vec3(0.0f, 0.0f, 0.0f));
-		airplane->setPower(0);
-		airplane->setVelocity({ 0, 0, 0 });
-		airplane->setPosition({ 0, 40, 0 });
-		airplane->resetDir();
+
 		return;
 	}
 	tick++;
@@ -134,6 +127,22 @@ void UpdateRestartCG() {
 	if (progress > 1.0) {
 		tick = 0;
 		Interaction::displayRestartCGFlag = false;
+		Interaction::operationMode = 0;
+		Scene::desertScene->Idle();
+		Scene::planeGameScene->Idle();
+		Scene::player->setPosition(glm::vec3(0.0f, 20.0f, 0.0f));
+		Scene::player->setVelocity(glm::vec3(0.0f, 0.0f, 0.0f));
+		airplane->setPower(0);
+		airplane->setVelocity({ 0, 0, 0 });
+		airplane->setPosition({ 0, 10, 0 });
+		airplane->resetDir();
+		std::vector<TextureInfo> infos
+		{
+			{AmbientTexture,"Bricks036_2K-JPG/Bricks036_2K_Color.jpg"},
+			{NormalTexture,"Bricks036_2K-JPG/Bricks036_2K_Normal.jpg"},
+			{RoughnessTexture,"Bricks036_2K-JPG/Bricks036_2K_Roughness.jpg"},
+		};
+		std::dynamic_pointer_cast<TexturedPlane>(airplane->getRenderData())->ChangeTexture(infos);
 		return;
 	}
 	tick++;

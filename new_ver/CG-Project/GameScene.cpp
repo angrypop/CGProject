@@ -287,6 +287,13 @@ void DesertScene::Play()
 void DesertScene::Success()
 {
 	this->_state = GameState::SuccessState;
+	std::vector<TextureInfo> infos
+	{
+		{AmbientTexture,"Bricks036_2K-JPG/Bricks036_2K_Red.jpg"},
+		{NormalTexture,"Bricks036_2K-JPG/Bricks036_2K_Normal.jpg"},
+		{RoughnessTexture,"Bricks036_2K-JPG/Bricks036_2K_Roughness.jpg"},
+	};
+	std::dynamic_pointer_cast<TexturedPlane>(Scene::airplane->getRenderData())->ChangeTexture(infos);
 	std::cout << "Desert Game Clear!" << std::endl;
 }
 

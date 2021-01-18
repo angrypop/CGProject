@@ -80,6 +80,13 @@ void GameObject::loadFromObj(std::string filename) {
 		}
 	}
 	viewObj = std::shared_ptr<ViewPolygon>(new ViewPolygon(polydata));
+	std::vector<TextureInfo> infos
+	{
+		{AmbientTexture,"Bricks036_2K-JPG/Bricks036_2K_Color.jpg"},
+		{NormalTexture,"Bricks036_2K-JPG/Bricks036_2K_Normal.jpg"},
+		{RoughnessTexture,"Bricks036_2K-JPG/Bricks036_2K_Roughness.jpg"},
+	};
+	std::dynamic_pointer_cast<TexturedPlane>(viewObj)->ChangeTexture(infos);
 }
 
 void GameObject::saveToObj(std::string filename)
@@ -257,7 +264,7 @@ void GameObject::rotate(const GLfloat& angle, const glm::vec3& vec) {
 
 void GameObject::resetDir()
 {
-	return;
+	//return;
 	glm::vec3 front = getFrontDir();
 	GLfloat currentPitch = atan(front.y / sqrt(front.x * front.x + front.z * front.z)) * RADIAN_TO_ANGLE;
 	this->viewObj->Rotate(-currentPitch, glm::cross(localFront, localUp));

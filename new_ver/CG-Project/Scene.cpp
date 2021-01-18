@@ -240,7 +240,7 @@ void Scene::InitScene() {
 		float a = temp * temp + 0.3f; a = a - floor(a); temp = cos(temp * temp) + 1.3f;
 		auto ptr = std::shared_ptr<TransparentPlane>(new TransparentPlane(
 			glm::vec3(0, i, 0), planePoints6, sizeof(planePoints6), planeIndices3, sizeof(planeIndices3), glm::vec4(r, g, b, a)));
-		//transparentGroup.AddObject(ptr);
+		transparentGroup.AddObject(ptr);
 	}
 
 	std::vector<GLfloat> transTestVertice;

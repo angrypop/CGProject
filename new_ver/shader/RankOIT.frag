@@ -1,8 +1,8 @@
 #version 450 core
 
-//layout(location = 0) out vec3 _gPosition;
-//layout(location = 1) out vec3 _gNormal;
-//layout(location = 3) out vec4 _gDepthID;
+layout(location = 0) out vec3 _gPosition;
+layout(location = 1) out vec3 _gNormal;
+layout(location = 3) out vec4 _gDepthID;
 layout(location = 4) out vec4 _gTransColor;
 in vec2 textureCoord;
 
@@ -97,25 +97,26 @@ void main() {
 	frag_count = build_local_fragment_list(texture(gDepthID, textureCoord).r);
 	sort_fragment_list(frag_count);
 //	_gTransColor = calculate_final_color(frag_count, texture(gAlbedoSpec, textureCoord).rgb);
+//	vec3 color;
 	_gTransColor = calculate_final_color(frag_count, vec3(0.0f));
-	//vec3 color = _gTransColor.rgb;
+	vec3 color = _gTransColor.rgb;
 	//_gAlbedoSpec = vec4(color, 1.0f);
 	//_gAlbedoSpec = vec4(frag_count * 1.0f / MAX_FRAGMENTS);
-	//if (frag_count != 0) {
-	//	_gPosition = worldPos[0].xyz;
-	//	_gNormal = normal[0].xyz;
-	//	_gDepthID = vec4(vec3(uintBitsToFloat(fragments[0].w)), normal[0].w);
-	//	if (normal[0].w == 1) { //water
-	//		//linear fog
-	//		float deltaDepth = texture(gDepthID, textureCoord).r - uintBitsToFloat(fragments[0].w);
-	//		color = mix(color, vec3(165 / 255.9, 236 / 255.9, 250 / 255.9), 1 - 1 / exp(deltaDepth));
-	//		_gTransColor = vec4(color, _gTransColor.a);
-	//		//TODO
-	//	}
-	//}
-	//else {
-	//	_gPosition = texture(gPosition, textureCoord).xyz;
-	//	_gNormal = texture(gNormal, textureCoord).xyz;
-	//	_gDepthID = texture(gDepthID, textureCoord).rgba;
-	//}
+	_gPosition = texture(gPosition, textureCoord).xyz;
+	_gNormal = texture(gNormal, textureCoord).xyz;
+	_gDepthID = texture(gDepthID, textureCoord).rgba;
+	if (frag_count != 0) {
+
+		if (normal[0].w == 1) { //water
+			//linear fog
+			float deltaDepth = texture(gDepthID, textureCoord).r - uintBitsToFloat(fragments[0].w);
+			_gTransColor = vec4(mix(color, vec3(165 / 255.9, 236 / 255.9, 250 / 255.9), _gTransColor.a),  1 - 1 / exp(deltaDepth));
+////			_gTransColor = vec4(vec3(165 / 255.9, 236 / 255.9, 250 / 255.9), 1 - 1 / exp(deltaDepth));
+
+			_gPosition = worldPos[0].xyz;
+			_gNormal = normal[0].xyz;
+			_gDepthID = vec4(vec3(uintBitsToFloat(fragments[0].w)), normal[0].w);
+			//TODO
+		}
+	} 
 }

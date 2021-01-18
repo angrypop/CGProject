@@ -330,17 +330,17 @@ void main() {
 //	fColor = vec4(reflectEffect(color.rgb, normal, textureCoord, fragPos, texture(gDepthID, textureCoord).a), 1.0f);
 	fColor = vec4(reflectEffect(colorTransMixed.rgb, normal, textureCoord, fragPos, texture(gDepthID, textureCoord).a), 1.0f);
 	fColor.rgb = vec3(1.0) - exp(-fColor.rgb * 2.5);
-
+//	fColor = vec4(normal, 1.0f);
 //	fColor = colorTrans.aaaa;
 	//fColor.rgb = pow(fColor.rgb, vec3(1.0 / 2.2));
 
 	//fColor = vec4(aces_tonemap(fColor.rgb), 1.0f);
 	//fColor = vec4(attenuation * originalColor * (ambient + (diffuse + specular) * (1.0 - shadow)), 1.0f);
 	//fColor = vec4(originalColor, 1.0);
-	//fColor = vec4(texture(gDepthID, textureCoord).rgb/1000, 1.0f);
+//	fColor = vec4(texture(gDepthID, textureCoord).rgb, 1.0f);
 	//fColor = vec4(normal, 1.0);
 	//fColor = vec4(reflect(normalize(fragPos - viewPos), normal) * 0.5 + 0.5, 1.0f);
-	//fColor = vec4(shadow );
+//	fColor = vec4(texture(gDepthID, textureCoord).a);
 	//fColor = vec4((uniP * uniV * vec4(fragPos, 1.0f)).zzzz/100);
 	//vec4 temp = FragPosLightSpace / FragPosLightSpace.w * 0.5 + 0.5;
 	//fColor = texture(shadowMap,temp.xy).rrrr;

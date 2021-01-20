@@ -10,28 +10,15 @@ public:
 	enum { PlaneVAO, NumPlaneVAO };
 	enum { PlaneArrayBuffer, PlaneElementBuffer, NumPlaneBuffer };
 	enum { position = 0, texCoord = 1 };
-
 	GLuint VAOs[NumPlaneVAO];
 	GLuint Buffers[NumPlaneBuffer];
-	//GLuint Program;
-	//GLuint GBufferProgram;
-	//GLuint GrassProgram;
-	//GLuint updateProgram;
-	//glm::mat3 TBN;
-
 	int part = 6;
 	GLuint FitTextureW = 2048;
 	GLuint FitTextureH = 2048;
-	//GLuint fitVAO;
-	//GLuint fitVBO;
-	//GLuint fitEBO;
-
 	glm::vec4 color;
-
 	int VertexNum = 0;
 
 public:
-	//TransparentPlane() {};
 	void Init(glm::vec3 position, GLfloat points[], GLint sizeofPoints, GLuint indices[], GLint sizeofIndices, glm::vec4 c)
 	{
 		color = c;
@@ -53,25 +40,21 @@ public:
 
 		modelMat = glm::translate(glm::mat4(1.0), position);
 	}
-
 	TransparentPlane(glm::vec3 position, GLfloat points[], GLint sizeofPoints, GLuint indices[], GLint sizeofIndices, glm::vec4 c) 
 		:ViewObject(ViewObjectEnum::TransparentObject)
 	{
 		this->Init(position, points, sizeofPoints, indices, sizeofIndices, c);
 	}
-
 	TransparentPlane(std::vector<GLfloat> points, std::vector<GLuint> indices, glm::vec4 color, glm::vec3 position = glm::vec3(0.0f))
 		:ViewObject(ViewObjectEnum::TransparentObject)
 	{
 		this->Init(position, points.data(), (GLint)points.size() * sizeof(GLfloat) ,
 			indices.data(), (GLint)indices.size() * sizeof(GLuint), color);
 	}
-
 	void SetColor(const glm::vec4& rgbaColor)
 	{
 		this->color = rgbaColor;
 	}
-
 	virtual void RenderOITBuffer();
 
 };

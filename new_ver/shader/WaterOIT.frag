@@ -42,14 +42,4 @@ void main() {
 	imageStore(list_buffer, int(index), item);
 	imageStore(list_buffer_worldPos, int(index), vec4(worldPos, 1.0f));
 	imageStore(list_buffer_normal, int(index), vec4(normal, 1.0f));
-	//if ()
-	//fColor = vec4(imageLoad(head_pointer_image, ivec2(gl_FragCoord.xy)).xxx * 1.0f / 1280 / 768, 1.0f);
-	//fColor = vec4(imageLoad(list_buffer_worldPos, int(index)).rgb, 1.0f);
-	//fColor = vec4(vec3(old_head * 1.0f / 1280 / 768), 1.0f);
-	//fColor = gl_FragCoord;
-	//fColor vec4(item.x)
-	//fColor = unpackUnorm4x8(item.z);
-	//fColor = vec4(vec3(LinearizeDepth(uintBitsToFloat(item.w)) / uniFar), 1.0f);
-	//fColor = vec4(worldPos / 10, 1.0f);
-	//fColor = vec4(unpackUnorm4x8(item.y).xyz / 10, 1.0f);
 }

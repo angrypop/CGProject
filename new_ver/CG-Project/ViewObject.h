@@ -4,6 +4,13 @@
 class ViewObject : public ViewBase
 {
 public:
+	virtual void RenderShadowBuffer() {}
+	virtual void RenderGBuffer() {}
+	virtual void RenderOITBuffer() {}
+	virtual void RenderBlendOIT() {}
+	virtual void RenderGBufferIlluminate() {}
+
+public:
 	// rotate this object around certain axis(x, y, z) and angle degree
 	void Rotate(const GLfloat& angle, const glm::vec3& axis = glm::vec3(0.0f, 0.0f, 1.0f));
 	// translate this object by displacement vector
@@ -27,12 +34,6 @@ public:
 
 	ViewObject(const ViewObjectEnum& type);
 
-public:
-	virtual void RenderShadowBuffer() {}
-	virtual void RenderGBuffer() {}
-	virtual void RenderOITBuffer() {}
-	virtual void RenderBlendOIT() {}
-	virtual void RenderGBufferIlluminate() {}
 
 protected:
 	glm::mat4 modelMat = glm::mat4(1.0f);

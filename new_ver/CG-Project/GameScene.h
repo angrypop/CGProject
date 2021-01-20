@@ -67,7 +67,6 @@ public:
 
 	enum class BarState { IdleBar, ActiveBar, WrongBar, SuccessBar};
 
-
 private:
 
 	// generate random target list and puzzle bars

@@ -3,10 +3,10 @@
 ```mermaid
 graph LR
    模型加载/计算细分几何着色器添加成员 --> 非半透明物体渲染到屏幕空间GBuffer -->|参数:世界坐标,法线,光照参数,视点空间Z-Buffer| 整合所有物体渲染到屏幕空间GBuffer
-   模型加载/计算细分几何着色器添加成员 --> 光空间Z-Buffer渲染
-   半透明物体渲染屏幕空间OITBuffer -->|参数:IOTBuffer与OIT链表| 整合所有物体渲染到屏幕空间GBuffer
-   -->|参数:GBuffer| 计算屏幕光照
-   光空间Z-Buffer渲染 -->|参数:光空间Z-Buffer| 计算屏幕光照
+
+   半透明物体渲染屏幕空间OITBuffer -->|参数:IOTBuffer与OIT链表| 整合为半透明色彩TBuffer -->|参数:TBuffer| 计算屏幕光照
+   整合所有物体渲染到屏幕空间GBuffer -->|参数:GBuffer| 计算屏幕光照
+
    计算屏幕光照 --> 计算屏幕反射
    模型加载/计算细分几何着色器添加成员 --> 半透明物体渲染屏幕空间OITBuffer
 ```

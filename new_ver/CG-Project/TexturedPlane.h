@@ -7,24 +7,12 @@
 class TexturedPlane : public ViewObject
 {
 public:
-	enum { PlaneVAO, NumPlaneVAO };
-	enum { PlaneArrayBuffer, PlaneElementBuffer, NumPlaneBuffer };
-	enum { position = 0, texCoord = 1 };
-	enum { PlaneColorTexture = AmbientTexture, PlaneNormalTexture = NormalTexture, PlaneRoughnessTexture = RoughnessTexture, NumPlaneTexture };
-
-	GLuint VAOs[NumPlaneVAO];
-	GLuint Buffers[NumPlaneBuffer];
-	GLuint hasTextures[NumPlaneTexture];
-	GLuint Textures[NumPlaneTexture];
-	GLuint Program;
-	GLuint GBufferProgram;
-	GLuint GrassProgram;
-	glm::mat3 TBN;
-	bool renderGrassFlag = false;
-	GLint VertexNum = 0;
+	virtual void RenderGrassGBuffer();
+	virtual void RenderGBuffer();
+	virtual void RenderShadowGrassBuffer();
+	virtual void RenderShadowBuffer();
 
 public:
-	//TexturedPlane() {};
 	void Init(glm::vec3 position, GLfloat points[], GLint sizeofPoints, GLuint indices[], GLint sizeofIndices, ShaderInfo shaders[], TextureInfo textures[])
 	{
 		this->VertexNum = sizeofIndices / sizeof(GLfloat);
@@ -84,13 +72,11 @@ public:
 			{ GL_FRAGMENT_SHADER,"GBufferGrass.frag" }
 			});
 	}
-
 	TexturedPlane(glm::vec3 position, GLfloat points[], GLint sizeofPoints, GLuint indices[], GLint sizeofIndices, ShaderInfo shaders[], TextureInfo textures[]) 
 		:ViewObject(ViewObjectEnum::TextureObject)
 	{
 		this->Init(position, points, sizeofPoints, indices, sizeofIndices, shaders, textures);
 	}
-
 	TexturedPlane(std::vector<GLfloat> vertices)
 		:ViewObject(ViewObjectEnum::TextureObject)
 	{
@@ -113,7 +99,6 @@ public:
 		this->Init(glm::vec3(0.0f), vertices.data(), (int)vertices.size() * sizeof(GLfloat), 
 			indices.data(), (int)indices.size() * sizeof(GLfloat), planeShaders, planeTextures);
 	}
-
 	TexturedPlane(std::vector<GLfloat> vertices, std::vector<GLuint> indices, std::vector<TextureInfo> planeTextures)
 		:ViewObject(ViewObjectEnum::TextureObject)
 	{
@@ -126,16 +111,22 @@ public:
 		this->Init(glm::vec3(0.0f), vertices.data(), (int)vertices.size() * sizeof(GLfloat),
 			indices.data(), (int)indices.size() * sizeof(GLfloat), planeShaders, planeTextures.data());
 	}
-
 	void ChangeTexture(const std::vector<TextureInfo> &infos);
-
-	virtual void RenderGrassGBuffer();
-
-	virtual void RenderGBuffer();
-
-	virtual void RenderShadowGrassBuffer();
-
-	virtual void RenderShadowBuffer();
-
 	void prepare(Light& light);
+
+	enum { PlaneVAO, NumPlaneVAO };
+	enum { PlaneArrayBuffer, PlaneElementBuffer, NumPlaneBuffer };
+	enum { position = 0, texCoord = 1 };
+	enum { PlaneColorTexture = AmbientTexture, PlaneNormalTexture = NormalTexture, PlaneRoughnessTexture = RoughnessTexture, NumPlaneTexture };
+
+	GLuint VAOs[NumPlaneVAO];
+	GLuint Buffers[NumPlaneBuffer];
+	GLuint hasTextures[NumPlaneTexture];
+	GLuint Textures[NumPlaneTexture];
+	GLuint Program;
+	GLuint GBufferProgram;
+	GLuint GrassProgram;
+	glm::mat3 TBN;
+	bool renderGrassFlag = false;
+	GLint VertexNum = 0;
 };

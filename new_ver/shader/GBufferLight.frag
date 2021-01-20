@@ -44,47 +44,20 @@ float ShadowCalculation(float bias, vec4 fragPosLightSpace)
 	// 取得当前片段在光源视角下的深度
 	float currentDepth = projCoords.z;
 	// 检查当前片段是否在阴影中
-	//float bias = max(0.05 * (1.0 - dot(normal, lightDir)), 0.005);
-	//float bias = 0.0005;//min(0.0001, currentDepth - closestDepth - 0.00000001);
 	float shadow = currentDepth - closestDepth > bias ? 1.0 : 0.0;
 
-	//float shadow = 0.0;
-	//vec2 texelSize = 1.0 / textureSize(shadowMap, 0);
-	//for (int x = -1; x <= 1; ++x)
-	//{
-	//	for (int y = -1; y <= 1; ++y)
-	//	{
-	//		float pcfDepth = texture(shadowMap, projCoords.xy + vec2(x, y) * texelSize).r;
-	//		shadow += currentDepth - bias >= pcfDepth ? 1.0 : 0.0;
-	//	}
-	//}
-	//shadow /= 9.0;
-
-	//fColor = vec4(vec3(currentDepth - closestDepth), 1.0f);
-	//fColor = vec4(projCoords, 1.0f);
-
-	//return
-	//return closestDepth;
-	//return currentDepth;
 	if (projCoords.x >= 0 && projCoords.x <= 1 && projCoords.y >= 0 && projCoords.y <= 1)
-		//fColor = vec4(projCoords, 1.0f);
+
 		shadow = currentDepth - closestDepth > bias ? 1.0 : 0.0;
 	else
-		//fColor = vec4(0.5f);
+
 		shadow = 0;
 
 
 	return shadow;
-	//return 0;
-	//return currentDepth - closestDepth;
+
 }
 
-//#define BISEARCH(SEARCHPOINT, DIRVEC, SIGN) DIRVEC *= 0.5; \
-//                    SEARCHPOINT+= DIRVEC * SIGN; \
-//                    uv = getScreenCoordByViewCoord(SEARCHPOINT); \
-//                    sampleDepth = linearizeDepth(texture(gDepthID, uv).x); \
-//                    testDepth = getLinearDepthOfViewCoord(SEARCHPOINT); \
-//                    SIGN = sign(sampleDepth - testDepth);
 float linearizeDepth(float depth) {
 	float z = depth * 2.0 - 1.0;
 	return (2.0 * uniNear * uniFar) / (uniFar + uniNear - z * (uniFar - uniNear));
@@ -151,30 +124,13 @@ vec3 waterRayTarcing(vec3 startPoint, vec3 direction, vec3 color, float jitter, 
 		vec2 uv = getScreenCoordByViewCoord((uniV * vec4(lastPoint,1.0f)).rgb);
 		float testDepth = getLinearDepthOfViewCoord((uniV * vec4(lastPoint, 1.0f)).rgb);
 		float sampleDepth = linearizeDepth(texture(gDepthID, uv).x);
-		//if (testDepth - sampleDepth < 0.5) {
-			//hitColor = vec4(texture2DLod(gcolor, uv, 0.0).rgb, 1.0);
+
 			hitColor = vec4(texture(gAlbedoSpec, uv).rgb, 1.0);
 			hitColor.a = clamp(1.0 - pow(distance(uv, vec2(0.5)) * 2.0, 2.0), 0.0, 1.0);
-		//}
-		//return color;
-		//return texture(skybox, normalize(direction)).rgb;
-	}
-	//if (hit && startPoint.z < lastPoint.z)
 
-	//return 100 * vec3(texture(gDepthID, getScreenCoordByViewCoord((uniV * vec4(startPoint, 1.0f)).rgb)) - texture(gDepthID, getScreenCoordByViewCoord((uniV * vec4(testPoint, 1.0f)).rgb)));
-	//return normalize(direction * 0.5 + 0.5);
-	//return direction * 0.5 + 0.5;
-	//return hit ? vec3(1.0f) : vec3(0.0f);
-	//return hitColor.rgb * hitColor.a;
-	////vec3 pureColor = vec3(164.0 / 255.0, 211.0 / 255.0, 238.0 / 255.0);
-	//return mix(pureColor, hitColor.rgb, hitColor.a * schlick);
-	//return mix(color, vec3(0.5f, 0.5f, 0.5f), 1 * schlick);
-	//return vec3(-(uniV * vec4(testPoint, 1.0f)).z);
-	//return vec3((uniV * vec4(startPoint, 1.0f)).z);
-	//return vec3(-getLinearDepthOfViewCoord((uniV * vec4(startPoint, 1.0f)).xyz) + getLinearDepthOfViewCoord((uniV * vec4(lastPoint, 1.0f)).xyz));
-	//return hit && startPoint.z > lastPoint.z ? mix(color, hitColor.rgb, hitColor.a * schlick) : color;
+	}
 	return mix(color, hitColor.rgb, hitColor.a * schlick);
-	//return lastPoint;
+
 }
 vec3 reflectEffect(vec3 color, vec3 normal, vec2 uv, vec3 worldPos, float attr) {
 	if (attr == 1.0) {
@@ -207,66 +163,6 @@ vec3 aces_tonemap(vec3 color) {
 	vec3 b = uniV * (0.983729 * uniV + 0.4329510) + 0.238081;
 	return pow(clamp(m2 * (a / b), 0.0, 1.0), vec3(1.0 / 2.2));
 }
-
-//vec2 getScreenCoordByViewCoord(vec3 viewCoord) {
-//	vec4 uniP = vec4(viewCoord, 1.0);
-//	uniP = uniP * uniP;
-//	uniP /= uniP.w;
-//	if (uniP.z < -1 || uniP.z > 1)
-//		return vec2(-1.0);
-//	uniP = uniP * 0.5f + 0.5f;
-//	//uniP = uniP * 2 - 1;
-//	return uniP.st;
-//}
-//
-//float linearizeDepth(float depth) {
-//	float z = depth * 2.0 - 1.0; // back to NDC 
-//	return (2.0 * uniNear * uniFar) / (uniFar + uniNear - z * (uniFar - uniNear));
-//}
-//
-//float getLinearDepthOfViewCoord(vec3 viewCoord) {
-//	vec4 uniP = vec4(viewCoord, 1.0);
-//	uniP = uniP * uniP;
-//	uniP /= uniP.w;
-//	return linearizeDepth(uniP.z) / uniFar;
-//}
-//vec3 waterRayTarcing(vec3 startPoint, vec3 direction, vec3 color, float schlick) {
-//	const float stepBase = 0.05;
-//	vec3 testPoint = startPoint;
-//	direction *= stepBase;
-//	bool hit = false;
-//	vec4 hitColor = vec4(0.0);
-//	for (int i = 0; i < 100; i++) {
-//		testPoint += direction;
-//		vec2 uv = getScreenCoordByViewCoord((uniV * vec4(testPoint, 1.0f)).xyz);
-//		float sampleDepth = texture(gDepthID, uv).x;
-//		//sampleDepth = linearizeDepth(sampleDepth);
-//		float testDepth = getLinearDepthOfViewCoord((uniV * vec4(testPoint, 1.0f)).xyz);
-//		if (sampleDepth < testDepth) {
-//			hit = true;
-//			hitColor = vec4(texture(gAlbedoSpec, uv).rgb, 1.0);
-//			break;
-//		}
-//	}
-//	if (!hit) return color;
-//	//return normalize(direction * 0.5 + 0.5);
-//	//if (abs(texture(gDepthID, getScreenCoordByViewCoord((uniV * vec4(startPoint, 1.0f)).xyz)).r - getLinearDepthOfViewCoord((uniV * vec4(startPoint, 1.0f)).xyz)) < 0.01) return vec3(1.0f); else return vec3(0.0f);
-//	//return vec3(0.01 / (abs(texture(gDepthID, getScreenCoordByViewCoord((uniV * vec4(startPoint, 1.0f)).xyz)).r - getLinearDepthOfViewCoord((uniV * vec4(startPoint, 1.0f)).xyz)) + 0.01));
-//	//return texture(gDepthID, getScreenCoordByViewCoord((uniV * vec4(startPoint, 1.0f)).xyz)).rrr;
-//	return vec3(getLinearDepthOfViewCoord((uniV * vec4(testPoint, 1.0f)).xyz));
-//	//return mix(color, hitColor.rgb, hitColor.a * schlick * 2);
-//	//return texture(gAlbedoSpec, getScreenCoordByViewCoord((uniV * vec4(startPoint, 1.0f)).xyz)).rgb;
-//	//return vec3(getScreenCoordByViewCoord((uniV * vec4(startPoint, 1.0f)).xyz).rg, 0.0f);
-//	//return (uniV * vec4(testPoint, 1.0f)).rgb;
-//}
-//vec3 reflectEffect(vec3 color, vec3 normal, vec2 uv, vec3 worldPos, float attr) {
-//	if (attr == 1.0) {
-//		vec3 viewRefRay = reflect(normalize(worldPos - viewPos), normal);
-//		float schlick = 0.02 + 0.98 * pow(1.0 - dot(viewRefRay, normal), 5.0);
-//		color = waterRayTarcing(worldPos + normal * (-worldPos.z / uniFar * 0.2 + 0.05), viewRefRay, color, schlick);
-//	}
-//	return color;
-//}
 
 #define START_H float(200.0)
 #define END_H float(1600.0)
@@ -330,18 +226,5 @@ void main() {
 //	fColor = vec4(reflectEffect(color.rgb, normal, textureCoord, fragPos, texture(gDepthID, textureCoord).a), 1.0f);
 	fColor = vec4(reflectEffect(colorTransMixed.rgb, normal, textureCoord, fragPos, texture(gDepthID, textureCoord).a), 1.0f);
 	fColor.rgb = vec3(1.0) - exp(-fColor.rgb * 2.5);
-//	fColor = vec4(normal, 1.0f);
-//	fColor = colorTrans.aaaa;
-	//fColor.rgb = pow(fColor.rgb, vec3(1.0 / 2.2));
 
-	//fColor = vec4(aces_tonemap(fColor.rgb), 1.0f);
-	//fColor = vec4(attenuation * originalColor * (ambient + (diffuse + specular) * (1.0 - shadow)), 1.0f);
-	//fColor = vec4(originalColor, 1.0);
-//	fColor = vec4(texture(gDepthID, textureCoord).rgb, 1.0f);
-	//fColor = vec4(normal, 1.0);
-	//fColor = vec4(reflect(normalize(fragPos - viewPos), normal) * 0.5 + 0.5, 1.0f);
-//	fColor = vec4(texture(gDepthID, textureCoord).a);
-	//fColor = vec4((uniP * uniV * vec4(fragPos, 1.0f)).zzzz/100);
-	//vec4 temp = FragPosLightSpace / FragPosLightSpace.w * 0.5 + 0.5;
-	//fColor = texture(shadowMap,temp.xy).rrrr;
 }

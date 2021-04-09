@@ -1,4 +1,0 @@
-﻿  GameObject.cpp
-C:\Users\angrypop\Documents\ZJU\CG\CGProject\CG-Project\CG-Project\GameObject.cpp(187,27): warning C4244: 'initializing': conversion from 'double' to 'GLfloat', possible loss of data
-C:\Users\angrypop\Documents\ZJU\CG\CGProject\CG-Project\CG-Project\GameObject.cpp(199,27): warning C4244: 'initializing': conversion from 'double' to 'GLfloat', possible loss of data
-  CG-Project.vcxproj -> C:\Users\angrypop\Documents\ZJU\CG\CGProject\CG-Project\x64\Debug\CG-Project.exe

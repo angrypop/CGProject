@@ -1,3 +1,9 @@
 # CGProject
 
-一个集合了解密与模拟飞行的小游戏，详见report.pdf
+Solve a puzzle, grab a plane, and then ... get ready for more challenges!
+
+The .exe file is in `/executable`.  However, you are advised to recompile the VS project in `/code` to ensure that all OpenGL dependencies are linked correctly. The 
+
+![](document/takeoff.png)
+
+![image-20210708204743576](document/ring.png)
